@@ -21,9 +21,12 @@ const commerce = {
     printUrl: "",
     /** Direct PDF / EPUB checkout */
     ebookUrl: "",
-    /** Optional: “Buy on Amazon” label override */
-    printLabel: "Buy print on Amazon",
+    /** Audible / Spotify / direct audiobook checkout */
+    audiobookUrl: "",
+    /** Optional label overrides */
+    printLabel: "Buy the Book",
     ebookLabel: "Buy PDF",
+    audiobookLabel: "Get the Audiobook",
   },
 
   companion: {

@@ -1,36 +1,46 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import SplitTitle from "../components/SplitTitle";
 import { MagneticLink } from "../components/MagneticButton";
+import { BuyButton } from "../components/BuyButton";
+import commerce, { hasUrl } from "../commerce";
 import { easeOut } from "../motion";
 
 export default function Home() {
   const ref = useRef(null);
+  const videoRef = useRef(null);
+  const [muted, setMuted] = useState(true);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.2]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.15]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+
+  const { printUrl, ebookUrl, audiobookUrl, printLabel, audiobookLabel } =
+    commerce.squareMile;
+
+  const toggleMute = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    el.muted = !el.muted;
+    setMuted(el.muted);
+    if (!el.muted) {
+      el.play().catch(() => {});
+    }
+  };
 
   return (
     <AnimatedPage>
-      <section className="hero hero-cinematic" ref={ref}>
+      <section className="hero hero-trailer" ref={ref}>
         <motion.div
           className="hero-orb"
           style={{ y, opacity, scale }}
           aria-hidden
-        />
-        <motion.div
-          className="hero-ring"
-          aria-hidden
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.5, scale: 1 }}
-          transition={{ duration: 1.4, ease: easeOut }}
         />
 
         <motion.p
@@ -39,10 +49,10 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: easeOut }}
         >
-          Imprint
+          Volume I · The Veil Press
         </motion.p>
 
-        <SplitTitle text="The Veil Press" />
+        <SplitTitle text="The Veil of the Square Mile" className="h1-book" />
 
         <motion.div
           className="title-rule"
@@ -52,26 +62,75 @@ export default function Home() {
         />
 
         <motion.p
-          className="lede lede-glow"
+          className="lede lede-glow hero-trailer-lede"
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.7, ease: easeOut }}
         >
-          Institutional histories that strip the fog from power.
+          The invisible British financial empire — documented, not dramatized.
         </motion.p>
 
         <motion.div
-          className="actions"
+          className="trailer-stage"
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.55, ease: easeOut }}
+        >
+          <div className="trailer-frame">
+            <video
+              ref={videoRef}
+              className="trailer-video"
+              src="/trailer.mp4"
+              poster="/cover.jpg"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              controls
+              aria-label="Trailer for The Veil of the Square Mile"
+            />
+            <button
+              type="button"
+              className="trailer-mute"
+              onClick={toggleMute}
+              aria-pressed={!muted}
+              aria-label={muted ? "Unmute trailer" : "Mute trailer"}
+            >
+              {muted ? "Unmute" : "Mute"}
+            </button>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="actions actions-center"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, delay: 0.85, ease: easeOut }}
+          transition={{ duration: 0.75, delay: 0.9, ease: easeOut }}
         >
-          <MagneticLink className="btn btn-primary btn-shimmer" to="/books/square-mile">
-            First volume
-          </MagneticLink>
-          <MagneticLink className="btn" to="/books">
-            Catalogue
-          </MagneticLink>
+          {hasUrl(printUrl) ? (
+            <BuyButton href={printUrl} label={printLabel || "Buy the Book"} />
+          ) : (
+            <MagneticLink
+              className="btn btn-primary btn-shimmer"
+              to="/books/square-mile"
+            >
+              Buy the Book
+            </MagneticLink>
+          )}
+          <BuyButton
+            href={audiobookUrl}
+            label={audiobookLabel || "Get the Audiobook"}
+            className="btn btn-shimmer"
+            comingSoonLabel="Audiobook · Coming soon"
+          />
+          {hasUrl(ebookUrl) && (
+            <BuyButton
+              href={ebookUrl}
+              label="Buy PDF"
+              className="btn"
+            />
+          )}
         </motion.div>
       </section>
 
@@ -100,7 +159,10 @@ export default function Home() {
                 The City of London Corporation and the invisible financial empire
                 — architecture on the record, not melodrama.
               </p>
-              <span className="btn btn-primary btn-shimmer" style={{ alignSelf: "flex-start" }}>
+              <span
+                className="btn btn-primary btn-shimmer"
+                style={{ alignSelf: "flex-start" }}
+              >
                 Enter the volume
               </span>
             </div>
@@ -117,8 +179,16 @@ export default function Home() {
         <Stagger className="card-grid three">
           {[
             { n: "01", t: "The book", d: "Continuous argument — the journey." },
-            { n: "02", t: "The Companion", d: "Sources, trees, bibliography — the map." },
-            { n: "03", t: "The library", d: "Reader apparatus for every Veil title." },
+            {
+              n: "02",
+              t: "The Companion",
+              d: "Sources, trees, bibliography — the map.",
+            },
+            {
+              n: "03",
+              t: "The library",
+              d: "Reader apparatus for every Veil title.",
+            },
           ].map((c) => (
             <StaggerItem key={c.n}>
               <div className="card card-lift card-glow">
@@ -132,7 +202,10 @@ export default function Home() {
       </section>
 
       <Reveal className="section">
-        <div className="card soon card-glow" style={{ textAlign: "center", padding: "2.4rem" }}>
+        <div
+          className="card soon card-glow"
+          style={{ textAlign: "center", padding: "2.4rem" }}
+        >
           <div className="meta">Further volumes</div>
           <h3 style={{ marginBottom: "0.5rem" }}>More under The Veil</h3>
           <p style={{ margin: "0 auto", maxWidth: "28rem" }}>
