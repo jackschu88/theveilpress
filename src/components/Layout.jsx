@@ -75,12 +75,21 @@ export default function Layout() {
             <p>
               Institutional histories. The fog removed.
               <br />© {new Date().getFullYear()} Jack Schumacher
+              <br />
+              <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
             </p>
           </div>
           <div className="footer-links">
             <NavLink to="/books">Books</NavLink>
             <NavLink to="/books/square-mile/companion">Companion</NavLink>
             <NavLink to="/about">About</NavLink>
+            <a
+              href="https://x.com/deepdivefile"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              X
+            </a>
           </div>
         </div>
         <div className="shell" style={{ marginTop: "1.5rem" }}>

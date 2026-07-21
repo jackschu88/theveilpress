@@ -36,12 +36,18 @@ export default function About() {
 
         <h2>Contact</h2>
         <p className="muted">
-          Press and rights inquiries: add your email when the domain is live
-          (e.g.{" "}
-          <code style={{ color: "var(--gold-dim)" }}>
-            press@theveilpress.com
-          </code>
-          ).
+          Press and inquiries:{" "}
+          <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
+        </p>
+        <p className="muted">
+          On X:{" "}
+          <a
+            href="https://x.com/deepdivefile"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @deepdivefile
+          </a>
         </p>
       </Reveal>
 
@@ -50,6 +56,14 @@ export default function About() {
           <Link className="btn btn-primary" to="/books/square-mile">
             The Veil of the Square Mile
           </Link>
+          <a
+            className="btn"
+            href="https://x.com/deepdivefile"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Follow on X
+          </a>
           <Link className="btn" to="/books">
             All books
           </Link>
