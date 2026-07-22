@@ -17,19 +17,19 @@
  *
  * Bundles:
  *   Digital Edition + Audiobook ........ $29.99
- *   Print + Companion .................. $41.99  (Companion at $5.99)
- *   Digital Edition + Companion ........ $25.99
- *   Audiobook + Companion .............. $23.99
- *   Digital + Audiobook + Companion .... $34.99
- *   Full (Print+Digital+Audio+Companion) $59.99
+ *   Print + Companion .................. $44.99  (Companion at $8.99)
+ *   Digital Edition + Companion ........ $28.99
+ *   Audiobook + Companion .............. $26.99
+ *   Digital + Audiobook + Companion .... $38.99
+ *   Full (Print+Digital+Audio+Companion) $64.99
  */
 
 /**
  * @typedef {{ url: string, price: number, label: string, name: string, blurb: string }} Product
  */
 
-/** Companion add-on price when sold inside a bundle (not a separate product). */
-export const COMPANION_BUNDLE_PRICE = 5.99;
+/** Companion add-on price when sold inside a bundle (not standalone $19.99). */
+export const COMPANION_BUNDLE_PRICE = 8.99;
 
 /** @type {Record<string, Product>} */
 export const products = {
@@ -51,7 +51,7 @@ export const products = {
     name: "Audiobook",
     price: 17.99,
     label: "Buy Audiobook · $17.99",
-    url: "https://theveilpress.gumroad.com/l/gwhsc",
+    url: "https://theveilpress.gumroad.com/l/rphkx",
     blurb: "Full narration. Instant digital delivery.",
   },
   companion: {
@@ -60,28 +60,28 @@ export const products = {
     label: "Get Companion · $19.99",
     url: "",
     blurb:
-      "Apparatus only: glossary, timelines, trees, bibliography, steelman. $5.99 when added in any bundle.",
+      "Apparatus only: glossary, timelines, trees, bibliography, steelman. $8.99 when added in any bundle.",
   },
   bundlePrintCompanion: {
     name: "Print + Companion",
-    price: 41.99,
-    label: "Print + Companion · $41.99",
+    price: 44.99,
+    label: "Print + Companion · $44.99",
     url: "",
-    blurb: "Paperback plus Companion Guide (Companion at $5.99).",
+    blurb: "Paperback plus Companion Guide (Companion at $8.99).",
   },
   bundleEbookCompanion: {
     name: "Digital Edition + Companion",
-    price: 25.99,
-    label: "Digital + Companion · $25.99",
+    price: 28.99,
+    label: "Digital + Companion · $28.99",
     url: "",
-    blurb: "Digital Edition plus Companion Guide (Companion at $5.99).",
+    blurb: "Digital Edition plus Companion Guide (Companion at $8.99).",
   },
   bundleAudioCompanion: {
     name: "Audiobook + Companion",
-    price: 23.99,
-    label: "Audio + Companion · $23.99",
+    price: 26.99,
+    label: "Audio + Companion · $26.99",
     url: "",
-    blurb: "Audiobook plus Companion Guide (Companion at $5.99).",
+    blurb: "Audiobook plus Companion Guide (Companion at $8.99).",
   },
   bundleEbookAudio: {
     name: "Digital Edition + Audiobook",
@@ -92,16 +92,16 @@ export const products = {
   },
   bundleEbookAudioCompanion: {
     name: "Digital Edition + Audiobook + Companion",
-    price: 34.99,
-    label: "Digital + Audio + Companion · $34.99",
+    price: 38.99,
+    label: "Digital + Audio + Companion · $38.99",
     url: "",
     blurb:
-      "Digital Edition, audiobook, and Companion Guide (Companion at $5.99).",
+      "Digital Edition, audiobook, and Companion Guide (Companion at $8.99).",
   },
   bundleFull: {
     name: "Full Bundle",
-    price: 59.99,
-    label: "Full Bundle · $59.99",
+    price: 64.99,
+    label: "Full Bundle · $64.99",
     url: "",
     blurb:
       "Print + Digital Edition + audiobook + Companion Guide. Everything in one checkout.",
