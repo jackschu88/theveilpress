@@ -574,6 +574,7 @@ h3 {
   letter-spacing: 0.04em;
   line-height: 1.2;
   margin: 0 0 0.85rem;
+  text-wrap: balance;
 }
 
 h1 {
@@ -638,6 +639,7 @@ p {
   font-size: 1.2rem;
   line-height: 1.75;
   color: rgba(240, 235, 224, 0.88);
+  text-wrap: pretty;
 }
 
 /* —— Nav (glass) —— */
@@ -755,6 +757,7 @@ main {
   max-width: 34rem;
   line-height: 1.7;
   font-weight: 400;
+  text-wrap: pretty;
 }
 
 .actions {
