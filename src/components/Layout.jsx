@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import VeilIntro from "./VeilIntro";
@@ -5,7 +6,10 @@ import Spotlight from "./Spotlight";
 import FogReveal from "./FogReveal";
 import GoldDust from "./GoldDust";
 import SmoothScroll from "./SmoothScroll";
+import Grain from "./Grain";
+import CustomCursor from "./CustomCursor";
 import { pageTransition } from "../motion";
+import { ScrollTrigger } from "../scroll";
 
 const links = [
   { to: "/", label: "Home", end: true },
@@ -18,16 +22,24 @@ const links = [
 export default function Layout() {
   const location = useLocation();
 
+  useEffect(() => {
+    // Route transitions change page height; give the new page a frame to
+    // render before recalculating ScrollTrigger's trigger positions.
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
+  }, [location.pathname]);
+
   return (
     <>
       <SmoothScroll />
+      <Grain />
+      <CustomCursor />
       <VeilIntro />
       <Spotlight />
       <FogReveal />
       <div className="atmosphere" aria-hidden>
         <div className="atmosphere-glow" />
         <div className="atmosphere-mesh" />
-        <div className="atmosphere-grain" />
         <GoldDust />
       </div>
 
