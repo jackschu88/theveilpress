@@ -1,24 +1,67 @@
+import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useReducedMotion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal } from "../components/Reveal";
+import { gsap } from "../scroll";
+
+const HeroScene = lazy(() => import("../components/HeroScene"));
 
 export default function Books() {
+  const heroRef = useRef(null);
+  const listRef = useRef(null);
+  const reduce = useReducedMotion();
+
+  useGSAP(
+    () => {
+      // Matches the reduced-motion pattern used throughout the codebase
+      // (GoldDust, FogReveal, SmoothScroll): skip creating the scrub
+      // ScrollTrigger so the catalogue list has no scroll-tied motion
+      // under prefers-reduced-motion.
+      if (reduce) return;
+
+      if (!listRef.current) return;
+      gsap.fromTo(
+        listRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: listRef.current,
+            start: "top 88%",
+            end: "top 60%",
+            scrub: 0.4,
+          },
+        }
+      );
+    },
+    { scope: listRef, dependencies: [reduce] }
+  );
+
   return (
     <AnimatedPage>
-      <Reveal>
-        <p className="eyebrow">Catalogue</p>
-        <h1>Books</h1>
-        <p className="lede">
-          Titles from The Veil Press. Each volume stands alone; the series shares
-          a standard: institutions on the record, not cabals in the shadows.
-        </p>
-      </Reveal>
+      <div className="hero" ref={heroRef}>
+        <Suspense fallback={null}>
+          <HeroScene variant="light" />
+        </Suspense>
+        <Reveal>
+          <p className="eyebrow">Catalogue</p>
+          <h1>Books</h1>
+          <p className="lede">
+            Titles from The Veil Press. Each volume stands alone; the series shares
+            a standard: institutions on the record, not cabals in the shadows.
+          </p>
+        </Reveal>
+      </div>
 
       <Reveal>
         <hr className="rule" />
       </Reveal>
 
-      <Reveal>
+      <div ref={listRef}>
         <ul className="list-clean list-animated">
           <li>
             <div>
@@ -64,7 +107,7 @@ export default function Books() {
             <span className="value">Soon</span>
           </li>
         </ul>
-      </Reveal>
+      </div>
     </AnimatedPage>
   );
 }
