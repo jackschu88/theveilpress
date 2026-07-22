@@ -7,12 +7,30 @@ import TiltCover from "../components/TiltCover";
 import SplitTitle from "../components/SplitTitle";
 import { MagneticLink, MagneticAnchor } from "../components/MagneticButton";
 import { BuyButton } from "../components/BuyButton";
-import commerce, { hasUrl } from "../commerce";
+import commerce, {
+  products,
+  hasUrl,
+  formatPrice,
+  anyCheckoutReady,
+} from "../commerce";
 import { easeOut } from "../motion";
 import { gsap } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
+
+const individuals = [
+  products.print,
+  products.ebook,
+  products.audiobook,
+  products.companion,
+];
+
+const bundles = [
+  products.bundleEbookAudio,
+  products.bundlePrintEbook,
+  products.bundleFull,
+];
 
 export default function SquareMile() {
   const heroRef = useRef(null);
@@ -46,9 +64,9 @@ export default function SquareMile() {
     { scope: argumentRef }
   );
 
-  const { printUrl, ebookUrl, printLabel, ebookLabel } = commerce.squareMile;
-  const printReady = hasUrl(printUrl);
-  const ebookReady = hasUrl(ebookUrl);
+  const printReady = hasUrl(products.print.url);
+  const ebookReady = hasUrl(products.ebook.url);
+  const storeReady = anyCheckoutReady();
 
   return (
     <AnimatedPage>
@@ -103,12 +121,15 @@ export default function SquareMile() {
             {printReady || ebookReady ? (
               <>
                 {printReady && (
-                  <BuyButton href={printUrl} label={printLabel} />
+                  <BuyButton
+                    href={products.print.url}
+                    label={products.print.label}
+                  />
                 )}
                 {ebookReady && (
                   <BuyButton
-                    href={ebookUrl}
-                    label={ebookLabel}
+                    href={products.ebook.url}
+                    label={products.ebook.label}
                     className="btn btn-shimmer"
                   />
                 )}
@@ -162,49 +183,90 @@ export default function SquareMile() {
         <Reveal>
           <div className="section-head">
             <h2>Get the book</h2>
+            <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
+              Checkout is on Gumroad — secure, instant for digital, print ships
+              to you. Best value: Full All-in-One at {formatPrice(products.bundleFull.price)}.
+            </p>
           </div>
         </Reveal>
+
+        <Reveal>
+          <p className="meta" style={{ margin: "1.75rem 0 0.75rem" }}>
+            Individual
+          </p>
+        </Reveal>
         <Stagger className="price-row">
-          <StaggerItem className="price-card price-glow">
-            <div className="meta">Print</div>
-            <strong>{printReady ? "Order" : "Coming soon"}</strong>
-            <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Trade paperback via Amazon KDP and bookstore channels (IngramSpark).
-            </p>
-            <BuyButton
-              href={printUrl}
-              label={printLabel}
-              comingSoonLabel="Link pending"
-              className="btn btn-primary btn-shimmer"
-            />
-          </StaggerItem>
-          <StaggerItem className="price-card price-glow">
-            <div className="meta">PDF / ebook</div>
-            <strong>{ebookReady ? "Download" : "Coming soon"}</strong>
-            <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Direct from The Veil Press. Buyers get Companion access at $5.99.
-            </p>
-            <BuyButton
-              href={ebookUrl}
-              label={ebookLabel}
-              comingSoonLabel="Link pending"
-              className="btn btn-primary btn-shimmer"
-            />
-          </StaggerItem>
+          {individuals.map((p) => (
+            <StaggerItem key={p.name} className="price-card price-glow">
+              <div className="meta">{p.name}</div>
+              <strong>{formatPrice(p.price)}</strong>
+              <p className="muted" style={{ margin: "0 0 1rem" }}>
+                {p.blurb}
+              </p>
+              <BuyButton
+                href={p.url}
+                label={p.label}
+                comingSoonLabel="Checkout pending"
+                className="btn btn-primary btn-shimmer"
+              />
+            </StaggerItem>
+          ))}
         </Stagger>
 
-        {!printReady && !ebookReady && (
+        <Reveal>
+          <p className="meta" style={{ margin: "1.75rem 0 0.75rem" }}>
+            Bundles · best value
+          </p>
+        </Reveal>
+        <Stagger className="price-row">
+          {bundles.map((p) => (
+            <StaggerItem
+              key={p.name}
+              className={`price-card price-glow${
+                p === products.bundleFull ? " price-card-featured" : ""
+              }`}
+            >
+              <div className="meta">
+                {p === products.bundleFull ? "Recommended" : "Bundle"}
+              </div>
+              <strong>{formatPrice(p.price)}</strong>
+              <p
+                style={{
+                  margin: "0 0 0.35rem",
+                  color: "var(--ink)",
+                  fontFamily: "Cinzel, serif",
+                  fontSize: "1.05rem",
+                }}
+              >
+                {p.name}
+              </p>
+              <p className="muted" style={{ margin: "0 0 1rem" }}>
+                {p.blurb}
+              </p>
+              <BuyButton
+                href={p.url}
+                label={p.label}
+                comingSoonLabel="Checkout pending"
+                className="btn btn-primary btn-shimmer"
+              />
+            </StaggerItem>
+          ))}
+        </Stagger>
+
+        {!storeReady && (
           <Reveal delay={0.1}>
             <div className="commerce-placeholder">
-              <strong style={{ color: "var(--ink)" }}>How to connect checkout</strong>
+              <strong style={{ color: "var(--ink)" }}>
+                Wire Gumroad checkout
+              </strong>
               <br />
-              1. Create products on Amazon (print) and Gumroad/Lemon (PDF).
+              1. Create the 7 products on Gumroad (4 individuals + 3 bundles)
+              using the prices above.
               <br />
-              2. Paste URLs into{" "}
-              <code>src/commerce.js</code> → <code>squareMile.printUrl</code> /{" "}
-              <code>ebookUrl</code>.
+              2. Paste each share URL into{" "}
+              <code>src/commerce.js</code> → <code>products.*.url</code>.
               <br />
-              3. Redeploy. Buttons go live automatically.
+              3. Redeploy. Every button on this page lights up automatically.
             </div>
           </Reveal>
         )}
@@ -217,25 +279,31 @@ export default function SquareMile() {
               className="card card-lift card-glow"
               to="/books/square-mile/companion"
             >
-              <div className="meta">Apparatus</div>
+              <div className="meta">
+                Apparatus · {formatPrice(commerce.companion.fullPrice)}
+              </div>
               <h3>Companion Guide</h3>
               <p>
                 The map: glossary, timelines, dynastic trees, bibliography,
-                steelman. Not a second narrative book.
+                steelman. Included free in the Full All-in-One bundle.
               </p>
             </Link>
           </StaggerItem>
           <StaggerItem>
             <div className="card card-glow">
-              <div className="meta">For print buyers</div>
-              <h3>QR path</h3>
+              <div className="meta">All-in-One</div>
+              <h3>{formatPrice(products.bundleFull.price)}</h3>
               <p>
-                Scan the code in the book, or open{" "}
-                <code style={{ color: "var(--gold-dim)" }}>
-                  theveilpress.com/books/square-mile/companion/print
-                </code>{" "}
-                for the book-buyer price.
+                Print + ebook + audiobook, and the Companion Guide free. One
+                checkout on Gumroad — best path for readers who want everything.
               </p>
+              <div style={{ marginTop: "1rem" }}>
+                <BuyButton
+                  href={products.bundleFull.url}
+                  label={products.bundleFull.label}
+                  comingSoonLabel="Checkout pending"
+                />
+              </div>
             </div>
           </StaggerItem>
         </Stagger>

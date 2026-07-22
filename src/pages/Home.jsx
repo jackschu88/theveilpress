@@ -6,7 +6,7 @@ import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import SplitTitle from "../components/SplitTitle";
 import { MagneticLink } from "../components/MagneticButton";
 import { BuyButton } from "../components/BuyButton";
-import commerce, { hasUrl } from "../commerce";
+import { products, hasUrl } from "../commerce";
 import { easeOut } from "../motion";
 import { gsap, ScrollTrigger } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
@@ -21,8 +21,7 @@ export default function Home() {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
 
-  const { printUrl, ebookUrl, audiobookUrl, printLabel, audiobookLabel } =
-    commerce.squareMile;
+  const { print, ebook, audiobook, bundleFull } = products;
 
   useScrollReveal(
     () => {
@@ -153,28 +152,38 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.9, ease: easeOut }}
         >
-          {hasUrl(printUrl) ? (
-            <BuyButton href={printUrl} label={printLabel || "Buy the Book"} />
+          {hasUrl(print.url) ? (
+            <BuyButton href={print.url} label={print.label} />
           ) : (
             <MagneticLink
               className="btn btn-primary btn-shimmer"
-              to="/books/square-mile"
+              to="/books/square-mile#buy"
             >
-              Buy the Book
+              Buy the Book · $36.99
             </MagneticLink>
           )}
           <BuyButton
-            href={audiobookUrl}
-            label={audiobookLabel || "Get the Audiobook"}
+            href={ebook.url}
+            label={ebook.label}
             className="btn btn-shimmer"
-            comingSoonLabel="Audiobook · Coming soon"
+            comingSoonLabel="PDF · $19.99"
           />
-          {hasUrl(ebookUrl) && (
+          <BuyButton
+            href={audiobook.url}
+            label={audiobook.label}
+            className="btn btn-shimmer"
+            comingSoonLabel="Audiobook · $17.99"
+          />
+          {hasUrl(bundleFull.url) ? (
             <BuyButton
-              href={ebookUrl}
-              label="Buy PDF"
+              href={bundleFull.url}
+              label={bundleFull.label}
               className="btn"
             />
+          ) : (
+            <MagneticLink className="btn" to="/books/square-mile#buy">
+              Full Bundle · $59.99
+            </MagneticLink>
           )}
         </motion.div>
       </section>

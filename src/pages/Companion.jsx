@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
-import commerce, { hasUrl } from "../commerce";
+import { products, hasUrl, formatPrice } from "../commerce";
 import { gsap } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
@@ -33,28 +33,12 @@ export default function Companion() {
   );
 
   const { pathname } = useLocation();
-  const isPrint = pathname.endsWith("/print");
-  const isEbook = pathname.endsWith("/ebook");
+  const fromBookPath =
+    pathname.endsWith("/print") || pathname.endsWith("/ebook");
 
-  const { fullUrl, printBuyerUrl, ebookBuyerUrl, fullLabel, buyerLabel } =
-    commerce.companion;
-
-  // Which checkout this route should emphasize
-  let primaryUrl = fullUrl;
-  let primaryLabel = fullLabel;
-  let routeNote = "Standalone reference access.";
-
-  if (isPrint) {
-    primaryUrl = printBuyerUrl || fullUrl;
-    primaryLabel = buyerLabel;
-    routeNote =
-      "Print book-buyer path — discounted Companion for readers who own the physical book.";
-  } else if (isEbook) {
-    primaryUrl = ebookBuyerUrl || printBuyerUrl || fullUrl;
-    primaryLabel = buyerLabel;
-    routeNote =
-      "Ebook book-buyer path — discounted Companion for readers who bought the digital book.";
-  }
+  const companion = products.companion;
+  const fullBundle = products.bundleFull;
+  const storeReady = hasUrl(companion.url) || hasUrl(fullBundle.url);
 
   const items = [
     ["Glossary", "Defined terms from the book"],
@@ -78,9 +62,12 @@ export default function Companion() {
           and the steelman of objections. This volume is the journey; the
           Companion is the map.
         </p>
-        {(isPrint || isEbook) && (
+        {fromBookPath && (
           <p className="note-box" style={{ marginTop: "1.25rem" }}>
-            {routeNote}
+            Book-buyer path. The Companion is {formatPrice(companion.price)}{" "}
+            standalone — or free inside the Full All-in-One bundle (
+            {formatPrice(fullBundle.price)}: print + ebook + audiobook +
+            Companion).
           </p>
         )}
       </Reveal>
@@ -111,72 +98,68 @@ export default function Companion() {
         <Reveal>
           <div className="section-head">
             <h2>Access</h2>
+            <p className="muted" style={{ margin: "0.5rem 0 0" }}>
+              Sold on Gumroad. Instant digital delivery.
+            </p>
           </div>
         </Reveal>
         <Stagger className="price-row">
           <StaggerItem className="price-card price-glow">
-            <div className="meta">Book buyers</div>
-            <strong>$5.99</strong>
+            <div className="meta">Standalone</div>
+            <strong>{formatPrice(companion.price)}</strong>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Print QR or ebook receipt. Permanent discount — no monthly codes.
+              {companion.blurb}
             </p>
             <BuyButton
-              href={
-                isEbook
-                  ? ebookBuyerUrl || printBuyerUrl
-                  : printBuyerUrl || ebookBuyerUrl
-              }
-              label={buyerLabel}
+              href={companion.url}
+              label={companion.label}
               comingSoonLabel="Checkout pending"
             />
           </StaggerItem>
-          <StaggerItem className="price-card price-glow">
-            <div className="meta">Standalone</div>
-            <strong>$19.99</strong>
+          <StaggerItem className="price-card price-glow price-card-featured">
+            <div className="meta">Best value</div>
+            <strong>{formatPrice(fullBundle.price)}</strong>
+            <p
+              style={{
+                margin: "0 0 0.35rem",
+                color: "var(--ink)",
+                fontFamily: "Cinzel, serif",
+                fontSize: "1.05rem",
+              }}
+            >
+              {fullBundle.name}
+            </p>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Reference volume for researchers who want the apparatus without
-              the narrative.
+              Print + ebook + audiobook — Companion included free.
             </p>
             <BuyButton
-              href={fullUrl}
-              label={fullLabel}
+              href={fullBundle.url}
+              label={fullBundle.label}
               comingSoonLabel="Checkout pending"
             />
           </StaggerItem>
         </Stagger>
 
-        {/* Primary CTA for this route */}
-        <Reveal delay={0.06}>
-          <div className="actions" style={{ marginTop: "1.25rem" }}>
-            <BuyButton href={primaryUrl} label={primaryLabel} />
-          </div>
-        </Reveal>
-
-        {!hasUrl(fullUrl) &&
-          !hasUrl(printBuyerUrl) &&
-          !hasUrl(ebookBuyerUrl) && (
-            <Reveal delay={0.1}>
-              <div className="commerce-placeholder" style={{ marginTop: "1.25rem" }}>
-                <strong style={{ color: "var(--ink)" }}>
-                  Wire Companion checkout
-                </strong>
-                <br />
-                1. Create products on Gumroad, Lemon Squeezy, or Stripe.
-                <br />
-                2. Paste URLs into <code>src/commerce.js</code>:
-                <br />
-                &nbsp;&nbsp;<code>companion.fullUrl</code> ($19.99)
-                <br />
-                &nbsp;&nbsp;<code>companion.printBuyerUrl</code> ($5.99)
-                <br />
-                &nbsp;&nbsp;<code>companion.ebookBuyerUrl</code> ($5.99)
-                <br />
-                3. Redeploy. QR →{" "}
-                <code>/books/square-mile/companion/print</code> uses the print
-                buyer link.
-              </div>
-            </Reveal>
-          )}
+        {!storeReady && (
+          <Reveal delay={0.1}>
+            <div className="commerce-placeholder" style={{ marginTop: "1.25rem" }}>
+              <strong style={{ color: "var(--ink)" }}>
+                Wire Companion checkout
+              </strong>
+              <br />
+              1. Create on Gumroad: Companion ({formatPrice(companion.price)})
+              and Full All-in-One ({formatPrice(fullBundle.price)}).
+              <br />
+              2. Paste URLs into <code>src/commerce.js</code>:
+              <br />
+              &nbsp;&nbsp;<code>products.companion.url</code>
+              <br />
+              &nbsp;&nbsp;<code>products.bundleFull.url</code>
+              <br />
+              3. Redeploy. Buttons go live automatically.
+            </div>
+          </Reveal>
+        )}
       </section>
 
       <section className="section">
