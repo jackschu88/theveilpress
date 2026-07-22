@@ -1,6 +1,6 @@
 import { lazy, Suspense, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useGSAP } from "@gsap/react";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
@@ -20,12 +20,19 @@ export default function Home() {
   const featuredImgRef = useRef(null);
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
+  const reduce = useReducedMotion();
 
   const { printUrl, ebookUrl, audiobookUrl, printLabel, audiobookLabel } =
     commerce.squareMile;
 
   useGSAP(
     () => {
+      // Matches the reduced-motion pattern used throughout the codebase
+      // (GoldDust, FogReveal, SmoothScroll): skip creating any scrub/pin
+      // ScrollTriggers so the page has no scroll-jacking or motion under
+      // prefers-reduced-motion.
+      if (reduce) return;
+
       if (orbRef.current) {
         gsap.to(orbRef.current, {
           yPercent: 40,
@@ -66,7 +73,7 @@ export default function Home() {
         });
       }
     },
-    { scope: heroRef }
+    { scope: heroRef, dependencies: [reduce] }
   );
 
   const toggleMute = () => {
