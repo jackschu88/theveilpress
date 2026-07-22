@@ -1,8 +1,38 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
+import { useGSAP } from "@gsap/react";
+import { useReducedMotion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal } from "../components/Reveal";
+import { gsap } from "../scroll";
 
 export default function About() {
+  const proseRef = useRef(null);
+  const reduce = useReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reduce) return;
+      if (!proseRef.current) return;
+      gsap.fromTo(
+        proseRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: proseRef.current,
+            start: "top 88%",
+            end: "top 60%",
+            scrub: 0.4,
+          },
+        }
+      );
+    },
+    { scope: proseRef, dependencies: [reduce] }
+  );
+
   return (
     <AnimatedPage>
       <Reveal>
@@ -18,7 +48,7 @@ export default function About() {
         <hr className="rule" />
       </Reveal>
 
-      <Reveal className="prose">
+      <div ref={proseRef} className="prose">
         <h2>The series</h2>
         <p>
           Each volume under The Veil examines a load-bearing piece of the modern
@@ -49,7 +79,7 @@ export default function About() {
             @deepdivefile
           </a>
         </p>
-      </Reveal>
+      </div>
 
       <Reveal>
         <div className="actions">
