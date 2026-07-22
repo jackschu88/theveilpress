@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { getShaftTexture } from "../../webgl/textures";
 
 const SHAFTS = [
   { x: -2.2, rot: 0.35, scale: 1.1, speed: 0.05 },
@@ -10,17 +11,19 @@ const SHAFTS = [
 
 export default function LightShafts({ intensity = 1 }) {
   const group = useRef(null);
+  const texture = useMemo(() => getShaftTexture(), []);
 
   const material = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
-        color: "#c9a84c",
+        map: texture,
+        color: "#e8c988",
         transparent: true,
-        opacity: 0.08 * intensity,
+        opacity: 0.16 * intensity,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
       }),
-    [intensity]
+    [intensity, texture]
   );
 
   useFrame((state) => {
@@ -42,7 +45,7 @@ export default function LightShafts({ intensity = 1 }) {
           scale={s.scale}
           material={material}
         >
-          <planeGeometry args={[1.4, 9]} />
+          <planeGeometry args={[0.9, 9]} />
         </mesh>
       ))}
     </group>

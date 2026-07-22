@@ -10,7 +10,7 @@ export default function Grain({ opacity = 0.05 }) {
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    const size = 96;
+    const size = 180;
     canvas.width = size;
     canvas.height = size;
 

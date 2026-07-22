@@ -1,14 +1,13 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useReducedMotion } from "framer-motion";
 import { useDeviceCapability } from "../../hooks/useDeviceCapability";
 import LightShafts from "./LightShafts";
 import DustField from "./DustField";
 
 const VARIANTS = {
-  full: { count: 220, intensity: 1, bloom: 0.9 },
-  light: { count: 100, intensity: 0.6, bloom: 0.5 },
+  full: { count: 220, intensity: 1 },
+  light: { count: 100, intensity: 0.6 },
 };
 
 // Narrow viewports (phones) get a smaller particle count on top of whatever
@@ -40,14 +39,6 @@ export default function HeroScene({ variant = "full" }) {
         <Suspense fallback={null}>
           <LightShafts intensity={config.intensity} />
           <DustField count={config.count} />
-          <EffectComposer multisampling={0}>
-            <Bloom
-              intensity={config.bloom}
-              luminanceThreshold={0.2}
-              luminanceSmoothing={0.9}
-              mipmapBlur
-            />
-          </EffectComposer>
         </Suspense>
       </Canvas>
     </div>
