@@ -48,10 +48,16 @@ export function getShaftTexture() {
   canvas.height = h;
   const ctx = canvas.getContext("2d");
 
-  // Horizontal falloff — soft left/right edges instead of a hard rectangle.
+  // Horizontal falloff — a wide, gently-curved wash instead of a sharp
+  // triangular peak. A knife-edge peak (single stop at full opacity) reads
+  // as a hard line once additively blended with neighboring shafts; a
+  // broad, lower-opacity plateau with gaussian-like shoulders reads as
+  // soft light instead.
   const hGrad = ctx.createLinearGradient(0, 0, w, 0);
   hGrad.addColorStop(0, "rgba(255,255,255,0)");
-  hGrad.addColorStop(0.5, "rgba(255,255,255,1)");
+  hGrad.addColorStop(0.3, "rgba(255,255,255,0.55)");
+  hGrad.addColorStop(0.5, "rgba(255,255,255,0.75)");
+  hGrad.addColorStop(0.7, "rgba(255,255,255,0.55)");
   hGrad.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = hGrad;
   ctx.fillRect(0, 0, w, h);
@@ -61,8 +67,8 @@ export function getShaftTexture() {
   ctx.globalCompositeOperation = "destination-in";
   const vGrad = ctx.createLinearGradient(0, 0, 0, h);
   vGrad.addColorStop(0, "rgba(255,255,255,0)");
-  vGrad.addColorStop(0.12, "rgba(255,255,255,1)");
-  vGrad.addColorStop(0.88, "rgba(255,255,255,1)");
+  vGrad.addColorStop(0.25, "rgba(255,255,255,1)");
+  vGrad.addColorStop(0.75, "rgba(255,255,255,1)");
   vGrad.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = vGrad;
   ctx.fillRect(0, 0, w, h);

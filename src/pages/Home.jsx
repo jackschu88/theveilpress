@@ -51,7 +51,7 @@ export default function Home() {
             scrollTrigger: {
               trigger: featuredRef.current,
               start: "top bottom",
-              end: "top 30%",
+              end: "top top",
               scrub: true,
             },
           }
@@ -59,7 +59,7 @@ export default function Home() {
 
         ScrollTrigger.create({
           trigger: featuredRef.current,
-          start: "top 20%",
+          start: "top top",
           end: "+=260",
           pin: true,
           pinSpacing: true,

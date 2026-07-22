@@ -4,9 +4,9 @@ import * as THREE from "three";
 import { getShaftTexture } from "../../webgl/textures";
 
 const SHAFTS = [
-  { x: -2.2, rot: 0.35, scale: 1.1, speed: 0.05 },
-  { x: 0.4, rot: -0.15, scale: 1.4, speed: 0.035 },
-  { x: 2.6, rot: 0.5, scale: 0.9, speed: 0.06 },
+  { x: -2.2, rot: 0.35, scale: 1.1, speed: 0.02 },
+  { x: 0.4, rot: -0.15, scale: 1.4, speed: 0.015 },
+  { x: 2.6, rot: 0.5, scale: 0.9, speed: 0.025 },
 ];
 
 export default function LightShafts({ intensity = 1 }) {
@@ -19,7 +19,7 @@ export default function LightShafts({ intensity = 1 }) {
         map: texture,
         color: "#e8c988",
         transparent: true,
-        opacity: 0.16 * intensity,
+        opacity: 0.2 * intensity,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
       }),
@@ -31,7 +31,7 @@ export default function LightShafts({ intensity = 1 }) {
     if (!g) return;
     const t = state.clock.elapsedTime;
     g.children.forEach((mesh, i) => {
-      mesh.rotation.z = SHAFTS[i].rot + Math.sin(t * SHAFTS[i].speed) * 0.05;
+      mesh.rotation.z = SHAFTS[i].rot + Math.sin(t * SHAFTS[i].speed) * 0.015;
     });
   });
 
@@ -45,7 +45,7 @@ export default function LightShafts({ intensity = 1 }) {
           scale={s.scale}
           material={material}
         >
-          <planeGeometry args={[0.9, 9]} />
+          <planeGeometry args={[1.6, 9]} />
         </mesh>
       ))}
     </group>
