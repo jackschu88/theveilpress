@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import TiltCover from "../components/TiltCover";
@@ -9,14 +10,48 @@ import { MagneticLink, MagneticAnchor } from "../components/MagneticButton";
 import { BuyButton } from "../components/BuyButton";
 import commerce, { hasUrl } from "../commerce";
 import { easeOut } from "../motion";
+import { gsap } from "../scroll";
+
+const HeroScene = lazy(() => import("../components/HeroScene"));
 
 export default function SquareMile() {
-  const ref = useRef(null);
+  const heroRef = useRef(null);
+  const argumentRef = useRef(null);
+  const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: heroRef,
     offset: ["start end", "end start"],
   });
   const bgY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+
+  useGSAP(
+    () => {
+      // Matches the reduced-motion pattern used throughout the codebase
+      // (GoldDust, FogReveal, SmoothScroll): skip creating the scrub
+      // ScrollTrigger so the argument card has no scroll-tied motion
+      // under prefers-reduced-motion.
+      if (reduce) return;
+
+      if (!argumentRef.current) return;
+      gsap.fromTo(
+        argumentRef.current,
+        { opacity: 0, scale: 0.94, y: 24 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: argumentRef.current,
+            start: "top 88%",
+            end: "top 55%",
+            scrub: 0.4,
+          },
+        }
+      );
+    },
+    { scope: argumentRef, dependencies: [reduce] }
+  );
 
   const { printUrl, ebookUrl, printLabel, ebookLabel } = commerce.squareMile;
   const printReady = hasUrl(printUrl);
@@ -24,7 +59,10 @@ export default function SquareMile() {
 
   return (
     <AnimatedPage>
-      <section className="hero hero-grid hero-book" ref={ref}>
+      <section className="hero hero-grid hero-book" ref={heroRef}>
+        <Suspense fallback={null}>
+          <HeroScene variant="light" />
+        </Suspense>
         <motion.div className="book-hero-glow" style={{ y: bgY }} aria-hidden />
         <div>
           <motion.p
@@ -112,7 +150,7 @@ export default function SquareMile() {
         <hr className="rule rule-pulse" />
       </Reveal>
 
-      <Reveal className="section">
+      <div ref={argumentRef} className="section">
         <div className="card card-glow argument-card">
           <div className="meta">The argument</div>
           <p className="argument-lead">
@@ -125,7 +163,7 @@ export default function SquareMile() {
             corporate order and a premise about what a human being is.
           </p>
         </div>
-      </Reveal>
+      </div>
 
       <section className="section" id="buy">
         <Reveal>
