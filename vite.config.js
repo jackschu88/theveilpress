@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 // Dedicated port so this never collides with other Vite apps (often on 5173).
@@ -12,6 +12,10 @@ export default defineConfig({
   preview: {
     port: 5180,
     strictPort: true,
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
   },
 })
 
