@@ -13,10 +13,10 @@ import { ScrollTrigger } from "../scroll";
 
 const links = [
   { to: "/", label: "Home", end: true },
-  { to: "/books", label: "Books" },
-  { to: "/books/square-mile", label: "Square Mile" },
+  { to: "/books", label: "Books", end: true },
+  { to: "/books/square-mile", label: "Square Mile", end: true },
   { to: "/books/square-mile/companion", label: "Companion" },
-  { to: "/about", label: "About" },
+  { to: "/about", label: "About", end: true },
 ];
 
 export default function Layout() {
