@@ -11,7 +11,6 @@ import commerce, {
   products,
   hasUrl,
   formatPrice,
-  anyCheckoutReady,
 } from "../commerce";
 import { easeOut } from "../motion";
 import { gsap } from "../scroll";
@@ -27,6 +26,7 @@ const individuals = [
 ];
 
 const bundles = [
+  products.bundleEbookAudio,
   products.bundlePrintCompanion,
   products.bundleEbookCompanion,
   products.bundleAudioCompanion,
@@ -68,7 +68,6 @@ export default function SquareMile() {
 
   const printReady = hasUrl(products.print.url);
   const ebookReady = hasUrl(products.ebook.url);
-  const storeReady = anyCheckoutReady();
 
   return (
     <AnimatedPage>
@@ -258,23 +257,6 @@ export default function SquareMile() {
           ))}
         </Stagger>
 
-        {!storeReady && (
-          <Reveal delay={0.1}>
-            <div className="commerce-placeholder">
-              <strong style={{ color: "var(--ink)" }}>
-                Wire Gumroad checkout
-              </strong>
-              <br />
-              1. Create the 9 products on Gumroad (4 standalones + 5 bundles)
-              using the prices above.
-              <br />
-              2. Paste each share URL into{" "}
-              <code>src/commerce.js</code> → <code>products.*.url</code>.
-              <br />
-              3. Redeploy. Every button on this page lights up automatically.
-            </div>
-          </Reveal>
-        )}
       </section>
 
       <section className="section">
@@ -301,7 +283,7 @@ export default function SquareMile() {
               <div className="meta">Full Bundle</div>
               <h3>{formatPrice(products.bundleFull.price)}</h3>
               <p>
-                Print + ebook + audiobook + Companion Guide. One checkout on
+                Print + Digital Edition + audiobook + Companion Guide. One checkout on
                 Gumroad — everything for readers who want the complete set.
               </p>
               <div style={{ marginTop: "1rem" }}>

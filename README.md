@@ -77,6 +77,4 @@ Paste a real `https://...` URL → button goes live (opens in new tab).
 - [ ] Real PDF / Companion file delivery on Gumroad/Lemon
 
 
-## Who builds this
 
-Built in-repo with Grok (this project). No separate website-AI platform required.

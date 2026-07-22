@@ -6,7 +6,6 @@ import { BuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
 import {
   products,
-  hasUrl,
   formatPrice,
   COMPANION_BUNDLE_PRICE,
 } from "../commerce";
@@ -44,7 +43,6 @@ export default function Companion() {
 
   const companion = products.companion;
   const fullBundle = products.bundleFull;
-  const storeReady = hasUrl(companion.url) || hasUrl(fullBundle.url);
 
   const items = [
     ["Glossary", "Defined terms from the book"],
@@ -73,7 +71,7 @@ export default function Companion() {
             Book-buyer path. Companion is {formatPrice(companion.price)}{" "}
             standalone, or {formatPrice(COMPANION_BUNDLE_PRICE)} when added in
             any bundle — Full Bundle ({formatPrice(fullBundle.price)}) includes
-            print + ebook + audiobook + Companion.
+            print + Digital Edition + audiobook + Companion.
           </p>
         )}
       </Reveal>
@@ -126,8 +124,8 @@ export default function Companion() {
             <div className="meta">In any bundle</div>
             <strong>{formatPrice(COMPANION_BUNDLE_PRICE)}</strong>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Companion add-on price when paired with print, PDF, audiobook, or
-              the full set — not sold alone at this rate.
+              Companion add-on price when paired with print, Digital Edition,
+              audiobook, or the full set — not sold alone at this rate.
             </p>
             <MagneticLink className="btn" to="/books/square-mile#buy">
               See bundles
@@ -147,7 +145,7 @@ export default function Companion() {
               {fullBundle.name}
             </p>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Print + ebook + audiobook + Companion Guide.
+              Print + Digital Edition + audiobook + Companion Guide.
             </p>
             <BuyButton
               href={fullBundle.url}
@@ -157,27 +155,6 @@ export default function Companion() {
           </StaggerItem>
         </Stagger>
 
-        {!storeReady && (
-          <Reveal delay={0.1}>
-            <div className="commerce-placeholder" style={{ marginTop: "1.25rem" }}>
-              <strong style={{ color: "var(--ink)" }}>
-                Wire Companion checkout
-              </strong>
-              <br />
-              1. Create on Gumroad: Companion ({formatPrice(companion.price)})
-              and Full Bundle ({formatPrice(fullBundle.price)}), plus any
-              Companion add-on bundles.
-              <br />
-              2. Paste URLs into <code>src/commerce.js</code>:
-              <br />
-              &nbsp;&nbsp;<code>products.companion.url</code>
-              <br />
-              &nbsp;&nbsp;<code>products.bundleFull.url</code>
-              <br />
-              3. Redeploy. Buttons go live automatically.
-            </div>
-          </Reveal>
-        )}
       </section>
 
       <section className="section">

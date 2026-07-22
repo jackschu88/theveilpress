@@ -1308,22 +1308,6 @@ a.card:hover,
   text-shadow: none;
 }
 
-.commerce-placeholder {
-  margin-top: 1.15rem;
-  padding: 1.1rem 1.2rem;
-  border: 1px dashed rgba(201, 168, 76, 0.28);
-  color: var(--ink-muted);
-  font-size: 0.98rem;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.25);
-}
-
-.commerce-placeholder code {
-  font-family: "Source Sans 3", monospace;
-  font-size: 0.85em;
-  color: var(--gold-dim);
-}
-
 .soon {
   opacity: 0.78;
 }

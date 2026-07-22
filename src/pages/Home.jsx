@@ -166,7 +166,7 @@ export default function Home() {
             href={ebook.url}
             label={ebook.label}
             className="btn btn-shimmer"
-            comingSoonLabel="PDF · $19.99"
+            comingSoonLabel="Digital Edition · $19.99"
           />
           <BuyButton
             href={audiobook.url}
