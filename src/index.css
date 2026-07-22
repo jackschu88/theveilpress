@@ -1429,6 +1429,24 @@ a.card:hover,
   }
 }
 
+/* Companion Guide promo trailer — cinematic 16:9, not phone portrait */
+.companion-trailer {
+  margin: 1.75rem 0 0.5rem;
+}
+.companion-trailer-frame {
+  width: min(52rem, 100%);
+  aspect-ratio: 16 / 9;
+  max-height: none;
+}
+.companion-trailer-caption {
+  text-align: center;
+  margin: 0.85rem 0 0;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .trailer-video {
     /* still allow manual play via controls */
@@ -1458,7 +1476,21 @@ a.card:hover,
   will-change: transform;
 }
 
-.list-animated li:hover {
+.list-animated li:not(.list-link):hover {
+  padding-left: 1.55rem;
+}
+
+.list-link {
+  padding: 0 !important;
+}
+
+.list-link a {
+  padding: 1.1rem 1.35rem;
+  transition: background 0.25s ease, padding-left 0.25s ease;
+}
+
+.list-link a:hover {
+  background: rgba(201, 168, 76, 0.05);
   padding-left: 1.55rem;
 }
 

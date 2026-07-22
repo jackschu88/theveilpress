@@ -55,27 +55,39 @@ export default function Books() {
 
       <div ref={listRef}>
         <ul className="list-clean list-animated">
-          <li>
-            <div>
-              <div className="meta" style={{ marginBottom: "0.35rem" }}>
-                Volume I
+          <li className="list-link">
+            <Link
+              to="/books/square-mile"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "1rem",
+                flexWrap: "wrap",
+                width: "100%",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              <div>
+                <div className="meta" style={{ marginBottom: "0.35rem" }}>
+                  Volume I
+                </div>
+                <span
+                  className="label"
+                  style={{ fontSize: "1.25rem" }}
+                >
+                  The Veil of the Square Mile
+                </span>
+                <p
+                  className="muted"
+                  style={{ margin: "0.4rem 0 0", maxWidth: "36rem" }}
+                >
+                  A comprehensive analysis of the invisible British financial
+                  empire.
+                </p>
               </div>
-              <Link
-                to="/books/square-mile"
-                className="label"
-                style={{ fontSize: "1.25rem" }}
-              >
-                The Veil of the Square Mile
-              </Link>
-              <p
-                className="muted"
-                style={{ margin: "0.4rem 0 0", maxWidth: "36rem" }}
-              >
-                A comprehensive analysis of the invisible British financial
-                empire.
-              </p>
-            </div>
-            <span className="value">Available</span>
+              <span className="value">Available</span>
+            </Link>
           </li>
           <li className="soon">
             <div>
