@@ -34,7 +34,7 @@ export default function HeroScene({ variant = "full" }) {
       <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 6], fov: 45 }}
-        gl={{ antialias: false, alpha: true }}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>
           <LightShafts intensity={config.intensity} />

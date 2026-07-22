@@ -33,47 +33,85 @@ export function getDustTexture() {
   ctx.fillRect(0, 0, size, size);
 
   dustTexture = new THREE.CanvasTexture(canvas);
+  dustTexture.wrapS = THREE.ClampToEdgeWrapping;
+  dustTexture.wrapT = THREE.ClampToEdgeWrapping;
+  dustTexture.minFilter = THREE.LinearFilter;
+  dustTexture.magFilter = THREE.LinearFilter;
+  dustTexture.generateMipmaps = false;
+  dustTexture.needsUpdate = true;
   return dustTexture;
 }
 
 let shaftTexture = null;
 
+/**
+ * Soft volumetric light-shaft map.
+ *
+ * Prior versions used a linear horizontal gradient that still left a hard
+ * silhouette once additively blended on a plane mesh — the plane edges
+ * read as vertical "lines" framing a phone-shaped column behind the hero.
+ *
+ * This version paints a true gaussian falloff in pixel space so every edge
+ * (left/right and top/bottom) reaches exact zero alpha, with a multi-pixel
+ * transparent border so bilinear sampling never samples a hard cut.
+ */
 export function getShaftTexture() {
   if (shaftTexture) return shaftTexture;
 
-  const w = 64;
-  const h = 256;
+  const w = 128;
+  const h = 512;
   const canvas = document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
   const ctx = canvas.getContext("2d");
+  const img = ctx.createImageData(w, h);
+  const data = img.data;
 
-  // Horizontal falloff — a wide, gently-curved wash instead of a sharp
-  // triangular peak. A knife-edge peak (single stop at full opacity) reads
-  // as a hard line once additively blended with neighboring shafts; a
-  // broad, lower-opacity plateau with gaussian-like shoulders reads as
-  // soft light instead.
-  const hGrad = ctx.createLinearGradient(0, 0, w, 0);
-  hGrad.addColorStop(0, "rgba(255,255,255,0)");
-  hGrad.addColorStop(0.3, "rgba(255,255,255,0.55)");
-  hGrad.addColorStop(0.5, "rgba(255,255,255,0.75)");
-  hGrad.addColorStop(0.7, "rgba(255,255,255,0.55)");
-  hGrad.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = hGrad;
-  ctx.fillRect(0, 0, w, h);
+  const cx = (w - 1) / 2;
+  // Horizontal sigma: ~18% of width — wide soft beam, not a knife edge.
+  const sigmaX = w * 0.18;
+  // Vertical envelope peaks mid-shaft and dies well before the mesh edge.
+  const sigmaY = h * 0.28;
+  const cy = (h - 1) / 2;
 
-  // Vertical falloff, multiplied in via destination-in so the top/bottom
-  // ends taper instead of ending in a straight cut line.
-  ctx.globalCompositeOperation = "destination-in";
-  const vGrad = ctx.createLinearGradient(0, 0, 0, h);
-  vGrad.addColorStop(0, "rgba(255,255,255,0)");
-  vGrad.addColorStop(0.25, "rgba(255,255,255,1)");
-  vGrad.addColorStop(0.75, "rgba(255,255,255,1)");
-  vGrad.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = vGrad;
-  ctx.fillRect(0, 0, w, h);
-  ctx.globalCompositeOperation = "source-over";
+  for (let y = 0; y < h; y += 1) {
+    for (let x = 0; x < w; x += 1) {
+      const dx = (x - cx) / sigmaX;
+      const dy = (y - cy) / sigmaY;
+      // Product of two gaussians → soft oval wash, zero at borders.
+      let a = Math.exp(-0.5 * (dx * dx + dy * dy));
+
+      // Hard-zero a 3px border so plane edges never show a cut line.
+      const border = 3;
+      if (x < border || x >= w - border || y < border || y >= h - border) {
+        a = 0;
+      } else {
+        // Smoothstep the border zone so the clamp isn't a step itself.
+        const bx = Math.min(x, w - 1 - x) / border;
+        const by = Math.min(y, h - 1 - y) / border;
+        const edge = Math.min(1, bx, by);
+        a *= edge * edge * (3 - 2 * edge);
+      }
+
+      // Keep peak modest — additive blending of 3 shafts will stack.
+      a = Math.min(1, a * 0.85);
+
+      const i = (y * w + x) * 4;
+      data[i] = 255;
+      data[i + 1] = 255;
+      data[i + 2] = 255;
+      data[i + 3] = Math.round(a * 255);
+    }
+  }
+
+  ctx.putImageData(img, 0, 0);
 
   shaftTexture = new THREE.CanvasTexture(canvas);
+  shaftTexture.wrapS = THREE.ClampToEdgeWrapping;
+  shaftTexture.wrapT = THREE.ClampToEdgeWrapping;
+  shaftTexture.minFilter = THREE.LinearFilter;
+  shaftTexture.magFilter = THREE.LinearFilter;
+  shaftTexture.generateMipmaps = false;
+  shaftTexture.needsUpdate = true;
   return shaftTexture;
 }
