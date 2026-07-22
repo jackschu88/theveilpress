@@ -1,18 +1,15 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { useGSAP } from "@gsap/react";
-import { useReducedMotion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal } from "../components/Reveal";
 import { gsap } from "../scroll";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 export default function About() {
   const proseRef = useRef(null);
-  const reduce = useReducedMotion();
 
-  useGSAP(
+  useScrollReveal(
     () => {
-      if (reduce) return;
       if (!proseRef.current) return;
       gsap.fromTo(
         proseRef.current,
@@ -30,7 +27,7 @@ export default function About() {
         }
       );
     },
-    { scope: proseRef, dependencies: [reduce] }
+    { scope: proseRef }
   );
 
   return (

@@ -1,7 +1,6 @@
 import { lazy, Suspense, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
-import { useGSAP } from "@gsap/react";
+import { motion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import SplitTitle from "../components/SplitTitle";
@@ -10,6 +9,7 @@ import { BuyButton } from "../components/BuyButton";
 import commerce, { hasUrl } from "../commerce";
 import { easeOut } from "../motion";
 import { gsap, ScrollTrigger } from "../scroll";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
 
@@ -20,19 +20,12 @@ export default function Home() {
   const featuredImgRef = useRef(null);
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
-  const reduce = useReducedMotion();
 
   const { printUrl, ebookUrl, audiobookUrl, printLabel, audiobookLabel } =
     commerce.squareMile;
 
-  useGSAP(
+  useScrollReveal(
     () => {
-      // Matches the reduced-motion pattern used throughout the codebase
-      // (GoldDust, FogReveal, SmoothScroll): skip creating any scrub/pin
-      // ScrollTriggers so the page has no scroll-jacking or motion under
-      // prefers-reduced-motion.
-      if (reduce) return;
-
       if (orbRef.current) {
         gsap.to(orbRef.current, {
           yPercent: 40,
@@ -73,7 +66,7 @@ export default function Home() {
         });
       }
     },
-    { scope: heroRef, dependencies: [reduce] }
+    { scope: heroRef }
   );
 
   const toggleMute = () => {

@@ -1,7 +1,6 @@
 import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useGSAP } from "@gsap/react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import TiltCover from "../components/TiltCover";
@@ -11,27 +10,21 @@ import { BuyButton } from "../components/BuyButton";
 import commerce, { hasUrl } from "../commerce";
 import { easeOut } from "../motion";
 import { gsap } from "../scroll";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
 
 export default function SquareMile() {
   const heroRef = useRef(null);
   const argumentRef = useRef(null);
-  const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start end", "end start"],
   });
   const bgY = useTransform(scrollYProgress, [0, 1], [0, 60]);
 
-  useGSAP(
+  useScrollReveal(
     () => {
-      // Matches the reduced-motion pattern used throughout the codebase
-      // (GoldDust, FogReveal, SmoothScroll): skip creating the scrub
-      // ScrollTrigger so the argument card has no scroll-tied motion
-      // under prefers-reduced-motion.
-      if (reduce) return;
-
       if (!argumentRef.current) return;
       gsap.fromTo(
         argumentRef.current,
@@ -50,7 +43,7 @@ export default function SquareMile() {
         }
       );
     },
-    { scope: argumentRef, dependencies: [reduce] }
+    { scope: argumentRef }
   );
 
   const { printUrl, ebookUrl, printLabel, ebookLabel } = commerce.squareMile;

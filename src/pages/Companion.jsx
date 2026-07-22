@@ -1,20 +1,17 @@
 import { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useGSAP } from "@gsap/react";
-import { useReducedMotion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
 import commerce, { hasUrl } from "../commerce";
 import { gsap } from "../scroll";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 export default function Companion() {
   const noteRef = useRef(null);
-  const reduce = useReducedMotion();
 
-  useGSAP(
+  useScrollReveal(
     () => {
-      if (reduce) return;
       if (!noteRef.current) return;
       gsap.fromTo(
         noteRef.current,
@@ -32,7 +29,7 @@ export default function Companion() {
         }
       );
     },
-    { scope: noteRef, dependencies: [reduce] }
+    { scope: noteRef }
   );
 
   const { pathname } = useLocation();

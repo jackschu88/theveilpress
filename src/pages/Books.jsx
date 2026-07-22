@@ -1,26 +1,18 @@
 import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
-import { useReducedMotion } from "framer-motion";
-import { useGSAP } from "@gsap/react";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal } from "../components/Reveal";
 import { gsap } from "../scroll";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
 
 export default function Books() {
   const heroRef = useRef(null);
   const listRef = useRef(null);
-  const reduce = useReducedMotion();
 
-  useGSAP(
+  useScrollReveal(
     () => {
-      // Matches the reduced-motion pattern used throughout the codebase
-      // (GoldDust, FogReveal, SmoothScroll): skip creating the scrub
-      // ScrollTrigger so the catalogue list has no scroll-tied motion
-      // under prefers-reduced-motion.
-      if (reduce) return;
-
       if (!listRef.current) return;
       gsap.fromTo(
         listRef.current,
@@ -38,7 +30,7 @@ export default function Books() {
         }
       );
     },
-    { scope: listRef, dependencies: [reduce] }
+    { scope: listRef }
   );
 
   return (
