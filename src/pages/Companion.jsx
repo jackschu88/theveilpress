@@ -3,7 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
-import { products, hasUrl, formatPrice } from "../commerce";
+import { MagneticLink } from "../components/MagneticButton";
+import {
+  products,
+  hasUrl,
+  formatPrice,
+  COMPANION_BUNDLE_PRICE,
+} from "../commerce";
 import { gsap } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
@@ -64,10 +70,10 @@ export default function Companion() {
         </p>
         {fromBookPath && (
           <p className="note-box" style={{ marginTop: "1.25rem" }}>
-            Book-buyer path. The Companion is {formatPrice(companion.price)}{" "}
-            standalone — or free inside the Full All-in-One bundle (
-            {formatPrice(fullBundle.price)}: print + ebook + audiobook +
-            Companion).
+            Book-buyer path. Companion is {formatPrice(companion.price)}{" "}
+            standalone, or {formatPrice(COMPANION_BUNDLE_PRICE)} when added in
+            any bundle — Full Bundle ({formatPrice(fullBundle.price)}) includes
+            print + ebook + audiobook + Companion.
           </p>
         )}
       </Reveal>
@@ -116,6 +122,17 @@ export default function Companion() {
               comingSoonLabel="Checkout pending"
             />
           </StaggerItem>
+          <StaggerItem className="price-card price-glow">
+            <div className="meta">In any bundle</div>
+            <strong>{formatPrice(COMPANION_BUNDLE_PRICE)}</strong>
+            <p className="muted" style={{ margin: "0 0 1rem" }}>
+              Companion add-on price when paired with print, PDF, audiobook, or
+              the full set — not sold alone at this rate.
+            </p>
+            <MagneticLink className="btn" to="/books/square-mile#buy">
+              See bundles
+            </MagneticLink>
+          </StaggerItem>
           <StaggerItem className="price-card price-glow price-card-featured">
             <div className="meta">Best value</div>
             <strong>{formatPrice(fullBundle.price)}</strong>
@@ -130,7 +147,7 @@ export default function Companion() {
               {fullBundle.name}
             </p>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Print + ebook + audiobook — Companion included free.
+              Print + ebook + audiobook + Companion Guide.
             </p>
             <BuyButton
               href={fullBundle.url}
@@ -148,7 +165,8 @@ export default function Companion() {
               </strong>
               <br />
               1. Create on Gumroad: Companion ({formatPrice(companion.price)})
-              and Full All-in-One ({formatPrice(fullBundle.price)}).
+              and Full Bundle ({formatPrice(fullBundle.price)}), plus any
+              Companion add-on bundles.
               <br />
               2. Paste URLs into <code>src/commerce.js</code>:
               <br />

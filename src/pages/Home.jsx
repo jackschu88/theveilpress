@@ -159,7 +159,7 @@ export default function Home() {
               className="btn btn-primary btn-shimmer"
               to="/books/square-mile#buy"
             >
-              Buy the Book · $36.99
+              Buy the Book · $35.99
             </MagneticLink>
           )}
           <BuyButton

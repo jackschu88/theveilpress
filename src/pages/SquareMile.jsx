@@ -27,8 +27,10 @@ const individuals = [
 ];
 
 const bundles = [
-  products.bundleEbookAudio,
-  products.bundlePrintEbook,
+  products.bundlePrintCompanion,
+  products.bundleEbookCompanion,
+  products.bundleAudioCompanion,
+  products.bundleEbookAudioCompanion,
   products.bundleFull,
 ];
 
@@ -185,7 +187,10 @@ export default function SquareMile() {
             <h2>Get the book</h2>
             <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
               Checkout is on Gumroad — secure, instant for digital, print ships
-              to you. Best value: Full All-in-One at {formatPrice(products.bundleFull.price)}.
+              to you. Companion is {formatPrice(products.companion.price)}{" "}
+              standalone, or {formatPrice(commerce.companion.addOnPrice)} inside
+              any bundle. Best value: Full Bundle at{" "}
+              {formatPrice(products.bundleFull.price)}.
             </p>
           </div>
         </Reveal>
@@ -260,7 +265,7 @@ export default function SquareMile() {
                 Wire Gumroad checkout
               </strong>
               <br />
-              1. Create the 7 products on Gumroad (4 individuals + 3 bundles)
+              1. Create the 9 products on Gumroad (4 standalones + 5 bundles)
               using the prices above.
               <br />
               2. Paste each share URL into{" "}
@@ -285,17 +290,19 @@ export default function SquareMile() {
               <h3>Companion Guide</h3>
               <p>
                 The map: glossary, timelines, dynastic trees, bibliography,
-                steelman. Included free in the Full All-in-One bundle.
+                steelman. {formatPrice(commerce.companion.fullPrice)} alone, or{" "}
+                {formatPrice(commerce.companion.addOnPrice)} when added in a
+                bundle.
               </p>
             </Link>
           </StaggerItem>
           <StaggerItem>
             <div className="card card-glow">
-              <div className="meta">All-in-One</div>
+              <div className="meta">Full Bundle</div>
               <h3>{formatPrice(products.bundleFull.price)}</h3>
               <p>
-                Print + ebook + audiobook, and the Companion Guide free. One
-                checkout on Gumroad — best path for readers who want everything.
+                Print + ebook + audiobook + Companion Guide. One checkout on
+                Gumroad — everything for readers who want the complete set.
               </p>
               <div style={{ marginTop: "1rem" }}>
                 <BuyButton
