@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import SplitTitle from "../components/SplitTitle";
@@ -8,21 +9,65 @@ import { MagneticLink } from "../components/MagneticButton";
 import { BuyButton } from "../components/BuyButton";
 import commerce, { hasUrl } from "../commerce";
 import { easeOut } from "../motion";
+import { gsap, ScrollTrigger } from "../scroll";
+
+const HeroScene = lazy(() => import("../components/HeroScene"));
 
 export default function Home() {
-  const ref = useRef(null);
+  const heroRef = useRef(null);
+  const orbRef = useRef(null);
+  const featuredRef = useRef(null);
+  const featuredImgRef = useRef(null);
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.15]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
   const { printUrl, ebookUrl, audiobookUrl, printLabel, audiobookLabel } =
     commerce.squareMile;
+
+  useGSAP(
+    () => {
+      if (orbRef.current) {
+        gsap.to(orbRef.current, {
+          yPercent: 40,
+          opacity: 0.15,
+          scale: 1.08,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
+      if (featuredRef.current && featuredImgRef.current) {
+        gsap.fromTo(
+          featuredImgRef.current,
+          { scale: 1.08 },
+          {
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: featuredRef.current,
+              start: "top bottom",
+              end: "top 30%",
+              scrub: true,
+            },
+          }
+        );
+
+        ScrollTrigger.create({
+          trigger: featuredRef.current,
+          start: "top 20%",
+          end: "+=260",
+          pin: true,
+          pinSpacing: true,
+        });
+      }
+    },
+    { scope: heroRef }
+  );
 
   const toggleMute = () => {
     const el = videoRef.current;
@@ -36,12 +81,12 @@ export default function Home() {
 
   return (
     <AnimatedPage>
-      <section className="hero hero-trailer" ref={ref}>
-        <motion.div
-          className="hero-orb"
-          style={{ y, opacity, scale }}
-          aria-hidden
-        />
+      <section className="hero hero-trailer" ref={heroRef}>
+        <Suspense fallback={null}>
+          <HeroScene variant="full" />
+        </Suspense>
+
+        <div ref={orbRef} className="hero-orb" aria-hidden />
 
         <motion.p
           className="eyebrow"
@@ -145,9 +190,17 @@ export default function Home() {
           </div>
         </Reveal>
         <Reveal>
-          <Link to="/books/square-mile" className="feature-panel feature-wow">
+          <Link
+            ref={featuredRef}
+            to="/books/square-mile"
+            className="feature-panel feature-wow"
+          >
             <div className="feature-visual">
-              <img src="/cover.jpg" alt="The Veil of the Square Mile cover" />
+              <img
+                ref={featuredImgRef}
+                src="/cover.jpg"
+                alt="The Veil of the Square Mile cover"
+              />
               <div className="feature-scan" aria-hidden />
             </div>
             <div className="feature-body">
