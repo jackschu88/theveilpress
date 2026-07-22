@@ -1,10 +1,40 @@
+import { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useGSAP } from "@gsap/react";
+import { useReducedMotion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
 import commerce, { hasUrl } from "../commerce";
+import { gsap } from "../scroll";
 
 export default function Companion() {
+  const noteRef = useRef(null);
+  const reduce = useReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reduce) return;
+      if (!noteRef.current) return;
+      gsap.fromTo(
+        noteRef.current,
+        { opacity: 0, x: -24 },
+        {
+          opacity: 1,
+          x: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: noteRef.current,
+            start: "top 88%",
+            end: "top 60%",
+            scrub: 0.4,
+          },
+        }
+      );
+    },
+    { scope: noteRef, dependencies: [reduce] }
+  );
+
   const { pathname } = useLocation();
   const isPrint = pathname.endsWith("/print");
   const isEbook = pathname.endsWith("/ebook");
@@ -62,7 +92,7 @@ export default function Companion() {
         <hr className="rule" />
       </Reveal>
 
-      <Reveal className="section">
+      <div ref={noteRef} className="section">
         <div className="note-box">
           <strong
             style={{
@@ -78,7 +108,7 @@ export default function Companion() {
           you intend to verify claims, follow genealogies, or work from the
           primary trail.
         </div>
-      </Reveal>
+      </div>
 
       <section className="section">
         <Reveal>
