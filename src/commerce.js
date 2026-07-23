@@ -163,7 +163,7 @@ export const products = {
     name: "Audiobook + Companion",
     price: prices.bundleAudioCompanion,
     label: `Audio + Companion · ${formatPrice(prices.bundleAudioCompanion)}`,
-    url: "",
+    url: "https://theveilpress.gumroad.com/l/mghiaq",
     blurb:
       "Audiobook plus Companion Guide. Audiobook full price; Companion 20% off.",
   },
