@@ -200,7 +200,7 @@ export default function Home() {
             <video
               ref={videoRef}
               className="trailer-video"
-              src="/trailer.mp4"
+              src="/videos/square-mile-trailer.mp4"
               poster="/cover.jpg"
               loop
               playsInline
