@@ -1,5 +1,5 @@
-import { lazy, Suspense, useRef } from "react";
-import { Link } from "react-router-dom";
+import { lazy, Suspense, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
@@ -9,7 +9,6 @@ import { MagneticLink, MagneticAnchor } from "../components/MagneticButton";
 import { BuyButton } from "../components/BuyButton";
 import commerce, {
   products,
-  hasUrl,
   formatPrice,
 } from "../commerce";
 import { easeOut } from "../motion";
@@ -34,14 +33,28 @@ const bundles = [
   products.bundleFull,
 ];
 
+function scrollToBuy() {
+  document.getElementById("buy")?.scrollIntoView({ behavior: "smooth" });
+}
+
 export default function SquareMile() {
   const heroRef = useRef(null);
   const argumentRef = useRef(null);
+  const location = useLocation();
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start end", "end start"],
   });
   const bgY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+
+  // Home / Companion deep-links use #buy — scroll after route paint.
+  useEffect(() => {
+    if (location.hash !== "#buy") return undefined;
+    const t = window.setTimeout(() => {
+      scrollToBuy();
+    }, 120);
+    return () => window.clearTimeout(t);
+  }, [location.pathname, location.hash]);
 
   useScrollReveal(
     () => {
@@ -65,9 +78,6 @@ export default function SquareMile() {
     },
     { scope: argumentRef }
   );
-
-  const printReady = hasUrl(products.print.url);
-  const ebookReady = hasUrl(products.ebook.url);
 
   return (
     <AnimatedPage>
@@ -113,44 +123,28 @@ export default function SquareMile() {
             Jack Schumacher
           </motion.p>
 
+          {/* Stay on-site first: formats + bundles, then Companion explainer */}
           <motion.div
             className="actions"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.15, duration: 0.7, ease: easeOut }}
           >
-            {printReady || ebookReady ? (
-              <>
-                {printReady && (
-                  <BuyButton
-                    href={products.print.url}
-                    label={products.print.label}
-                  />
-                )}
-                {ebookReady && (
-                  <BuyButton
-                    href={products.ebook.url}
-                    label={products.ebook.label}
-                    className="btn btn-shimmer"
-                  />
-                )}
-              </>
-            ) : (
-              <MagneticAnchor
-                className="btn btn-primary btn-shimmer"
-                href="#buy"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document
-                    .getElementById("buy")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                Get the book
-              </MagneticAnchor>
-            )}
-            <MagneticLink className="btn" to="/books/square-mile/companion">
-              Companion Guide
+            <MagneticAnchor
+              className="btn btn-primary btn-shimmer"
+              href="#buy"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToBuy();
+              }}
+            >
+              Formats &amp; bundles
+            </MagneticAnchor>
+            <MagneticLink
+              className="btn btn-shimmer"
+              to="/books/square-mile/companion"
+            >
+              Companion · why buy it
             </MagneticLink>
           </motion.div>
         </div>
@@ -185,37 +179,45 @@ export default function SquareMile() {
           <div className="section-head">
             <h2>Get the book</h2>
             <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
-              Checkout is on Gumroad — secure, instant for digital, print ships
-              to you. Companion is {formatPrice(products.companion.price)}{" "}
-              standalone, or {formatPrice(commerce.companion.addOnPrice)} inside
-              any bundle. Best value: Full Bundle at{" "}
-              {formatPrice(products.bundleFull.price)}.
+              Pick a format or save with a bundle. Checkout is on Gumroad —
+              secure, instant for digital, print ships to you. Bundles: main
+              product full price, add-ons 20% off — Full Bundle add-ons 25% off
+              at {formatPrice(products.bundleFull.price)}.
             </p>
           </div>
         </Reveal>
 
+        {/* Pitch Companion before single-SKU impulse checkout */}
         <Reveal>
-          <p className="meta" style={{ margin: "1.75rem 0 0.75rem" }}>
-            Individual
-          </p>
-        </Reveal>
-        <Stagger className="price-row">
-          {individuals.map((p) => (
-            <StaggerItem key={p.name} className="price-card price-glow">
-              <div className="meta">{p.name}</div>
-              <strong>{formatPrice(p.price)}</strong>
+          <div className="card card-glow companion-buy-teaser">
+            <MagneticLink
+              to="/books/square-mile/companion"
+              className="companion-buy-teaser-cover"
+            >
+              <img src="/companion-cover.jpg" alt="Companion Guide cover" />
+            </MagneticLink>
+            <div>
+              <div className="meta" style={{ marginBottom: "0.35rem" }}>
+                Before you buy · Companion Guide
+              </div>
+              <h3 style={{ margin: "0 0 0.5rem", fontSize: "1.2rem" }}>
+                Watch why the map matters
+              </h3>
               <p className="muted" style={{ margin: "0 0 1rem" }}>
-                {p.blurb}
+                Short trailer + what&apos;s inside. Companion Guide{" "}
+                {formatPrice(products.companion.price)}.
               </p>
-              <BuyButton
-                href={p.url}
-                label={p.label}
-                comingSoonLabel="Checkout pending"
-                className="btn btn-primary btn-shimmer"
-              />
-            </StaggerItem>
-          ))}
-        </Stagger>
+              <div className="actions">
+                <MagneticLink
+                  className="btn btn-primary btn-shimmer"
+                  to="/books/square-mile/companion"
+                >
+                  Watch the Companion video
+                </MagneticLink>
+              </div>
+            </div>
+          </div>
+        </Reveal>
 
         <Reveal>
           <p className="meta" style={{ margin: "1.75rem 0 0.75rem" }}>
@@ -227,11 +229,18 @@ export default function SquareMile() {
             <StaggerItem
               key={p.name}
               className={`price-card price-glow${
-                p === products.bundleFull ? " price-card-featured" : ""
+                p === products.bundleFull ||
+                p === products.bundleEbookAudioCompanion
+                  ? " price-card-featured"
+                  : ""
               }`}
             >
               <div className="meta">
-                {p === products.bundleFull ? "Recommended" : "Bundle"}
+                {p === products.bundleFull
+                  ? "Recommended"
+                  : p === products.bundleEbookAudioCompanion
+                    ? "Best digital"
+                    : "Bundle"}
               </div>
               <strong>{formatPrice(p.price)}</strong>
               <p
@@ -257,26 +266,72 @@ export default function SquareMile() {
           ))}
         </Stagger>
 
+        <Reveal>
+          <p className="meta" style={{ margin: "1.75rem 0 0.75rem" }}>
+            Individual
+          </p>
+        </Reveal>
+        <Stagger className="price-row">
+          {individuals.map((p) => (
+            <StaggerItem key={p.name} className="price-card price-glow">
+              <div className="meta">{p.name}</div>
+              <strong>{formatPrice(p.price)}</strong>
+              <p className="muted" style={{ margin: "0 0 1rem" }}>
+                {p.blurb}
+              </p>
+              {p === products.companion ? (
+                <div className="actions" style={{ flexDirection: "column", alignItems: "stretch", gap: "0.5rem" }}>
+                  <MagneticLink
+                    className="btn btn-shimmer"
+                    to="/books/square-mile/companion"
+                  >
+                    Watch why · then buy
+                  </MagneticLink>
+                  <BuyButton
+                    href={p.url}
+                    label={p.label}
+                    comingSoonLabel="Checkout pending"
+                    className="btn btn-primary btn-shimmer"
+                  />
+                </div>
+              ) : (
+                <BuyButton
+                  href={p.url}
+                  label={p.label}
+                  comingSoonLabel="Checkout pending"
+                  className="btn btn-primary btn-shimmer"
+                />
+              )}
+            </StaggerItem>
+          ))}
+        </Stagger>
       </section>
 
       <section className="section">
         <Stagger className="card-grid two">
           <StaggerItem>
-            <Link
-              className="card card-lift card-glow"
-              to="/books/square-mile/companion"
-            >
+            <div className="card card-glow">
               <div className="meta">
                 Apparatus · {formatPrice(commerce.companion.fullPrice)}
               </div>
               <h3>Companion Guide</h3>
               <p>
                 The map: glossary, timelines, dynastic trees, bibliography,
-                steelman. {formatPrice(commerce.companion.fullPrice)} alone, or{" "}
-                {formatPrice(commerce.companion.addOnPrice)} when added in a
-                bundle.
+                steelman. {formatPrice(commerce.companion.fullPrice)}.
               </p>
-            </Link>
+              <div className="actions" style={{ marginTop: "1rem" }}>
+                <MagneticLink
+                  className="btn btn-primary btn-shimmer"
+                  to="/books/square-mile/companion"
+                >
+                  Watch why · trailer
+                </MagneticLink>
+                <BuyButton
+                  href={products.companion.url}
+                  label={products.companion.label}
+                />
+              </div>
+            </div>
           </StaggerItem>
           <StaggerItem>
             <div className="card card-glow">

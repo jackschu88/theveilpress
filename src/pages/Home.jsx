@@ -1,12 +1,10 @@
-import { lazy, Suspense, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import SplitTitle from "../components/SplitTitle";
 import { MagneticLink } from "../components/MagneticButton";
-import { BuyButton } from "../components/BuyButton";
-import { products, hasUrl } from "../commerce";
 import { easeOut } from "../motion";
 import { gsap, ScrollTrigger } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
@@ -19,9 +17,17 @@ export default function Home() {
   const featuredRef = useRef(null);
   const featuredImgRef = useRef(null);
   const videoRef = useRef(null);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
 
-  const { print, ebook, audiobook, bundleFull } = products;
+  // Prefer sound on; browsers may block unmuted autoplay until a gesture.
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    el.muted = false;
+    el.play().catch(() => {
+      // Autoplay with sound blocked — leave unmuted so play starts with audio.
+    });
+  }, []);
 
   useScrollReveal(
     () => {
@@ -127,7 +133,6 @@ export default function Home() {
               src="/trailer.mp4"
               poster="/cover.jpg"
               autoPlay
-              muted
               loop
               playsInline
               preload="auto"
@@ -152,39 +157,22 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.9, ease: easeOut }}
         >
-          {hasUrl(print.url) ? (
-            <BuyButton href={print.url} label={print.label} />
-          ) : (
-            <MagneticLink
-              className="btn btn-primary btn-shimmer"
-              to="/books/square-mile#buy"
-            >
-              Buy the Book · $35.99
-            </MagneticLink>
-          )}
-          <BuyButton
-            href={ebook.url}
-            label={ebook.label}
+          {/* On-site funnel first — never straight to Gumroad from Home */}
+          <MagneticLink
+            className="btn btn-primary btn-shimmer"
+            to="/books/square-mile#buy"
+          >
+            Formats &amp; bundles
+          </MagneticLink>
+          <MagneticLink
             className="btn btn-shimmer"
-            comingSoonLabel="Digital Edition · $19.99"
-          />
-          <BuyButton
-            href={audiobook.url}
-            label={audiobook.label}
-            className="btn btn-shimmer"
-            comingSoonLabel="Audiobook · $17.99"
-          />
-          {hasUrl(bundleFull.url) ? (
-            <BuyButton
-              href={bundleFull.url}
-              label={bundleFull.label}
-              className="btn"
-            />
-          ) : (
-            <MagneticLink className="btn" to="/books/square-mile#buy">
-              Full Bundle · $59.99
-            </MagneticLink>
-          )}
+            to="/books/square-mile/companion"
+          >
+            Companion · watch why
+          </MagneticLink>
+          <MagneticLink className="btn" to="/books/square-mile">
+            Enter the volume
+          </MagneticLink>
         </motion.div>
       </section>
 
@@ -239,27 +227,32 @@ export default function Home() {
           </div>
         </Reveal>
         <Stagger className="card-grid three">
-          {[
-            { n: "01", t: "The book", d: "Continuous argument — the journey." },
-            {
-              n: "02",
-              t: "The Companion",
-              d: "Sources, trees, bibliography — the map.",
-            },
-            {
-              n: "03",
-              t: "The library",
-              d: "Reader apparatus for every Veil title.",
-            },
-          ].map((c) => (
-            <StaggerItem key={c.n}>
-              <div className="card card-lift card-glow">
-                <div className="meta">{c.n}</div>
-                <h3>{c.t}</h3>
-                <p>{c.d}</p>
-              </div>
-            </StaggerItem>
-          ))}
+          <StaggerItem>
+            <Link className="card card-lift card-glow" to="/books/square-mile#buy">
+              <div className="meta">01</div>
+              <h3>The book</h3>
+              <p>Continuous argument — the journey. Formats &amp; bundles.</p>
+            </Link>
+          </StaggerItem>
+          <StaggerItem>
+            <Link
+              className="card card-lift card-glow"
+              to="/books/square-mile/companion"
+            >
+              <div className="meta">02</div>
+              <h3>The Companion</h3>
+              <p>
+                Sources, trees, bibliography — the map. Watch why it matters.
+              </p>
+            </Link>
+          </StaggerItem>
+          <StaggerItem>
+            <div className="card card-glow">
+              <div className="meta">03</div>
+              <h3>The library</h3>
+              <p>Reader apparatus for every Veil title — in development.</p>
+            </div>
+          </StaggerItem>
         </Stagger>
       </section>
 

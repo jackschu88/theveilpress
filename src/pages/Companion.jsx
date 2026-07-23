@@ -4,11 +4,7 @@ import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
-import {
-  products,
-  formatPrice,
-  COMPANION_BUNDLE_PRICE,
-} from "../commerce";
+import { products, formatPrice } from "../commerce";
 import { gsap } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
@@ -63,17 +59,36 @@ export default function Companion() {
         <p className="lede">You have read the argument. Here is the apparatus.</p>
         <p className="muted prose">
           Sources, timelines, dynastic trees, glossary, bibliography, appendices,
-          and the steelman of objections. This volume is the journey; the
+          and the steelman of objections. The main book is the journey; the
           Companion is the map.
         </p>
         {fromBookPath && (
           <p className="note-box" style={{ marginTop: "1.25rem" }}>
-            Book-buyer path. Companion is {formatPrice(companion.price)}{" "}
-            standalone, or {formatPrice(COMPANION_BUNDLE_PRICE)} when added in
-            any bundle — Full Bundle ({formatPrice(fullBundle.price)}) includes
-            print + Digital Edition + audiobook + Companion.
+            Book-buyer path. Companion Guide is{" "}
+            {formatPrice(companion.price)}. Full Bundle (
+            {formatPrice(fullBundle.price)}) includes print + Digital Edition +
+            audiobook + Companion.
           </p>
         )}
+      </Reveal>
+
+      <Reveal>
+        <div className="trailer-stage companion-trailer">
+          <div className="trailer-frame companion-trailer-frame">
+            <video
+              className="trailer-video"
+              src="/videos/companion_trailer.mp4"
+              poster="/companion-cover.jpg"
+              controls
+              playsInline
+              preload="metadata"
+              aria-label="Cinematic trailer for the Companion Guide"
+            />
+          </div>
+          <p className="muted companion-trailer-caption">
+            Companion Guide · {formatPrice(companion.price)}
+          </p>
+        </div>
       </Reveal>
 
       <Reveal>
@@ -121,19 +136,8 @@ export default function Companion() {
             />
           </StaggerItem>
           <StaggerItem className="price-card price-glow">
-            <div className="meta">In any bundle</div>
-            <strong>{formatPrice(COMPANION_BUNDLE_PRICE)}</strong>
-            <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Companion add-on price when paired with print, Digital Edition,
-              audiobook, or the full set — not sold alone at this rate.
-            </p>
-            <MagneticLink className="btn" to="/books/square-mile#buy">
-              See bundles
-            </MagneticLink>
-          </StaggerItem>
-          <StaggerItem className="price-card price-glow price-card-featured">
-            <div className="meta">Best value</div>
-            <strong>{formatPrice(fullBundle.price)}</strong>
+            <div className="meta">Bundle</div>
+            <strong>{formatPrice(products.bundleEbookCompanion.price)}</strong>
             <p
               style={{
                 margin: "0 0 0.35rem",
@@ -142,19 +146,56 @@ export default function Companion() {
                 fontSize: "1.05rem",
               }}
             >
-              {fullBundle.name}
+              {products.bundleEbookCompanion.name}
             </p>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
-              Print + Digital Edition + audiobook + Companion Guide.
+              {products.bundleEbookCompanion.blurb}
             </p>
             <BuyButton
-              href={fullBundle.url}
-              label={fullBundle.label}
+              href={products.bundleEbookCompanion.url}
+              label={products.bundleEbookCompanion.label}
+              comingSoonLabel="Checkout pending"
+            />
+          </StaggerItem>
+          <StaggerItem className="price-card price-glow price-card-featured">
+            <div className="meta">Recommended</div>
+            <strong>
+              {formatPrice(products.bundleEbookAudioCompanion.price)}
+            </strong>
+            <p
+              style={{
+                margin: "0 0 0.35rem",
+                color: "var(--ink)",
+                fontFamily: "Cinzel, serif",
+                fontSize: "1.05rem",
+              }}
+            >
+              {products.bundleEbookAudioCompanion.name}
+            </p>
+            <p className="muted" style={{ margin: "0 0 1rem" }}>
+              {products.bundleEbookAudioCompanion.blurb}
+            </p>
+            <BuyButton
+              href={products.bundleEbookAudioCompanion.url}
+              label={products.bundleEbookAudioCompanion.label}
               comingSoonLabel="Checkout pending"
             />
           </StaggerItem>
         </Stagger>
 
+        <Reveal>
+          <div className="actions" style={{ marginTop: "1.25rem" }}>
+            <MagneticLink className="btn" to="/books/square-mile#buy">
+              All formats &amp; bundles
+            </MagneticLink>
+            <BuyButton
+              href={fullBundle.url}
+              label={fullBundle.label}
+              className="btn btn-shimmer"
+              comingSoonLabel={`Full Bundle · ${formatPrice(fullBundle.price)} · Coming soon`}
+            />
+          </div>
+        </Reveal>
       </section>
 
       <section className="section">
