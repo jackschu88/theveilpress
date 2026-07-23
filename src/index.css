@@ -1395,11 +1395,35 @@ a.card:hover,
   background: #000;
 }
 
+.trailer-play-sound {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  border: 0;
+  cursor: pointer;
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-bright, #e4c76a);
+  background: rgba(5, 6, 10, 0.55);
+  backdrop-filter: blur(2px);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.trailer-play-sound:hover {
+  background: rgba(5, 6, 10, 0.72);
+  color: #fff;
+}
+
 .trailer-mute {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
-  z-index: 2;
+  z-index: 4;
   font-family: "Source Sans 3", system-ui, sans-serif;
   font-size: 0.62rem;
   letter-spacing: 0.14em;
@@ -1421,6 +1445,25 @@ a.card:hover,
   border-color: var(--gold-bright);
   color: var(--gold-bright);
   background: rgba(5, 6, 10, 0.88);
+}
+
+/* Highlight when browser forced mute — click / any page gesture enables audio */
+.trailer-mute-on {
+  border-color: var(--gold-bright);
+  color: var(--ink-deep, #0a0b10);
+  background: var(--gold);
+  box-shadow: 0 0 0 1px rgba(201, 168, 76, 0.35), 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: trailer-mute-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes trailer-mute-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.82;
+  }
 }
 
 @media (min-width: 900px) {
