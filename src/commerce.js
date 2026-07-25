@@ -382,7 +382,7 @@ export const PRESALE = {
   executiveFounderPack: {
     name: "Limited Founders Edition",
     price: EXECUTIVE_PRICE,
-    url: "",
+    url: "https://theveilpress.gumroad.com/l/uehrv",
     blurb:
       "Signed hardcover book + signed hardcover Companion Guide + all digital (ebook, audiobook, Companion PDF). Numbered limited edition.",
   },
