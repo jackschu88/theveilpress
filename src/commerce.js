@@ -358,14 +358,14 @@ export const EXECUTIVE_TOTAL_SOLO = EXECUTIVE_VALUE_STACK.reduce(
 );
 
 /** Limited Founders Edition pack price. */
-export const EXECUTIVE_PRICE = 125.99;
+export const EXECUTIVE_PRICE = 124.99;
 
 /**
  * Presale products — live at /presale.
  * Fill in Gumroad URLs when ready. Empty URLs show "Pre-order link pending".
  *
  * Founders Edition ........ $59.99  signed hardcover book only (Gumroad live)
- * Limited Founders Edition  $125.99 signed hardcover + signed companion HC + all digital
+ * Limited Founders Edition  $124.99 signed hardcover + signed companion HC + all digital
  */
 export const PRESALE = {
   softcover: { name: "Softcover Book", price: 39.99, url: "", blurb: "Trade paperback. Pre-order the first volume." },
