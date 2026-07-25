@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
-import { BuyButton } from "../components/BuyButton";
+import { BuyButton, ProductBuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
 import { products, formatPrice } from "../commerce";
 import { gsap } from "../scroll";
@@ -66,8 +66,8 @@ export default function Companion() {
           <p className="note-box" style={{ marginTop: "1.25rem" }}>
             Book-buyer path. Companion Guide is{" "}
             {formatPrice(companion.price)}. Full Bundle (
-            {formatPrice(fullBundle.price)}) includes print + Digital Edition +
-            audiobook + Companion.
+            {formatPrice(fullBundle.price)}) pairs IngramSpark print with the
+            full digital set on Gumroad.
           </p>
         )}
       </Reveal>
@@ -185,14 +185,13 @@ export default function Companion() {
 
         <Reveal>
           <div className="actions" style={{ marginTop: "1.25rem" }}>
-            <MagneticLink className="btn" to="/books/square-mile#buy">
-              All formats &amp; bundles
+            <MagneticLink className="btn" to="/presale">
+              Pre-order
             </MagneticLink>
-            <BuyButton
-              href={fullBundle.url}
-              label={fullBundle.label}
+            <ProductBuyButton
+              product={fullBundle}
               className="btn btn-shimmer"
-              comingSoonLabel={`Full Bundle · ${formatPrice(fullBundle.price)} · Coming soon`}
+              hybridLabel={`Full Bundle · ${formatPrice(fullBundle.price)}`}
             />
           </div>
         </Reveal>
@@ -218,8 +217,8 @@ export default function Companion() {
 
       <Reveal className="section">
         <div className="actions">
-          <Link className="btn" to="/books/square-mile">
-            Back to the book
+          <Link className="btn" to="/presale">
+            Pre-order
           </Link>
         </div>
         <p className="muted" style={{ marginTop: "1.5rem", fontSize: "1rem" }}>

@@ -235,21 +235,14 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.9, ease: easeOut }}
         >
-          {/* On-site funnel first — never straight to Gumroad from Home */}
           <MagneticLink
             className="btn btn-primary btn-shimmer"
-            to="/books/square-mile#buy"
+            to="/presale"
           >
-            Formats &amp; bundles
+            Pre-order now
           </MagneticLink>
-          <MagneticLink
-            className="btn btn-shimmer"
-            to="/books/square-mile/companion"
-          >
-            Companion · watch why
-          </MagneticLink>
-          <MagneticLink className="btn" to="/books/square-mile">
-            Enter the volume
+          <MagneticLink className="btn" to="/presale">
+            View presale offerings
           </MagneticLink>
         </motion.div>
       </section>
@@ -267,7 +260,7 @@ export default function Home() {
         <Reveal>
           <Link
             ref={featuredRef}
-            to="/books/square-mile"
+            to="/presale"
             className="feature-panel feature-wow"
           >
             <div className="feature-visual">
@@ -280,7 +273,7 @@ export default function Home() {
             </div>
             <div className="feature-body">
               <div className="meta" style={{ marginBottom: "0.75rem" }}>
-                Volume I · Available
+                Volume I · Pre-order
               </div>
               <h3>The Veil of the Square Mile</h3>
               <p>
@@ -291,7 +284,7 @@ export default function Home() {
                 className="btn btn-primary btn-shimmer"
                 style={{ alignSelf: "flex-start" }}
               >
-                Enter the volume
+                Pre-order now
               </span>
             </div>
           </Link>
@@ -306,30 +299,28 @@ export default function Home() {
         </Reveal>
         <Stagger className="card-grid three">
           <StaggerItem>
-            <Link className="card card-lift card-glow" to="/books/square-mile#buy">
+            <Link className="card card-lift card-glow" to="/presale">
               <div className="meta">01</div>
               <h3>The book</h3>
-              <p>Continuous argument — the journey. Formats &amp; bundles.</p>
+              <p>Continuous argument — the journey. Pre-order now.</p>
             </Link>
           </StaggerItem>
           <StaggerItem>
-            <Link
-              className="card card-lift card-glow"
-              to="/books/square-mile/companion"
-            >
+            <Link className="card card-lift card-glow" to="/presale">
               <div className="meta">02</div>
               <h3>The Companion</h3>
-              <p>
-                Sources, trees, bibliography — the map. Watch why it matters.
-              </p>
+              <p>Sources, trees, bibliography — the map. Available for pre-order.</p>
             </Link>
           </StaggerItem>
           <StaggerItem>
-            <div className="card card-glow">
+            <Link className="card card-lift card-glow" to="/presale">
               <div className="meta">03</div>
-              <h3>The library</h3>
-              <p>Reader apparatus for every Veil title — in development.</p>
-            </div>
+              <h3>Founders editions</h3>
+              <p>
+                Founders Edition (signed hardcover) and Limited Founders Edition
+                (both signed hardcovers + all digital). Pre-order now.
+              </p>
+            </Link>
           </StaggerItem>
         </Stagger>
       </section>

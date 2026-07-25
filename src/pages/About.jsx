@@ -80,8 +80,8 @@ export default function About() {
 
       <Reveal>
         <div className="actions">
-          <Link className="btn btn-primary" to="/books/square-mile">
-            The Veil of the Square Mile
+          <Link className="btn btn-primary" to="/presale">
+            Pre-order now
           </Link>
           <a
             className="btn"
@@ -91,8 +91,8 @@ export default function About() {
           >
             Follow on X
           </a>
-          <Link className="btn" to="/books">
-            All books
+          <Link className="btn" to="/presale">
+            Presale
           </Link>
         </div>
       </Reveal>

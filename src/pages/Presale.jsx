@@ -1,0 +1,145 @@
+import { lazy, Suspense } from "react";
+import { motion } from "framer-motion";
+import AnimatedPage from "../components/AnimatedPage";
+import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
+import SplitTitle from "../components/SplitTitle";
+import TiltCover from "../components/TiltCover";
+import { BuyButton } from "../components/BuyButton";
+import { MagneticLink } from "../components/MagneticButton";
+import { PRESALE, formatPrice } from "../commerce";
+import { easeOut } from "../motion";
+
+const HeroScene = lazy(() => import("../components/HeroScene"));
+
+const presaleItems = [
+  { ...PRESALE.softcover, badge: "Book" },
+  { ...PRESALE.hardcover, badge: "Book" },
+  { ...PRESALE.companionPdf, badge: "Companion" },
+  { ...PRESALE.companionHardcover, badge: "Companion" },
+  { ...PRESALE.foundersPack, badge: "Founders Edition", featured: true },
+  { ...PRESALE.executiveFounderPack, badge: "Limited Founders", featured: true, dedicated: true },
+];
+
+export default function Presale() {
+  return (
+    <AnimatedPage>
+      <section className="hero hero-grid hero-book">
+        <Suspense fallback={null}>
+          <HeroScene variant="light" />
+        </Suspense>
+        <div>
+          <motion.p
+            className="eyebrow"
+            initial={{ opacity: 0, x: -14 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.65, ease: easeOut }}
+          >
+            Pre-order · Volume I
+          </motion.p>
+
+          <SplitTitle text="The Veil of the Square Mile" className="h1-book" />
+
+          <motion.div
+            className="title-rule"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1, delay: 0.85, ease: easeOut }}
+          />
+
+          <motion.p
+            className="lede lede-glow"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.95, ease: easeOut }}
+          >
+            Pre-order the first volume from The Veil Press.
+          </motion.p>
+
+          <motion.p
+            className="muted"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            style={{ marginTop: "0.35rem" }}
+          >
+            Jack Schumacher
+          </motion.p>
+        </div>
+
+        <TiltCover
+          src="/cover.jpg"
+          alt="Cover of The Veil of the Square Mile"
+        />
+      </section>
+
+      <Reveal>
+        <hr className="rule rule-pulse" />
+      </Reveal>
+
+      <section className="section">
+        <Reveal>
+          <div className="section-head">
+            <h2>Pre-order now</h2>
+            <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
+              Secure your copy at the presale price. Books ship on release; digital items deliver launch day.
+            </p>
+          </div>
+        </Reveal>
+
+        <Stagger className="price-row">
+          {presaleItems.map((item) => (
+            <StaggerItem
+              key={item.name}
+              className={`price-card price-glow${item.featured ? " price-card-featured" : ""}`}
+            >
+              <div className="meta">{item.badge}</div>
+              <strong>{formatPrice(item.price)}</strong>
+              <p
+                style={{
+                  margin: "0 0 0.35rem",
+                  color: "var(--ink)",
+                  fontFamily: "Cinzel, serif",
+                  fontSize: "1.05rem",
+                }}
+              >
+                {item.name}
+              </p>
+              <p className="muted" style={{ margin: "0 0 1rem" }}>
+                {item.blurb}
+              </p>
+              {item.dedicated ? (
+                <MagneticLink
+                  to="/presale/executive"
+                  className="btn btn-primary btn-shimmer"
+                >
+                  View Limited Founders Edition
+                </MagneticLink>
+              ) : (
+                <BuyButton
+                  href={item.url}
+                  label={`Pre-order · ${formatPrice(item.price)}`}
+                  comingSoonLabel="Pre-order link pending"
+                  className="btn btn-primary btn-shimmer"
+                />
+              )}
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </section>
+
+      <Reveal className="section">
+        <div
+          className="card soon card-glow"
+          style={{ textAlign: "center", padding: "2.4rem" }}
+        >
+          <h3 style={{ marginBottom: "0.5rem" }}>About the presale</h3>
+          <p style={{ margin: "0 auto", maxWidth: "28rem" }}>
+            Pre-order now and secure your copy. All items are manufactured on demand
+            through our print partners. Digital items deliver via Gumroad on launch day.
+            You will be notified when your order ships.
+          </p>
+        </div>
+      </Reveal>
+    </AnimatedPage>
+  );
+}

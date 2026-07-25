@@ -1,4 +1,5 @@
 import { MagneticAnchor, MagneticLink } from "./MagneticButton";
+import { isHybridProduct } from "../commerce";
 
 /**
  * External checkout button — only renders primary action if URL is set.
@@ -33,6 +34,42 @@ export function BuyButton({
   }
 
   return <a {...props}>{label}</a>;
+}
+
+/**
+ * Product CTA — hybrid products go to the on-site guided path;
+ * single-platform products open external checkout (Gumroad / Ingram).
+ */
+export function ProductBuyButton({
+  product,
+  className = "btn btn-primary btn-shimmer",
+  comingSoonLabel = "Checkout pending",
+  hybridLabel,
+}) {
+  if (!product) {
+    return (
+      <span className="btn btn-disabled" aria-disabled="true">
+        {comingSoonLabel}
+      </span>
+    );
+  }
+
+  if (isHybridProduct(product)) {
+    return (
+      <MagneticLink to={product.path} className={className}>
+        {hybridLabel || `Continue · ${product.name}`}
+      </MagneticLink>
+    );
+  }
+
+  return (
+    <BuyButton
+      href={product.url}
+      label={product.label}
+      className={className}
+      comingSoonLabel={comingSoonLabel}
+    />
+  );
 }
 
 export function BuyLink({ to, label, className = "btn" }) {

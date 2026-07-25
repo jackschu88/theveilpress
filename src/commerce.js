@@ -1,19 +1,20 @@
 /**
- * The Veil Press — Gumroad storefront
- * -----------------------------------
- * All website checkout goes through Gumroad.
- * Paste each product's Gumroad share URL below when live.
- * Leave a URL as "" to show "Coming soon" / "Checkout pending".
+ * The Veil Press — storefront
+ * ---------------------------
+ * Digital SKUs → Gumroad.
+ * Print book → IngramSpark (or linked retail).
+ * Hybrid bundles (print + digital) use an on-site guided checkout path
+ * with two external steps — one cart cannot span both platforms.
  *
  * Gumroad product URL shape:
  *   https://YOURNAME.gumroad.com/l/PRODUCT-SLUG
  * Optional overlay: append ?wanted=true
  *
  * Standalone:
- *   Print book ............... $42.99
- *   Digital Edition .......... $15.99
- *   Audiobook ................ $17.99
- *   Companion Guide .......... $24.99
+ *   Print book ............... $42.99  (IngramSpark)
+ *   Digital Edition .......... $15.99  (Gumroad)
+ *   Audiobook ................ $17.99  (Gumroad)
+ *   Companion Guide .......... $24.99  (Gumroad)
  *
  * Bundle pricing:
  *   Main product at full price; each add-on 20% off.
@@ -22,7 +23,9 @@
  */
 
 /**
- * @typedef {{ url: string, price: number, label: string, name: string, blurb: string }} Product
+ * @typedef {{ url: string, price: number, label: string, name: string, blurb: string, path?: string, checkout?: "external" | "hybrid" }} Product
+ * @typedef {{ id: string, channel: "ingram" | "gumroad", title: string, detail: string, price: number, url: string, label: string }} CheckoutStep
+ * @typedef {{ id: string, path: string, name: string, price: number, blurb: string, steps: CheckoutStep[] }} HybridPlan
  */
 
 /** Round money to cents. */
@@ -78,6 +81,42 @@ export function storeBundlePrice(listPrices, addonRate = ADDON_RATE) {
   return charmPrice(bundlePrice(listPrices, addonRate));
 }
 
+/** Sum of add-on portions only (no main), charm-priced. */
+export function storeAddonPackPrice(addonListPrices, addonRate = ADDON_RATE) {
+  const raw = addonListPrices.reduce(
+    (sum, p) => sum + money(p * addonRate),
+    0
+  );
+  return charmPrice(raw);
+}
+
+/**
+ * Print checkout — IngramSpark / retailer.
+ * Paste the live IngramSpark (or Amazon/B&N) URL when ready.
+ */
+export const INGRAM_PRINT_URL = "";
+
+/**
+ * Gumroad digital SKUs (instant delivery).
+ * Create a dedicated “digital set for print buyers” product if you want
+ * the hybrid step price to match the on-site math exactly.
+ */
+export const GUMROAD = {
+  ebook: "https://theveilpress.gumroad.com/l/riwlqv",
+  audiobook: "https://theveilpress.gumroad.com/l/rphkx",
+  companion: "https://theveilpress.gumroad.com/l/jawnaq",
+  bundleEbookCompanion: "https://theveilpress.gumroad.com/l/tkfupm",
+  bundleAudioCompanion: "https://theveilpress.gumroad.com/l/mghiaq",
+  bundleEbookAudio: "https://theveilpress.gumroad.com/l/ggmum",
+  /** Digital Edition + Audiobook + Companion (used as Full Bundle step 2). */
+  bundleEbookAudioCompanion: "https://theveilpress.gumroad.com/l/obsuvc",
+  /**
+   * Optional: dedicated digital unlock for print buyers at hybrid pack price.
+   * Falls back to bundleEbookAudioCompanion when empty.
+   */
+  fullDigitalUnlock: "",
+};
+
 const prices = {
   print: STANDALONE.print,
   ebook: STANDALONE.ebook,
@@ -110,6 +149,80 @@ const prices = {
     ],
     FULL_BUNDLE_ADDON_RATE
   ),
+  /** Digital half of Full Bundle (ebook+audio+companion at 25% off). */
+  fullDigitalPack: storeAddonPackPrice(
+    [STANDALONE.ebook, STANDALONE.audiobook, STANDALONE.companion],
+    FULL_BUNDLE_ADDON_RATE
+  ),
+  /** Companion as 20% add-on (print + companion hybrid step 2). */
+  companionAddon: storeAddonPackPrice([STANDALONE.companion], ADDON_RATE),
+};
+
+function gumroadDigitalUnlockUrl() {
+  return GUMROAD.fullDigitalUnlock || GUMROAD.bundleEbookAudioCompanion;
+}
+
+/** @type {Record<string, HybridPlan>} */
+export const hybridPlans = {
+  full: {
+    id: "full",
+    path: "/books/square-mile/checkout/full",
+    name: "Full Bundle",
+    price: prices.bundleFull,
+    blurb:
+      "Print ships via IngramSpark. Digital Edition, audiobook, and Companion unlock instantly on Gumroad.",
+    steps: [
+      {
+        id: "print",
+        channel: "ingram",
+        title: "Order the print book",
+        detail:
+          "Trade paperback through IngramSpark (or linked retail). Ships to you.",
+        price: prices.print,
+        url: INGRAM_PRINT_URL,
+        label: `Order print · ${formatPrice(prices.print)}`,
+      },
+      {
+        id: "digital",
+        channel: "gumroad",
+        title: "Unlock the digital set",
+        detail:
+          "Digital Edition + audiobook + Companion Guide — instant download on Gumroad.",
+        price: prices.fullDigitalPack,
+        url: gumroadDigitalUnlockUrl(),
+        label: `Get digital set · ${formatPrice(prices.fullDigitalPack)}`,
+      },
+    ],
+  },
+  "print-companion": {
+    id: "print-companion",
+    path: "/books/square-mile/checkout/print-companion",
+    name: "Print + Companion",
+    price: prices.bundlePrintCompanion,
+    blurb:
+      "Paperback via IngramSpark, Companion Guide via Gumroad — two quick checkouts, one complete kit.",
+    steps: [
+      {
+        id: "print",
+        channel: "ingram",
+        title: "Order the print book",
+        detail: "Trade paperback through IngramSpark (or linked retail).",
+        price: prices.print,
+        url: INGRAM_PRINT_URL,
+        label: `Order print · ${formatPrice(prices.print)}`,
+      },
+      {
+        id: "companion",
+        channel: "gumroad",
+        title: "Get the Companion Guide",
+        detail:
+          "Apparatus: glossary, timelines, trees, bibliography, steelman. Instant on Gumroad.",
+        price: prices.companionAddon,
+        url: GUMROAD.companion,
+        label: `Get Companion · ${formatPrice(prices.companionAddon)}`,
+      },
+    ],
+  },
 };
 
 /** @type {Record<string, Product>} */
@@ -118,44 +231,51 @@ export const products = {
     name: "Print Book",
     price: prices.print,
     label: `Buy Print · ${formatPrice(prices.print)}`,
-    url: "",
-    blurb: "Trade paperback. Coming soon.",
+    url: INGRAM_PRINT_URL,
+    blurb: "Trade paperback via IngramSpark. Ships to you.",
+    checkout: "external",
   },
   ebook: {
     name: "Digital Edition",
     price: prices.ebook,
     label: `Buy Digital Edition · ${formatPrice(prices.ebook)}`,
-    url: "https://theveilpress.gumroad.com/l/riwlqv",
+    url: GUMROAD.ebook,
     blurb: "Instant download. Full digital edition of the volume.",
+    checkout: "external",
   },
   audiobook: {
     name: "Audiobook",
     price: prices.audiobook,
     label: `Buy Audiobook · ${formatPrice(prices.audiobook)}`,
-    url: "https://theveilpress.gumroad.com/l/rphkx",
+    url: GUMROAD.audiobook,
     blurb: "Full narration. Instant digital delivery.",
+    checkout: "external",
   },
   companion: {
     name: "Companion Guide",
     price: prices.companion,
     label: `Get Companion · ${formatPrice(prices.companion)}`,
-    url: "https://theveilpress.gumroad.com/l/jawnaq",
+    url: GUMROAD.companion,
     blurb:
       "Apparatus only: glossary, timelines, trees, bibliography, steelman.",
+    checkout: "external",
   },
   bundlePrintCompanion: {
     name: "Print + Companion",
     price: prices.bundlePrintCompanion,
     label: `Print + Companion · ${formatPrice(prices.bundlePrintCompanion)}`,
     url: "",
+    path: hybridPlans["print-companion"].path,
+    checkout: "hybrid",
     blurb:
-      "Paperback plus Companion Guide. Print full price; Companion 20% off.",
+      "Print via IngramSpark + Companion on Gumroad. Guided two-step checkout.",
   },
   bundleEbookCompanion: {
     name: "Digital Edition + Companion",
     price: prices.bundleEbookCompanion,
     label: `Digital + Companion · ${formatPrice(prices.bundleEbookCompanion)}`,
-    url: "https://theveilpress.gumroad.com/l/tkfupm",
+    url: GUMROAD.bundleEbookCompanion,
+    checkout: "external",
     blurb:
       "Digital Edition plus Companion Guide. Digital full price; Companion 20% off.",
   },
@@ -163,7 +283,8 @@ export const products = {
     name: "Audiobook + Companion",
     price: prices.bundleAudioCompanion,
     label: `Audio + Companion · ${formatPrice(prices.bundleAudioCompanion)}`,
-    url: "https://theveilpress.gumroad.com/l/mghiaq",
+    url: GUMROAD.bundleAudioCompanion,
+    checkout: "external",
     blurb:
       "Audiobook plus Companion Guide. Audiobook full price; Companion 20% off.",
   },
@@ -171,7 +292,8 @@ export const products = {
     name: "Digital Edition + Audiobook",
     price: prices.bundleEbookAudio,
     label: `Digital + Audio · ${formatPrice(prices.bundleEbookAudio)}`,
-    url: "https://theveilpress.gumroad.com/l/ggmum",
+    url: GUMROAD.bundleEbookAudio,
+    checkout: "external",
     blurb:
       "Digital Edition and audiobook. Digital full price; audiobook 20% off.",
   },
@@ -179,7 +301,8 @@ export const products = {
     name: "Digital Edition + Audiobook + Companion",
     price: prices.bundleEbookAudioCompanion,
     label: `Digital + Audio + Companion · ${formatPrice(prices.bundleEbookAudioCompanion)}`,
-    url: "https://theveilpress.gumroad.com/l/obsuvc",
+    url: GUMROAD.bundleEbookAudioCompanion,
+    checkout: "external",
     blurb:
       "Digital Edition, audiobook, and Companion. Digital full price; add-ons 20% off.",
   },
@@ -188,13 +311,90 @@ export const products = {
     price: prices.bundleFull,
     label: `Full Bundle · ${formatPrice(prices.bundleFull)}`,
     url: "",
+    path: hybridPlans.full.path,
+    checkout: "hybrid",
     blurb:
-      "Print + Digital Edition + audiobook + Companion Guide. Print full price; each add-on 25% off.",
+      "Print (IngramSpark) + all digital (Gumroad). Guided two-step checkout — print full price; digital add-ons 25% off.",
   },
 };
 
+/** True when product uses the multi-step hybrid path. */
+export function isHybridProduct(product) {
+  return Boolean(product && product.checkout === "hybrid" && product.path);
+}
+
+/** Resolve hybrid plan by product or plan id. */
+export function getHybridPlan(productOrId) {
+  if (!productOrId) return null;
+  if (typeof productOrId === "string") {
+    return hybridPlans[productOrId] || null;
+  }
+  if (productOrId.path) {
+    return (
+      Object.values(hybridPlans).find((p) => p.path === productOrId.path) ||
+      null
+    );
+  }
+  return null;
+}
+
+/**
+ * Value breakdown for the Limited Founders Edition — solo list prices.
+ * Pack includes: signed hardcover book + signed hardcover companion + all digital.
+ */
+export const EXECUTIVE_VALUE_STACK = [
+  { item: "Hardcover Book (signed)", solo: 45.99 },
+  { item: "Hardcover Companion Guide (signed)", solo: 69.99 },
+  { item: "Digital Edition (ebook)", solo: 15.99 },
+  { item: "Audiobook", solo: 17.99 },
+  { item: "Companion Guide (PDF)", solo: 24.99 },
+  { item: "Personal message", solo: null },
+  { item: "Companion extension (bonus chapter)", solo: null },
+  { item: "Numbered edition", solo: null },
+];
+
+export const EXECUTIVE_TOTAL_SOLO = EXECUTIVE_VALUE_STACK.reduce(
+  (sum, v) => sum + (v.solo || 0), 0
+);
+
+/** Limited Founders Edition pack price. */
+export const EXECUTIVE_PRICE = 125.99;
+
+/**
+ * Presale products — live at /presale.
+ * Fill in Gumroad URLs when ready. Empty URLs show "Pre-order link pending".
+ *
+ * Founders Edition ........ $59.99  signed hardcover book only (Gumroad live)
+ * Limited Founders Edition  $125.99 signed hardcover + signed companion HC + all digital
+ */
+export const PRESALE = {
+  softcover: { name: "Softcover Book", price: 39.99, url: "", blurb: "Trade paperback. Pre-order the first volume." },
+  hardcover: { name: "Hardcover Book", price: 45.99, url: "", blurb: "Hardcover edition. Pre-order the first volume." },
+  companionPdf: { name: "Companion Guide (PDF)", price: 24.99, url: "", blurb: "Digital companion guide. Glossary, timelines, bibliography, steelman. Delivered on release." },
+  companionHardcover: { name: "Companion Guide (Hardcover)", price: 69.99, url: "", blurb: "Hardcover companion guide. The apparatus for the main volume." },
+  foundersPack: {
+    name: "Founders Edition",
+    price: 59.99,
+    url: "https://theveilpress.gumroad.com/l/jnnnft",
+    blurb: "Signed hardcover of The Veil of the Square Mile. Special presale price.",
+  },
+  /** Alias kept as executiveFounderPack for existing page imports. */
+  executiveFounderPack: {
+    name: "Limited Founders Edition",
+    price: EXECUTIVE_PRICE,
+    url: "",
+    blurb:
+      "Signed hardcover book + signed hardcover Companion Guide + all digital (ebook, audiobook, Companion PDF). Numbered limited edition.",
+  },
+};
+
+export function presaleLabel(name, price) {
+  return `Pre-order ${name} · $${price.toFixed(2)}`;
+}
+
 const commerce = {
   products,
+  hybridPlans,
 
   get squareMile() {
     return {
@@ -215,7 +415,7 @@ const commerce = {
       fullUrl: products.companion.url,
       fullLabel: products.companion.label,
       fullPrice: products.companion.price,
-      bundleUrl: products.bundleFull.url,
+      bundleUrl: products.bundleFull.path || products.bundleFull.url,
       bundleLabel: products.bundleFull.label,
       bundlePrice: products.bundleFull.price,
     };
@@ -239,7 +439,12 @@ export function hasUrl(url) {
 
 /** True when any product has a live checkout URL. */
 export function anyCheckoutReady() {
-  return Object.values(products).some((p) => hasUrl(p.url));
+  return (
+    Object.values(products).some((p) => hasUrl(p.url)) ||
+    Object.values(hybridPlans).some((plan) =>
+      plan.steps.some((s) => hasUrl(s.url))
+    )
+  );
 }
 
 export default commerce;

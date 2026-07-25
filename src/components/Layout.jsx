@@ -13,9 +13,7 @@ import { ScrollTrigger } from "../scroll";
 
 const links = [
   { to: "/", label: "Home", end: true },
-  { to: "/books", label: "Books", end: true },
-  { to: "/books/square-mile", label: "Square Mile", end: true },
-  { to: "/books/square-mile/companion", label: "Companion" },
+  { to: "/presale", label: "Pre-order", end: true },
   { to: "/about", label: "About", end: true },
 ];
 
@@ -92,8 +90,7 @@ export default function Layout() {
             </p>
           </div>
           <div className="footer-links">
-            <NavLink to="/books">Books</NavLink>
-            <NavLink to="/books/square-mile/companion">Companion</NavLink>
+            <NavLink to="/presale">Pre-order</NavLink>
             <NavLink to="/about">About</NavLink>
             <a
               href="https://x.com/deepdivefile"

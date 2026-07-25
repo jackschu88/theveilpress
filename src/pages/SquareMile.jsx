@@ -5,8 +5,8 @@ import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import TiltCover from "../components/TiltCover";
 import SplitTitle from "../components/SplitTitle";
-import { MagneticLink, MagneticAnchor } from "../components/MagneticButton";
-import { BuyButton } from "../components/BuyButton";
+import { MagneticLink } from "../components/MagneticButton";
+import { BuyButton, ProductBuyButton } from "../components/BuyButton";
 import commerce, {
   products,
   formatPrice,
@@ -130,21 +130,14 @@ export default function SquareMile() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.15, duration: 0.7, ease: easeOut }}
           >
-            <MagneticAnchor
-              className="btn btn-primary btn-shimmer"
-              href="#buy"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToBuy();
-              }}
-            >
-              Formats &amp; bundles
-            </MagneticAnchor>
             <MagneticLink
-              className="btn btn-shimmer"
-              to="/books/square-mile/companion"
+              className="btn btn-primary btn-shimmer"
+              to="/presale"
             >
-              Companion · why buy it
+              Pre-order now
+            </MagneticLink>
+            <MagneticLink className="btn btn-shimmer" to="/presale">
+              Presale offerings
             </MagneticLink>
           </motion.div>
         </div>
@@ -179,10 +172,10 @@ export default function SquareMile() {
           <div className="section-head">
             <h2>Get the book</h2>
             <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
-              Pick a format or save with a bundle. Checkout is on Gumroad —
-              secure, instant for digital, print ships to you. Bundles: main
-              product full price, add-ons 20% off — Full Bundle add-ons 25% off
-              at {formatPrice(products.bundleFull.price)}.
+              Digital SKUs checkout on Gumroad (instant). Print is fulfilled
+              via IngramSpark. Bundles that mix both use a guided two-step path.
+              Main product full price, add-ons 20% off — Full Bundle add-ons 25%
+              off at {formatPrice(products.bundleFull.price)}.
             </p>
           </div>
         </Reveal>
@@ -256,11 +249,15 @@ export default function SquareMile() {
               <p className="muted" style={{ margin: "0 0 1rem" }}>
                 {p.blurb}
               </p>
-              <BuyButton
-                href={p.url}
-                label={p.label}
+              <ProductBuyButton
+                product={p}
                 comingSoonLabel="Checkout pending"
                 className="btn btn-primary btn-shimmer"
+                hybridLabel={
+                  p === products.bundleFull
+                    ? `Start Full Bundle · ${formatPrice(p.price)}`
+                    : `Continue · ${formatPrice(p.price)}`
+                }
               />
             </StaggerItem>
           ))}
@@ -335,17 +332,17 @@ export default function SquareMile() {
           </StaggerItem>
           <StaggerItem>
             <div className="card card-glow">
-              <div className="meta">Full Bundle</div>
+              <div className="meta">Full Bundle · two steps</div>
               <h3>{formatPrice(products.bundleFull.price)}</h3>
               <p>
-                Print + Digital Edition + audiobook + Companion Guide. One checkout on
-                Gumroad — everything for readers who want the complete set.
+                Print via IngramSpark + Digital Edition, audiobook, and Companion
+                on Gumroad. Guided path — print full price, digital add-ons 25%
+                off.
               </p>
               <div style={{ marginTop: "1rem" }}>
-                <BuyButton
-                  href={products.bundleFull.url}
-                  label={products.bundleFull.label}
-                  comingSoonLabel="Checkout pending"
+                <ProductBuyButton
+                  product={products.bundleFull}
+                  hybridLabel={`Start Full Bundle · ${formatPrice(products.bundleFull.price)}`}
                 />
               </div>
             </div>

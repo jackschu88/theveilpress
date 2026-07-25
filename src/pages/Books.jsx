@@ -57,7 +57,7 @@ export default function Books() {
         <ul className="list-clean list-animated">
           <li className="list-link">
             <Link
-              to="/books/square-mile"
+              to="/presale"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -86,7 +86,7 @@ export default function Books() {
                   empire.
                 </p>
               </div>
-              <span className="value">Available</span>
+              <span className="value">Pre-order</span>
             </Link>
           </li>
           <li className="soon">
