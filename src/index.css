@@ -2161,7 +2161,7 @@ a.card:hover,
 
 /* —— Music Player —— */
 .music-player {
-  max-width: 32rem;
+  max-width: 48rem;
   border: 1px solid rgba(201, 168, 76, 0.2);
   border-radius: 10px;
   background:
@@ -2172,28 +2172,42 @@ a.card:hover,
 }
 
 .music-tracklist {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+@media (max-width: 640px) {
+  .music-tracklist {
+    grid-template-columns: 1fr;
+  }
 }
 
 .music-track {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-  border: none;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
   background: transparent;
-  cursor: pointer;
   transition: background 0.2s ease;
   font-family: "Source Sans 3", system-ui, sans-serif;
   text-align: left;
   width: 100%;
+  min-width: 0;
   color: var(--ink-muted);
 }
 
-.music-track:last-child {
-  border-bottom: none;
+/* Odd items (1-based col 1): keep right border; even (col 2): no right border */
+.music-track:nth-child(2n) {
+  border-right: none;
+}
+
+@media (max-width: 640px) {
+  .music-track {
+    border-right: none;
+  }
 }
 
 .music-track:hover {
@@ -2205,6 +2219,21 @@ a.card:hover,
   color: var(--gold-bright);
 }
 
+.music-track-main {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
 .music-track-icon {
   font-size: 0.85rem;
   width: 1.5rem;
@@ -2214,12 +2243,16 @@ a.card:hover,
 
 .music-track-title {
   flex: 1;
-  font-size: 0.9rem;
+  min-width: 0;
+  font-size: 0.88rem;
   color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .music-track-bar {
-  width: 5rem;
+  width: 3.5rem;
   height: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
@@ -2230,7 +2263,7 @@ a.card:hover,
 
 @media (max-width: 500px) {
   .music-track-bar {
-    width: 3rem;
+    width: 2.75rem;
   }
 }
 
@@ -2243,12 +2276,13 @@ a.card:hover,
 }
 
 .music-dl-link {
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--gold-dim);
   text-decoration: none;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .music-dl-link:hover {
@@ -2263,6 +2297,7 @@ a.card:hover,
   font-family: "Source Sans 3", system-ui, sans-serif;
   border-top: 1px solid rgba(201, 168, 76, 0.1);
   letter-spacing: 0.06em;
+  grid-column: 1 / -1;
 }
 
 /* —— Executive: Media Library —— */

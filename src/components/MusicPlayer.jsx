@@ -1,4 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+
+function resolveAudioUrl(src) {
+  if (!src || typeof window === "undefined") return src || "";
+  try {
+    return new URL(src, window.location.href).href;
+  } catch {
+    return src;
+  }
+}
 
 export default function MusicPlayer({ tracks = [] }) {
   const [current, setCurrent] = useState(null);
@@ -7,36 +16,37 @@ export default function MusicPlayer({ tracks = [] }) {
   const [error, setError] = useState(null);
   const audioRef = useRef(null);
 
-  // Load / play when the selected track changes (avoids setTimeout race).
-  useEffect(() => {
+  function playTrack(track) {
     const audio = audioRef.current;
-    if (!audio || !current) return;
+    if (!audio || !track?.src) {
+      setError(`Could not play “${track?.title ?? "track"}”.`);
+      return;
+    }
 
     setError(null);
     setProgress(0);
-    audio.src = current.src;
-    audio.load();
+    setCurrent(track);
 
-    let cancelled = false;
-    audio
-      .play()
-      .then(() => {
-        if (!cancelled) setPlaying(true);
-      })
-      .catch((err) => {
-        if (!cancelled) {
+    const nextUrl = resolveAudioUrl(track.src);
+    // Play inside the click handler so the browser still has a user gesture.
+    // (Deferred play() in useEffect is often blocked as autoplay.)
+    if (audio.src !== nextUrl) {
+      audio.src = track.src;
+    }
+
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise
+        .then(() => setPlaying(true))
+        .catch((err) => {
           setPlaying(false);
-          // Autoplay blocked until user gesture is rare here (click already happened).
-          if (err?.name !== "AbortError") {
-            setError(`Could not play “${current.title}”.`);
-          }
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [current]);
+          if (err?.name === "AbortError") return;
+          setError(`Could not play “${track.title}”.`);
+        });
+    } else {
+      setPlaying(true);
+    }
+  }
 
   function toggle(track) {
     const audio = audioRef.current;
@@ -49,15 +59,15 @@ export default function MusicPlayer({ tracks = [] }) {
         audio
           ?.play()
           .then(() => setPlaying(true))
-          .catch(() => {
+          .catch((err) => {
             setPlaying(false);
+            if (err?.name === "AbortError") return;
             setError(`Could not play “${track.title}”.`);
           });
       }
       return;
     }
-    setCurrent(track);
-    setPlaying(true);
+    playTrack(track);
   }
 
   function handleTimeUpdate() {
@@ -99,7 +109,7 @@ export default function MusicPlayer({ tracks = [] }) {
         onError={handleError}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        preload="none"
+        preload="metadata"
         playsInline
       />
 
@@ -107,16 +117,26 @@ export default function MusicPlayer({ tracks = [] }) {
         {tracks.map((track) => {
           const isActive = current?.id === track.id;
           return (
-            <button
+            <div
               key={track.id}
-              type="button"
               className={`music-track${isActive ? " music-track-active" : ""}`}
-              onClick={() => toggle(track)}
             >
-              <span className="music-track-icon">
-                {isActive && playing ? "⏸" : "▶"}
-              </span>
-              <span className="music-track-title">{track.title}</span>
+              <button
+                type="button"
+                className="music-track-main"
+                onClick={() => toggle(track)}
+                aria-pressed={isActive && playing}
+                aria-label={
+                  isActive && playing
+                    ? `Pause ${track.title}`
+                    : `Play ${track.title}`
+                }
+              >
+                <span className="music-track-icon" aria-hidden="true">
+                  {isActive && playing ? "⏸" : "▶"}
+                </span>
+                <span className="music-track-title">{track.title}</span>
+              </button>
               {isActive && (
                 <span
                   className="music-track-bar"
@@ -126,21 +146,37 @@ export default function MusicPlayer({ tracks = [] }) {
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-valuenow={Math.round(progress)}
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    const audio = audioRef.current;
+                    if (!audio?.duration) return;
+                    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+                      e.preventDefault();
+                      const delta = e.key === "ArrowRight" ? 0.05 : -0.05;
+                      const next = Math.min(
+                        1,
+                        Math.max(0, audio.currentTime / audio.duration + delta),
+                      );
+                      audio.currentTime = next * audio.duration;
+                      setProgress(next * 100);
+                    }
+                  }}
                 >
-                  <span className="music-track-fill" style={{ width: `${progress}%` }} />
+                  <span
+                    className="music-track-fill"
+                    style={{ width: `${progress}%` }}
+                  />
                 </span>
               )}
-              <span className="music-track-dl">
-                <a
-                  href={track.src}
-                  download
-                  onClick={(e) => e.stopPropagation()}
-                  className="music-dl-link"
-                >
-                  Add to playlist
-                </a>
-              </span>
-            </button>
+              <a
+                href={track.src}
+                download
+                className="music-dl-link"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Add to playlist
+              </a>
+            </div>
           );
         })}
       </div>
@@ -149,7 +185,11 @@ export default function MusicPlayer({ tracks = [] }) {
         <p className="music-now">Now playing: {current.title}</p>
       )}
       {error && (
-        <p className="music-now" role="alert" style={{ color: "var(--gold, #c9a227)" }}>
+        <p
+          className="music-now"
+          role="alert"
+          style={{ color: "var(--gold, #c9a227)" }}
+        >
           {error}
         </p>
       )}
