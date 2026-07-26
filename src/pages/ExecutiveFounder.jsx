@@ -1,8 +1,7 @@
-import { lazy, Suspense, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
-import TiltCover from "../components/TiltCover";
 import { BuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
 import MusicPlayer from "../components/MusicPlayer";
@@ -15,13 +14,11 @@ import {
 } from "../commerce";
 import { easeOut } from "../motion";
 
-const HeroScene = lazy(() => import("../components/HeroScene"));
-
+/** Portrait journey films (9:16 player). Landscape pieces live only in mediaLibrary. */
 const journeyVideos = [
   { id: "main-ad", title: "The Veil of the Square Mile", src: "/videos/journey-main.mp4", poster: "/cover.jpg" },
   { id: "lazy-boy", title: "The news from somewhere else", src: "/videos/journey-lazboy.mp4", poster: "" },
   { id: "crowd", title: "In the crowd", src: "/videos/journey-crowd.mp4", poster: "" },
-  { id: "fog-boy", title: "Through the fog", src: "/videos/journey-fogboy.mp4", poster: "" },
 ];
 
 const soundtrack = [
@@ -35,13 +32,18 @@ const soundtrack = [
   { id: "same-script", title: "Same Script", src: "/audio/same-script.mp3" },
 ];
 
+/** Explore more — portrait clips first; landscape “Through the fog” last (full-width). */
 const mediaLibrary = [
   { title: "The Veil — Main Trailer", src: "/videos/square-mile-trailer.mp4", poster: "/cover.jpg" },
   { title: "Companion Guide Trailer", src: "/videos/companion_trailer.mp4", poster: "/companion-cover.jpg" },
   { title: "The Journey — Main Ad", src: "/videos/journey-main.mp4", poster: "/cover.jpg" },
   { title: "The news from somewhere else", src: "/videos/journey-lazboy.mp4", poster: "" },
   { title: "In the crowd", src: "/videos/journey-crowd.mp4", poster: "" },
-  { title: "Through the fog", src: "/videos/journey-fogboy.mp4", poster: "" },
+  {
+    title: "Through the fog",
+    src: "/videos/journey-fogboy.mp4",
+    poster: "",
+  },
 ];
 
 const included = [
@@ -78,7 +80,7 @@ export default function ExecutiveFounder() {
   const [activeVideo, setActiveVideo] = useState(journeyVideos[0].id);
   const [needsPlay, setNeedsPlay] = useState(false);
   const [modalVideo, setModalVideo] = useState(null);
-  const journeyRef = useRef(null);
+  const mediaRef = useRef(null);
   const videoRef = useRef(null);
 
   const currentVideo = journeyVideos.find((v) => v.id === activeVideo);
@@ -108,165 +110,209 @@ export default function ExecutiveFounder() {
       .catch(() => setNeedsPlay(true));
   }
 
+  function scrollToMedia() {
+    mediaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <AnimatedPage>
-      <section className="hero hero-grid hero-book">
-        <Suspense fallback={null}>
-          <HeroScene variant="light" />
-        </Suspense>
-        <motion.div
-          className="exec-glow"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2 }}
-          aria-hidden
-        />
-
-        <div>
-          <motion.span
-            className="exec-badge"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: easeOut }}
-          >
-            Limited Edition
-          </motion.span>
-
-          <motion.h1
-            className="exec-title"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: easeOut }}
-          >
-            Limited Founders Edition
-          </motion.h1>
-
-          <motion.div
-            className="title-rule"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1, delay: 0.5, ease: easeOut }}
+      {/* ── Hero: introduce + scroll to media (no purchase yet) ── */}
+      <section className="exec-hero-composite" aria-label="Limited Founders Edition">
+        <div className="exec-hero-stage">
+          <img
+            className="exec-hero-photo"
+            src="/limited-founders-hero-wide.jpg"
+            alt="The Veil of the Square Mile hardcover on marble pedestal"
           />
-
-          <motion.p
-            className="exec-lede"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.65, ease: easeOut }}
-          >
-            The definitive founders package. Signed hardcover book, signed hardcover
-            Companion Guide, and every digital format — numbered and extended — at a
-            presale price that rewards the conviction.
-          </motion.p>
+          <div className="exec-hero-shade" aria-hidden />
 
           <motion.div
-            className="exec-price-block"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.85, ease: easeOut }}
+            className="exec-hero-glass"
+            initial={{ opacity: 0, x: -18 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.85, ease: easeOut }}
           >
-            <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
-            <span className="exec-compare">
-              <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
-              <span className="exec-save">Save {formatPrice(savings)} ({savingsPct}% off)</span>
-            </span>
-          </motion.div>
+            <motion.span
+              className="exec-badge"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: easeOut }}
+            >
+              Limited Edition
+            </motion.span>
 
-          <motion.div
-            className="actions"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05, duration: 0.7, ease: easeOut }}
-          >
-            <BuyButton
-              href={PRESALE.executiveFounderPack.url}
-              label={`Pre-order Limited Founders · ${formatPrice(EXECUTIVE_PRICE)}`}
-              comingSoonLabel="Pre-order link pending"
-              className="btn btn-primary btn-shimmer btn-exec"
+            <motion.h1
+              className="exec-title"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15, ease: easeOut }}
+            >
+              Limited Founders Edition
+            </motion.h1>
+
+            <motion.div
+              className="title-rule"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1, delay: 0.4, ease: easeOut }}
             />
-            <MagneticLink className="btn" to="/presale">
-              All presale options
-            </MagneticLink>
+
+            <motion.p
+              className="exec-lede"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: easeOut }}
+            >
+              The definitive founders package. Signed hardcover book, signed hardcover
+              Companion Guide, and every digital format — numbered and extended — at a
+              presale price that rewards the conviction.
+            </motion.p>
+
+            <motion.div
+              className="exec-price-block"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.7, ease: easeOut }}
+            >
+              <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
+              <span className="exec-compare">
+                <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
+                <span className="exec-save">
+                  Save {formatPrice(savings)} ({savingsPct}% off)
+                </span>
+              </span>
+            </motion.div>
+
+            <motion.div
+              className="actions"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9, duration: 0.7, ease: easeOut }}
+            >
+              <button
+                type="button"
+                className="btn btn-primary btn-shimmer btn-exec"
+                onClick={scrollToMedia}
+              >
+                Why Limited Founders Edition
+              </button>
+              <MagneticLink className="btn" to="/presale">
+                All presale options
+              </MagneticLink>
+            </motion.div>
           </motion.div>
         </div>
-
-        <TiltCover
-          src="/cover.jpg"
-          alt="The Veil of the Square Mile cover"
-        />
       </section>
 
-      <Reveal>
-        <hr className="rule rule-pulse" />
-      </Reveal>
-
-      {/* ── The Journey ── */}
-      <section className="journey-section" ref={journeyRef}>
+      {/* ── ALL MEDIA (before purchase) ── */}
+      <div id="why-limited-founders" ref={mediaRef} className="exec-media-anchor">
         <Reveal>
-          <h2 className="journey-headline">This isn't just a book. It's a journey.</h2>
-          <p className="journey-sub">Watch this before you decide.</p>
+          <hr className="rule rule-pulse" />
         </Reveal>
 
-        <Reveal>
-          <div className="journey-player">
-            <div className="journey-frame">
-              <video
-                ref={videoRef}
-                className="journey-video"
-                src={currentVideo?.src}
-                poster={currentVideo?.poster || undefined}
-                loop
-                playsInline
-                preload="metadata"
-                controls
-                aria-label={currentVideo?.title}
-              />
-              {needsPlay && (
+        {/* Journey films */}
+        <section className="journey-section">
+          <Reveal>
+            <h2 className="journey-headline">This isn&apos;t just a book. It&apos;s a journey.</h2>
+            <p className="journey-sub">Watch this before you decide.</p>
+          </Reveal>
+
+          <Reveal>
+            <div className="journey-player">
+              <div className="journey-frame">
+                <video
+                  ref={videoRef}
+                  className="journey-video"
+                  src={currentVideo?.src}
+                  poster={currentVideo?.poster || undefined}
+                  loop
+                  playsInline
+                  preload="metadata"
+                  controls
+                  aria-label={currentVideo?.title}
+                />
+                {needsPlay && (
+                  <button
+                    type="button"
+                    className="trailer-play-sound"
+                    onClick={handlePlayOverlay}
+                  >
+                    Watch with sound
+                  </button>
+                )}
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal>
+            <div className="journey-queue">
+              {journeyVideos.map((v) => (
+                <button
+                  key={v.id}
+                  type="button"
+                  className={`journey-queue-item${activeVideo === v.id ? " journey-queue-active" : ""}`}
+                  onClick={() => setActiveVideo(v.id)}
+                >
+                  <span className="journey-queue-num">
+                    {v.id === "main-ad" ? "Featured" : `0${journeyVideos.indexOf(v)}`}
+                  </span>
+                  <span className="journey-queue-title">{v.title}</span>
+                </button>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal>
+            <p className="journey-footer">Once you see it, you will understand why this matters.</p>
+          </Reveal>
+        </section>
+
+        {/* Soundtrack */}
+        <section className="section">
+          <Reveal>
+            <h2 className="exec-section-headline">Songs from the resistance</h2>
+            <p className="exec-section-sub">Listen while you decide.</p>
+          </Reveal>
+          <Reveal>
+            <MusicPlayer tracks={soundtrack} />
+          </Reveal>
+        </section>
+
+        {/* Film library */}
+        <section className="section">
+          <Reveal>
+            <h2 className="exec-section-headline">Explore more</h2>
+            <p className="exec-section-sub">All the films in one place.</p>
+          </Reveal>
+          <Stagger className="exec-media-grid">
+            {mediaLibrary.map((m) => (
+              <StaggerItem key={m.title}>
                 <button
                   type="button"
-                  className="trailer-play-sound"
-                  onClick={handlePlayOverlay}
+                  className="exec-media-card"
+                  onClick={() => setModalVideo(m)}
                 >
-                  Watch with sound
+                  <div className="exec-media-thumb">
+                    {m.poster ? (
+                      <img src={m.poster} alt={m.title} />
+                    ) : (
+                      <div className="exec-media-placeholder">
+                        <span>▶</span>
+                      </div>
+                    )}
+                    <div className="exec-media-play" aria-hidden>
+                      <span>▶</span>
+                    </div>
+                  </div>
+                  <p className="exec-media-label">{m.title}</p>
                 </button>
-              )}
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal>
-          <div className="journey-queue">
-            {journeyVideos.map((v) => (
-              <button
-                key={v.id}
-                type="button"
-                className={`journey-queue-item${activeVideo === v.id ? " journey-queue-active" : ""}`}
-                onClick={() => setActiveVideo(v.id)}
-              >
-                <span className="journey-queue-num">{v.id === "main-ad" ? "Featured" : `0${journeyVideos.indexOf(v)}`}</span>
-                <span className="journey-queue-title">{v.title}</span>
-              </button>
+              </StaggerItem>
             ))}
-          </div>
-        </Reveal>
+          </Stagger>
+        </section>
+      </div>
 
-        <Reveal>
-          <p className="journey-footer">Once you see it, you will understand why this matters.</p>
-        </Reveal>
-      </section>
-
-      {/* ── Hear the Message ── */}
-      <section className="section">
-        <Reveal>
-          <h2 className="exec-section-headline">Songs from the resistance</h2>
-          <p className="exec-section-sub">Listen while you decide.</p>
-        </Reveal>
-        <Reveal>
-          <MusicPlayer tracks={soundtrack} />
-        </Reveal>
-      </section>
-
-      {/* ── What You Receive ── */}
+      {/* ── Package details ── */}
       <section className="section">
         <Reveal>
           <h2 className="exec-section-headline">What you receive</h2>
@@ -281,8 +327,7 @@ export default function ExecutiveFounder() {
         </Stagger>
       </section>
 
-      {/* ── The Value ── */}
-      <section className="section">
+      <section className="section exec-value-section">
         <Reveal>
           <h2 className="exec-section-headline">The value</h2>
           <p className="exec-section-sub">What each piece costs on its own vs. the pack price.</p>
@@ -311,24 +356,14 @@ export default function ExecutiveFounder() {
             </div>
             <div className="exec-value-save">
               <span>You save</span>
-              <span>{formatPrice(savings)} ({savingsPct}% off)</span>
+              <span>
+                {formatPrice(savings)} ({savingsPct}% off)
+              </span>
             </div>
-          </div>
-        </Reveal>
-
-        <Reveal>
-          <div className="actions" style={{ marginTop: "1.5rem" }}>
-            <BuyButton
-              href={PRESALE.executiveFounderPack.url}
-              label={`Pre-order Limited Founders · ${formatPrice(EXECUTIVE_PRICE)}`}
-              comingSoonLabel="Pre-order link pending"
-              className="btn btn-primary btn-shimmer btn-exec"
-            />
           </div>
         </Reveal>
       </section>
 
-      {/* ── Limited edition (no number) ── */}
       <section className="section">
         <div className="exec-limited-section">
           <Reveal>
@@ -340,7 +375,24 @@ export default function ExecutiveFounder() {
               this edition closes permanently.
             </p>
           </Reveal>
-          <Reveal>
+        </div>
+      </section>
+
+      {/* ── Purchase (bottom only) ── */}
+      <section className="section exec-purchase" id="purchase">
+        <Reveal>
+          <div className="exec-purchase-card">
+            <p className="exec-purchase-eyebrow">Ready when you are</p>
+            <h2 className="exec-purchase-title">Claim your Limited Founders Edition</h2>
+            <p className="exec-purchase-price">
+              <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
+              <span className="exec-compare">
+                <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
+                <span className="exec-save">
+                  Save {formatPrice(savings)} ({savingsPct}% off)
+                </span>
+              </span>
+            </p>
             <div className="actions" style={{ justifyContent: "center" }}>
               <BuyButton
                 href={PRESALE.executiveFounderPack.url}
@@ -348,42 +400,12 @@ export default function ExecutiveFounder() {
                 comingSoonLabel="Pre-order link pending"
                 className="btn btn-primary btn-shimmer btn-exec btn-exec-lg"
               />
+              <MagneticLink className="btn" to="/presale">
+                All presale options
+              </MagneticLink>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── Media Library ── */}
-      <section className="section">
-        <Reveal>
-          <h2 className="exec-section-headline">Explore more</h2>
-          <p className="exec-section-sub">All the films in one place.</p>
+          </div>
         </Reveal>
-        <Stagger className="exec-media-grid">
-          {mediaLibrary.map((m) => (
-            <StaggerItem key={m.title}>
-              <button
-                type="button"
-                className="exec-media-card"
-                onClick={() => setModalVideo(m)}
-              >
-                <div className="exec-media-thumb">
-                  {m.poster ? (
-                    <img src={m.poster} alt={m.title} />
-                  ) : (
-                    <div className="exec-media-placeholder">
-                      <span>▶</span>
-                    </div>
-                  )}
-                  <div className="exec-media-play" aria-hidden>
-                    <span>▶</span>
-                  </div>
-                </div>
-                <p className="exec-media-label">{m.title}</p>
-              </button>
-            </StaggerItem>
-          ))}
-        </Stagger>
       </section>
 
       {/* Video modal */}

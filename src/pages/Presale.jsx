@@ -14,7 +14,6 @@ const HeroScene = lazy(() => import("../components/HeroScene"));
 const presaleItems = [
   { ...PRESALE.softcover, badge: "Book" },
   { ...PRESALE.hardcover, badge: "Book" },
-  { ...PRESALE.companionPdf, badge: "Companion" },
   { ...PRESALE.companionHardcover, badge: "Companion" },
   { ...PRESALE.foundersPack, badge: "Founders Edition", featured: true },
   { ...PRESALE.executiveFounderPack, badge: "Limited Founders", featured: true, dedicated: true },

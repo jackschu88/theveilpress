@@ -104,7 +104,8 @@ export const INGRAM_PRINT_URL = "";
 export const GUMROAD = {
   ebook: "https://theveilpress.gumroad.com/l/riwlqv",
   audiobook: "https://theveilpress.gumroad.com/l/rphkx",
-  companion: "https://theveilpress.gumroad.com/l/jawnaq",
+  /** Digital Companion PDF — set when a dedicated Gumroad SKU exists (jawnaq is Companion hardcover). */
+  companion: "",
   bundleEbookCompanion: "https://theveilpress.gumroad.com/l/tkfupm",
   bundleAudioCompanion: "https://theveilpress.gumroad.com/l/mghiaq",
   bundleEbookAudio: "https://theveilpress.gumroad.com/l/ggmum",
@@ -339,42 +340,97 @@ export function getHybridPlan(productOrId) {
 }
 
 /**
+ * Presale / Limited Founders list prices (source of truth for stack math).
+ *
+ * Softcover .............. $39.99
+ * Hardcover (unsigned) ... $45.99
+ * Companion hardcover .... $59.99
+ * Founders (signed HC) ... $59.99
+ * Digital ebook .......... $15.99  (STANDALONE)
+ * Audiobook .............. $17.99  (STANDALONE)
+ * Companion PDF .......... $24.99  (STANDALONE)
+ *
+ * Limited Founders includes signed HC book + signed HC companion + all digital.
+ * Solo stack values the signed main book at Founders Edition price (not unsigned hardcover).
+ */
+export const PRESALE_LIST = {
+  softcover: 39.99,
+  hardcover: 45.99,
+  companionHardcover: 59.99,
+  /** Signed hardcover alone (Founders Edition). */
+  foundersSignedHardcover: 59.99,
+  ebook: STANDALONE.ebook,
+  audiobook: STANDALONE.audiobook,
+  companionPdf: STANDALONE.companion,
+};
+
+/**
  * Value breakdown for the Limited Founders Edition — solo list prices.
  * Pack includes: signed hardcover book + signed hardcover companion + all digital.
  */
 export const EXECUTIVE_VALUE_STACK = [
-  { item: "Hardcover Book (signed)", solo: 45.99 },
-  { item: "Hardcover Companion Guide (signed)", solo: 69.99 },
-  { item: "Digital Edition (ebook)", solo: 15.99 },
-  { item: "Audiobook", solo: 17.99 },
-  { item: "Companion Guide (PDF)", solo: 24.99 },
+  {
+    item: "Hardcover Book (signed) — Founders Edition",
+    solo: PRESALE_LIST.foundersSignedHardcover,
+  },
+  {
+    item: "Hardcover Companion Guide (signed)",
+    solo: PRESALE_LIST.companionHardcover,
+  },
+  { item: "Digital Edition (ebook)", solo: PRESALE_LIST.ebook },
+  { item: "Audiobook", solo: PRESALE_LIST.audiobook },
+  { item: "Companion Guide (PDF)", solo: PRESALE_LIST.companionPdf },
   { item: "Personal message", solo: null },
   { item: "Companion extension (bonus chapter)", solo: null },
   { item: "Numbered edition", solo: null },
 ];
 
-export const EXECUTIVE_TOTAL_SOLO = EXECUTIVE_VALUE_STACK.reduce(
-  (sum, v) => sum + (v.solo || 0), 0
+export const EXECUTIVE_TOTAL_SOLO = money(
+  EXECUTIVE_VALUE_STACK.reduce((sum, v) => sum + (v.solo || 0), 0)
 );
 
-/** Limited Founders Edition pack price. */
+/**
+ * Limited Founders pack price.
+ * Solo total: $59.99 + $59.99 + $15.99 + $17.99 + $24.99 = $178.95
+ * Pack $124.99 → save $53.96 (~30% off combined solo).
+ */
 export const EXECUTIVE_PRICE = 124.99;
+
+export const EXECUTIVE_SAVINGS = money(EXECUTIVE_TOTAL_SOLO - EXECUTIVE_PRICE);
 
 /**
  * Presale products — live at /presale.
- * Fill in Gumroad URLs when ready. Empty URLs show "Pre-order link pending".
- *
- * Founders Edition ........ $59.99  signed hardcover book only (Gumroad live)
- * Limited Founders Edition  $124.99 signed hardcover + signed companion HC + all digital
+ * Empty URLs show "Pre-order link pending".
  */
 export const PRESALE = {
-  softcover: { name: "Softcover Book", price: 39.99, url: "", blurb: "Trade paperback. Pre-order the first volume." },
-  hardcover: { name: "Hardcover Book", price: 45.99, url: "", blurb: "Hardcover edition. Pre-order the first volume." },
-  companionPdf: { name: "Companion Guide (PDF)", price: 24.99, url: "", blurb: "Digital companion guide. Glossary, timelines, bibliography, steelman. Delivered on release." },
-  companionHardcover: { name: "Companion Guide (Hardcover)", price: 69.99, url: "", blurb: "Hardcover companion guide. The apparatus for the main volume." },
+  softcover: {
+    name: "Softcover Book",
+    price: PRESALE_LIST.softcover,
+    url: "https://theveilpress.gumroad.com/l/jytnb",
+    blurb: "Trade paperback. Pre-order the first volume.",
+  },
+  hardcover: {
+    name: "Hardcover Book",
+    price: PRESALE_LIST.hardcover,
+    url: "https://theveilpress.gumroad.com/l/pntwl",
+    blurb: "Hardcover edition. Pre-order the first volume.",
+  },
+  companionPdf: {
+    name: "Companion Guide (PDF)",
+    price: PRESALE_LIST.companionPdf,
+    url: "",
+    blurb:
+      "Digital companion guide. Glossary, timelines, bibliography, steelman. Delivered on release.",
+  },
+  companionHardcover: {
+    name: "Companion Guide (Hardcover)",
+    price: PRESALE_LIST.companionHardcover,
+    url: "https://theveilpress.gumroad.com/l/jawnaq",
+    blurb: "Hardcover companion guide. The apparatus for the main volume.",
+  },
   foundersPack: {
     name: "Founders Edition",
-    price: 59.99,
+    price: PRESALE_LIST.foundersSignedHardcover,
     url: "https://theveilpress.gumroad.com/l/jnnnft",
     blurb: "Signed hardcover of The Veil of the Square Mile. Special presale price.",
   },
