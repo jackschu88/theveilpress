@@ -2300,6 +2300,93 @@ a.card:hover,
   grid-column: 1 / -1;
 }
 
+/* Fixed bar — audio element lives in Layout so route changes do not stop it */
+.music-global-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.1rem;
+  border-top: 1px solid rgba(201, 168, 76, 0.25);
+  background:
+    linear-gradient(180deg, rgba(18, 16, 12, 0.92), rgba(10, 9, 7, 0.96));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.4);
+  font-family: "Source Sans 3", system-ui, sans-serif;
+}
+
+.music-global-toggle,
+.music-global-next {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  border-radius: 999px;
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--gold-bright, #e8c96a);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.music-global-toggle:hover,
+.music-global-next:hover {
+  background: rgba(201, 168, 76, 0.16);
+}
+
+.music-global-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 0 1 12rem;
+}
+
+.music-global-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-dim, #a08a3a);
+}
+
+.music-global-title {
+  font-size: 0.88rem;
+  color: var(--ink, #f2ebe0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-global-seek {
+  flex: 1;
+  min-width: 4rem;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.music-global-seek-fill {
+  display: block;
+  height: 100%;
+  background: var(--gold, #c9a227);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+body:has(.music-global-bar) {
+  padding-bottom: 3.5rem;
+}
+
+
 /* —— Executive: Media Library —— */
 .exec-media-grid {
   display: grid;

@@ -6,6 +6,7 @@ import SplitTitle from "../components/SplitTitle";
 import TiltCover from "../components/TiltCover";
 import { BuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
+import MusicPlayer from "../components/MusicPlayer";
 import { PRESALE, formatPrice } from "../commerce";
 import { easeOut } from "../motion";
 
@@ -124,6 +125,20 @@ export default function Presale() {
             </StaggerItem>
           ))}
         </Stagger>
+      </section>
+
+      <section className="section">
+        <Reveal>
+          <div className="section-head">
+            <h2>Songs from the resistance</h2>
+            <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
+              Listen while you decide. Playback continues as you browse the site.
+            </p>
+          </div>
+        </Reveal>
+        <Reveal>
+          <MusicPlayer />
+        </Reveal>
       </section>
 
       <Reveal className="section">

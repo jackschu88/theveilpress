@@ -4,7 +4,6 @@ import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
-import MusicPlayer from "../components/MusicPlayer";
 import {
   PRESALE,
   EXECUTIVE_VALUE_STACK,
@@ -19,29 +18,6 @@ const journeyVideos = [
   { id: "main-ad", title: "The Veil of the Square Mile", src: "/videos/journey-main.mp4", poster: "/cover.jpg" },
   { id: "lazy-boy", title: "The news from somewhere else", src: "/videos/journey-lazboy.mp4", poster: "" },
   { id: "crowd", title: "In the crowd", src: "/videos/journey-crowd.mp4", poster: "" },
-];
-
-const soundtrack = [
-  { id: "fog-lost", title: "Lost in the Fog", src: "/audio/lost-in-the-fog.mp3" },
-  { id: "rollin", title: "Rollin'", src: "/audio/cut-through-the-fog.mp3" },
-  { id: "foggy-roads", title: "Foggy Roads", src: "/audio/foggy-roads.mp3" },
-  { id: "behind-curtain", title: "Behind the Curtain", src: "/audio/behind-the-curtain.mp3" },
-  { id: "worked-bone", title: "Worked to the Bone", src: "/audio/worked-to-the-bone.mp3" },
-  { id: "threads-across", title: "Threads Across the Water", src: "/audio/threads-across-the-water.mp3" },
-  { id: "now-you-know", title: "Now You Know", src: "/audio/now-you-know.mp3" },
-  { id: "same-script", title: "Same Script", src: "/audio/same-script.mp3" },
-  { id: "through-the-fog", title: "Through the Fog", src: "/audio/through-the-fog.mp3" },
-  { id: "meet-me-in-the-quiet", title: "Meet Me in the Quiet", src: "/audio/meet-me-in-the-quiet.mp3" },
-  { id: "one-light", title: "One Light", src: "/audio/one-light.mp3" },
-  { id: "nowhere", title: "Nowhere", src: "/audio/nowhere.mp3" },
-  { id: "beneath", title: "Beneath", src: "/audio/beneath.mp3" },
-  { id: "same-old-friday", title: "Same Old Friday", src: "/audio/same-old-friday.mp3" },
-  { id: "still-here", title: "Still Here", src: "/audio/still-here.mp3" },
-  { id: "on-my-way", title: "On My Way", src: "/audio/on-my-way.mp3" },
-  { id: "better-off", title: "Better Off", src: "/audio/better-off.mp3" },
-  { id: "unstoppable-now", title: "Unstoppable Now", src: "/audio/unstoppable-now.mp3" },
-  { id: "break-the-frame", title: "Break the Frame", src: "/audio/break-the-frame.mp3" },
-  { id: "the-long-game", title: "The Long Game", src: "/audio/the-long-game.mp3" },
 ];
 
 /** Explore more — portrait clips first; landscape “Through the fog” last (full-width). */
@@ -276,17 +252,6 @@ export default function ExecutiveFounder() {
 
           <Reveal>
             <p className="journey-footer">Once you see it, you will understand why this matters.</p>
-          </Reveal>
-        </section>
-
-        {/* Soundtrack */}
-        <section className="section">
-          <Reveal>
-            <h2 className="exec-section-headline">Songs from the resistance</h2>
-            <p className="exec-section-sub">Listen while you decide.</p>
-          </Reveal>
-          <Reveal>
-            <MusicPlayer tracks={soundtrack} />
           </Reveal>
         </section>
 

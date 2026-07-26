@@ -8,6 +8,8 @@ import GoldDust from "./GoldDust";
 import SmoothScroll from "./SmoothScroll";
 import Grain from "./Grain";
 import CustomCursor from "./CustomCursor";
+import SoundtrackProvider from "./SoundtrackProvider";
+import GlobalMusicBar from "./GlobalMusicBar";
 import { pageTransition } from "../motion";
 import { ScrollTrigger } from "../scroll";
 
@@ -28,7 +30,7 @@ export default function Layout() {
   }, [location.pathname]);
 
   return (
-    <>
+    <SoundtrackProvider>
       <SmoothScroll />
       <Grain />
       <CustomCursor />
@@ -76,6 +78,8 @@ export default function Layout() {
         </AnimatePresence>
       </main>
 
+      <GlobalMusicBar />
+
       <footer className="site-footer">
         <div className="shell footer-inner">
           <div>
@@ -109,6 +113,6 @@ export default function Layout() {
           </p>
         </div>
       </footer>
-    </>
+    </SoundtrackProvider>
   );
 }
