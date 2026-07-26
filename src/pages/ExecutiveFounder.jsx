@@ -30,6 +30,18 @@ const soundtrack = [
   { id: "threads-across", title: "Threads Across the Water", src: "/audio/threads-across-the-water.mp3" },
   { id: "now-you-know", title: "Now You Know", src: "/audio/now-you-know.mp3" },
   { id: "same-script", title: "Same Script", src: "/audio/same-script.mp3" },
+  { id: "through-the-fog", title: "Through the Fog", src: "/audio/through-the-fog.mp3" },
+  { id: "meet-me-in-the-quiet", title: "Meet Me in the Quiet", src: "/audio/meet-me-in-the-quiet.mp3" },
+  { id: "one-light", title: "One Light", src: "/audio/one-light.mp3" },
+  { id: "nowhere", title: "Nowhere", src: "/audio/nowhere.mp3" },
+  { id: "beneath", title: "Beneath", src: "/audio/beneath.mp3" },
+  { id: "same-old-friday", title: "Same Old Friday", src: "/audio/same-old-friday.mp3" },
+  { id: "still-here", title: "Still Here", src: "/audio/still-here.mp3" },
+  { id: "on-my-way", title: "On My Way", src: "/audio/on-my-way.mp3" },
+  { id: "better-off", title: "Better Off", src: "/audio/better-off.mp3" },
+  { id: "unstoppable-now", title: "Unstoppable Now", src: "/audio/unstoppable-now.mp3" },
+  { id: "break-the-frame", title: "Break the Frame", src: "/audio/break-the-frame.mp3" },
+  { id: "the-long-game", title: "The Long Game", src: "/audio/the-long-game.mp3" },
 ];
 
 /** Explore more — portrait clips first; landscape “Through the fog” last (full-width). */

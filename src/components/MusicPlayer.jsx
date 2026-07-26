@@ -1,38 +1,69 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function MusicPlayer({ tracks = [] }) {
   const [current, setCurrent] = useState(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [error, setError] = useState(null);
   const audioRef = useRef(null);
 
+  // Load / play when the selected track changes (avoids setTimeout race).
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !current) return;
+
+    setError(null);
+    setProgress(0);
+    audio.src = current.src;
+    audio.load();
+
+    let cancelled = false;
+    audio
+      .play()
+      .then(() => {
+        if (!cancelled) setPlaying(true);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setPlaying(false);
+          // Autoplay blocked until user gesture is rare here (click already happened).
+          if (err?.name !== "AbortError") {
+            setError(`Could not play “${current.title}”.`);
+          }
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [current]);
+
   function toggle(track) {
+    const audio = audioRef.current;
     if (current?.id === track.id) {
       if (playing) {
-        audioRef.current?.pause();
+        audio?.pause();
         setPlaying(false);
       } else {
-        audioRef.current?.play();
-        setPlaying(true);
+        setError(null);
+        audio
+          ?.play()
+          .then(() => setPlaying(true))
+          .catch(() => {
+            setPlaying(false);
+            setError(`Could not play “${track.title}”.`);
+          });
       }
       return;
     }
     setCurrent(track);
     setPlaying(true);
-    setProgress(0);
-    // Need a small delay so the new src loads
-    setTimeout(() => {
-      if (audioRef.current) {
-        audioRef.current.src = track.src;
-        audioRef.current.load();
-        audioRef.current.play().catch(() => setPlaying(false));
-      }
-    }, 50);
   }
 
   function handleTimeUpdate() {
-    if (!audioRef.current || !audioRef.current.duration) return;
-    setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+    const audio = audioRef.current;
+    if (!audio || !audio.duration || !Number.isFinite(audio.duration)) return;
+    setProgress((audio.currentTime / audio.duration) * 100);
   }
 
   function handleEnded() {
@@ -40,12 +71,21 @@ export default function MusicPlayer({ tracks = [] }) {
     setProgress(0);
   }
 
+  function handleError() {
+    if (current) {
+      setPlaying(false);
+      setError(`Could not load “${current.title}”.`);
+    }
+  }
+
   function handleSeek(e) {
+    e.stopPropagation();
+    const audio = audioRef.current;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
-    const pct = x / rect.width;
-    if (audioRef.current && audioRef.current.duration) {
-      audioRef.current.currentTime = pct * audioRef.current.duration;
+    const pct = Math.min(1, Math.max(0, x / rect.width));
+    if (audio && audio.duration && Number.isFinite(audio.duration)) {
+      audio.currentTime = pct * audio.duration;
       setProgress(pct * 100);
     }
   }
@@ -56,7 +96,11 @@ export default function MusicPlayer({ tracks = [] }) {
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleEnded}
+        onError={handleError}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
         preload="none"
+        playsInline
       />
 
       <div className="music-tracklist">
@@ -74,7 +118,15 @@ export default function MusicPlayer({ tracks = [] }) {
               </span>
               <span className="music-track-title">{track.title}</span>
               {isActive && (
-                <span className="music-track-bar" onClick={handleSeek}>
+                <span
+                  className="music-track-bar"
+                  onClick={handleSeek}
+                  role="slider"
+                  aria-label="Seek"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(progress)}
+                >
                   <span className="music-track-fill" style={{ width: `${progress}%` }} />
                 </span>
               )}
@@ -95,6 +147,11 @@ export default function MusicPlayer({ tracks = [] }) {
 
       {current && playing && (
         <p className="music-now">Now playing: {current.title}</p>
+      )}
+      {error && (
+        <p className="music-now" role="alert" style={{ color: "var(--gold, #c9a227)" }}>
+          {error}
+        </p>
       )}
     </div>
   );
