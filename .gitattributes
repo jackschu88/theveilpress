@@ -1,3 +1,2 @@
-# Large new media for Limited Founders / journey pages
-public/videos/journey-*.mp4 filter=lfs diff=lfs merge=lfs -text
-public/companion_trailer.mp4 filter=lfs diff=lfs merge=lfs -text
+﻿# Media is stored as normal git files (not LFS) so Vercel deploys real bytes.
+# Git LFS pointers break audio/video playback on Vercel (same fix as soundtrack commit 00e4210).

@@ -16,6 +16,11 @@ let lenisInstance = null;
 export function initSmoothScroll() {
   if (lenisInstance) return () => {};
 
+  // SPA route changes manage position; don't let the browser restore mid-page.
+  if (typeof history !== "undefined" && "scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
   const lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -36,6 +41,23 @@ export function initSmoothScroll() {
     lenis.destroy();
     lenisInstance = null;
   };
+}
+
+/** Instant jump to top — used on route change so pages never open mid-scroll. */
+export function scrollToTop() {
+  if (lenisInstance) {
+    lenisInstance.scrollTo(0, { immediate: true });
+  } else if (typeof window !== "undefined") {
+    window.scrollTo(0, 0);
+  }
+  if (typeof document !== "undefined") {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+}
+
+export function getLenis() {
+  return lenisInstance;
 }
 
 export { gsap, ScrollTrigger };

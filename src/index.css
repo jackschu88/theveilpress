@@ -1397,7 +1397,8 @@ a.card:hover,
 
 .trailer-play-sound {
   position: absolute;
-  inset: 0;
+  /* Leave the bottom free so native video controls stay clickable */
+  inset: 0 0 3rem 0;
   z-index: 3;
   display: grid;
   place-items: center;

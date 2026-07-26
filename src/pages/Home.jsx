@@ -20,8 +20,8 @@ export default function Home() {
   const [muted, setMuted] = useState(false);
   const [needsPlay, setNeedsPlay] = useState(false);
 
-  // Sound on by default — never set muted for autoplay.
-  // If the browser blocks autoplay-with-sound, wait for a click (still unmuted).
+  // Prefer autoplay with sound; if the browser blocks it, fall back to muted
+  // autoplay so the picture still runs, then unlock audio on first gesture.
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
@@ -35,6 +35,22 @@ export default function Home() {
       if (!cancelled) setMuted(false);
     };
 
+    const playMuted = async () => {
+      el.defaultMuted = true;
+      el.muted = true;
+      try {
+        await el.play();
+        if (!cancelled) {
+          setMuted(true);
+          setNeedsPlay(true);
+        }
+        return true;
+      } catch {
+        if (!cancelled) setNeedsPlay(true);
+        return false;
+      }
+    };
+
     const playWithSound = async () => {
       withSound();
       try {
@@ -43,12 +59,12 @@ export default function Home() {
         if (!cancelled) setNeedsPlay(false);
         return true;
       } catch {
-        if (!cancelled) setNeedsPlay(true);
+        // Keep the film rolling muted rather than a frozen poster.
+        await playMuted();
         return false;
       }
     };
 
-    withSound();
     playWithSound();
 
     const onGesture = (event) => {
@@ -69,7 +85,11 @@ export default function Home() {
     const onVolume = () => {
       if (!cancelled) setMuted(Boolean(el.muted));
     };
+    const onError = () => {
+      if (!cancelled) setNeedsPlay(true);
+    };
     el.addEventListener("volumechange", onVolume);
+    el.addEventListener("error", onError);
 
     return () => {
       cancelled = true;
@@ -77,6 +97,7 @@ export default function Home() {
         document.removeEventListener(type, onGesture, true)
       );
       el.removeEventListener("volumechange", onVolume);
+      el.removeEventListener("error", onError);
     };
   }, []);
 

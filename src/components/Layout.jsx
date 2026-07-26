@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import VeilIntro from "./VeilIntro";
@@ -11,7 +11,7 @@ import CustomCursor from "./CustomCursor";
 import SoundtrackProvider from "./SoundtrackProvider";
 import GlobalMusicBar from "./GlobalMusicBar";
 import { pageTransition } from "../motion";
-import { ScrollTrigger } from "../scroll";
+import { ScrollTrigger, scrollToTop } from "../scroll";
 
 const links = [
   { to: "/", label: "Pre-order", end: true },
@@ -22,12 +22,23 @@ const links = [
 export default function Layout() {
   const location = useLocation();
 
+  // Always start each route at the top (unless a hash targets a section).
+  // Without this, Lenis + SPA navigation leaves the previous page's scroll
+  // offset, so the new page opens mid-way down.
+  useLayoutEffect(() => {
+    if (location.hash) return;
+    scrollToTop();
+  }, [location.pathname, location.hash]);
+
   useEffect(() => {
     // Route transitions change page height; give the new page a frame to
     // render before recalculating ScrollTrigger's trigger positions.
-    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    const id = requestAnimationFrame(() => {
+      if (!location.hash) scrollToTop();
+      ScrollTrigger.refresh();
+    });
     return () => cancelAnimationFrame(id);
-  }, [location.pathname]);
+  }, [location.pathname, location.hash]);
 
   return (
     <SoundtrackProvider>

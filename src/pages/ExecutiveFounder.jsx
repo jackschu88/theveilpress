@@ -70,12 +70,15 @@ export default function ExecutiveFounder() {
   const [modalVideo, setModalVideo] = useState(null);
   const mediaRef = useRef(null);
   const videoRef = useRef(null);
+  const modalVideoRef = useRef(null);
 
   const currentVideo = journeyVideos.find((v) => v.id === activeVideo);
 
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
+    // Force the browser to pick up the new src when the queue changes.
+    el.load();
     const tryPlay = async () => {
       try {
         el.muted = true;
@@ -85,7 +88,10 @@ export default function ExecutiveFounder() {
         setNeedsPlay(true);
       }
     };
+    const onError = () => setNeedsPlay(true);
+    el.addEventListener("error", onError);
     tryPlay();
+    return () => el.removeEventListener("error", onError);
   }, [activeVideo]);
 
   function handlePlayOverlay() {
@@ -97,6 +103,16 @@ export default function ExecutiveFounder() {
       .then(() => setNeedsPlay(false))
       .catch(() => setNeedsPlay(true));
   }
+
+  // Modal autoplay is outside the original click gesture — mute first so it starts.
+  useEffect(() => {
+    if (!modalVideo) return undefined;
+    const el = modalVideoRef.current;
+    if (!el) return undefined;
+    el.muted = true;
+    el.play().catch(() => {});
+    return undefined;
+  }, [modalVideo]);
 
   function scrollToMedia() {
     mediaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -398,12 +414,14 @@ export default function ExecutiveFounder() {
             </button>
             <div className="exec-modal-frame">
               <video
+                ref={modalVideoRef}
                 className="exec-modal-video"
                 src={modalVideo.src}
                 poster={modalVideo.poster || undefined}
                 controls
                 autoPlay
                 playsInline
+                muted
                 preload="auto"
               />
             </div>
