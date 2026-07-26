@@ -20,4 +20,9 @@ export const soundtrack = [
   { id: "unstoppable-now", title: "Unstoppable Now", src: "/audio/unstoppable-now.mp3" },
   { id: "break-the-frame", title: "Break the Frame", src: "/audio/break-the-frame.mp3" },
   { id: "the-long-game", title: "The Long Game", src: "/audio/the-long-game.mp3" },
+  { id: "still-calling", title: "Still Calling", src: "/audio/still-calling.mp3" },
+  { id: "stand-up", title: "Stand Up", src: "/audio/stand-up.mp3" },
+  { id: "behind-the-noise", title: "Behind the Noise", src: "/audio/behind-the-noise.mp3" },
+  { id: "smoke-and-mirrors", title: "Smoke & Mirrors", src: "/audio/smoke-and-mirrors.mp3" },
+  { id: "penny-and-the-crown", title: "Penny and the Crown", src: "/audio/penny-and-the-crown.mp3" },
 ];
