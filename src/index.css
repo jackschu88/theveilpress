@@ -2161,7 +2161,7 @@ a.card:hover,
 
 /* —— Music Player —— */
 .music-player {
-  max-width: 48rem;
+  max-width: 64rem;
   border: 1px solid rgba(201, 168, 76, 0.2);
   border-radius: 10px;
   background:
@@ -2173,11 +2173,17 @@ a.card:hover,
 
 .music-tracklist {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
+  .music-tracklist {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
   .music-tracklist {
     grid-template-columns: 1fr;
   }
@@ -2199,13 +2205,26 @@ a.card:hover,
   color: var(--ink-muted);
 }
 
-/* Odd items (1-based col 1): keep right border; even (col 2): no right border */
-.music-track:nth-child(2n) {
+/* Drop right border on last column of each row */
+.music-track:nth-child(3n) {
   border-right: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
+  .music-track:nth-child(3n) {
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .music-track:nth-child(2n) {
+    border-right: none;
+  }
+}
+
+@media (max-width: 560px) {
   .music-track {
+    border-right: none;
+  }
+  .music-track:nth-child(2n),
+  .music-track:nth-child(3n) {
     border-right: none;
   }
 }
