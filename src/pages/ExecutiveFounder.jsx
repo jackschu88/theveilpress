@@ -42,7 +42,7 @@ const mediaLibrary = [
   {
     title: "Through the fog",
     src: "/videos/journey-fogboy.mp4",
-    poster: "",
+    poster: "/videos/journey-fogboy-poster.jpg",
   },
 ];
 
