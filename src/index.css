@@ -1483,13 +1483,19 @@ a.card:hover,
   }
 }
 
-/* Pre-order opening trailer — full cinematic 16:9 */
+/* Pre-order opening trailer — portrait (same frame as Film page) */
 .presale-trailer-hero .presale-trailer-frame {
-  width: min(56rem, 100%);
+  width: min(22rem, 88vw);
   max-width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 9 / 16;
   height: auto;
-  max-height: min(72vh, 36rem);
+  max-height: min(78vh, 40rem);
+}
+
+@media (min-width: 900px) {
+  .presale-trailer-hero .presale-trailer-frame {
+    width: min(26rem, 42vw);
+  }
 }
 
 /* Companion Guide promo trailer — cinematic 16:9, not phone portrait */
