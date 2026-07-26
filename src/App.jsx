@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
@@ -14,10 +14,13 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="presale" element={<Presale />} />
+        {/* Presale is the live storefront homepage */}
+        <Route index element={<Presale />} />
+        <Route path="presale" element={<Navigate to="/" replace />} />
         <Route path="presale/executive" element={<ExecutiveFounder />} />
         <Route path="presale/executive/thank-you" element={<ThankYou />} />
+        {/* Cinematic trailer / marketing page kept under /home */}
+        <Route path="home" element={<Home />} />
         <Route path="books" element={<Books />} />
         <Route path="books/square-mile" element={<SquareMile />} />
         <Route path="books/square-mile/companion" element={<Companion />} />

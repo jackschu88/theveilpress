@@ -12,8 +12,8 @@ import { pageTransition } from "../motion";
 import { ScrollTrigger } from "../scroll";
 
 const links = [
-  { to: "/", label: "Home", end: true },
-  { to: "/presale", label: "Pre-order", end: true },
+  { to: "/", label: "Pre-order", end: true },
+  { to: "/home", label: "Film", end: true },
   { to: "/about", label: "About", end: true },
 ];
 
@@ -90,7 +90,8 @@ export default function Layout() {
             </p>
           </div>
           <div className="footer-links">
-            <NavLink to="/presale">Pre-order</NavLink>
+            <NavLink to="/">Pre-order</NavLink>
+            <NavLink to="/home">Film</NavLink>
             <NavLink to="/about">About</NavLink>
             <a
               href="https://x.com/deepdivefile"
