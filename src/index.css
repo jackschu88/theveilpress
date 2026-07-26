@@ -1336,7 +1336,17 @@ a.card:hover,
   justify-content: center;
 }
 
-/* —— Trailer hero (homepage first impression) —— */
+/* —— Pre-order: trailer opens the page —— */
+.presale-trailer-hero {
+  position: relative;
+  padding: 0.25rem 0 0.75rem;
+}
+
+.presale-trailer-hero .trailer-stage {
+  margin: 0;
+}
+
+/* —— Trailer hero (Film page first impression) —— */
 .hero-trailer {
   position: relative;
   padding-top: 2rem;
@@ -1471,6 +1481,15 @@ a.card:hover,
   .trailer-frame {
     width: min(26rem, 42vw);
   }
+}
+
+/* Pre-order opening trailer — full cinematic 16:9 */
+.presale-trailer-hero .presale-trailer-frame {
+  width: min(56rem, 100%);
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-height: min(72vh, 36rem);
 }
 
 /* Companion Guide promo trailer — cinematic 16:9, not phone portrait */

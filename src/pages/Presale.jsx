@@ -4,6 +4,7 @@ import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import SplitTitle from "../components/SplitTitle";
 import TiltCover from "../components/TiltCover";
+import TrailerPlayer from "../components/TrailerPlayer";
 import { BuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
 import MusicPlayer from "../components/MusicPlayer";
@@ -23,6 +24,20 @@ const presaleItems = [
 export default function Presale() {
   return (
     <AnimatedPage>
+      {/* Film first — the Square Mile trailer is the opening impression */}
+      <section className="presale-trailer-hero" aria-label="The Veil of the Square Mile trailer">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.85, ease: easeOut }}
+        >
+          <TrailerPlayer
+            frameClassName="presale-trailer-frame"
+            ariaLabel="Trailer for The Veil of the Square Mile"
+          />
+        </motion.div>
+      </section>
+
       <section className="hero hero-grid hero-book">
         <Suspense fallback={null}>
           <HeroScene variant="light" />

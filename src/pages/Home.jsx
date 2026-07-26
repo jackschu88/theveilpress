@@ -1,9 +1,10 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import SplitTitle from "../components/SplitTitle";
+import TrailerPlayer from "../components/TrailerPlayer";
 import { MagneticLink } from "../components/MagneticButton";
 import { easeOut } from "../motion";
 import { gsap, ScrollTrigger } from "../scroll";
@@ -16,90 +17,6 @@ export default function Home() {
   const orbRef = useRef(null);
   const featuredRef = useRef(null);
   const featuredImgRef = useRef(null);
-  const videoRef = useRef(null);
-  const [muted, setMuted] = useState(false);
-  const [needsPlay, setNeedsPlay] = useState(false);
-
-  // Prefer autoplay with sound; if the browser blocks it, fall back to muted
-  // autoplay so the picture still runs, then unlock audio on first gesture.
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    let cancelled = false;
-
-    const withSound = () => {
-      el.defaultMuted = false;
-      el.muted = false;
-      el.volume = 1;
-      el.removeAttribute("muted");
-      if (!cancelled) setMuted(false);
-    };
-
-    const playMuted = async () => {
-      el.defaultMuted = true;
-      el.muted = true;
-      try {
-        await el.play();
-        if (!cancelled) {
-          setMuted(true);
-          setNeedsPlay(true);
-        }
-        return true;
-      } catch {
-        if (!cancelled) setNeedsPlay(true);
-        return false;
-      }
-    };
-
-    const playWithSound = async () => {
-      withSound();
-      try {
-        await el.play();
-        withSound();
-        if (!cancelled) setNeedsPlay(false);
-        return true;
-      } catch {
-        // Keep the film rolling muted rather than a frozen poster.
-        await playMuted();
-        return false;
-      }
-    };
-
-    playWithSound();
-
-    const onGesture = (event) => {
-      if (event?.target?.closest?.(".trailer-mute")) return;
-      playWithSound().then((ok) => {
-        if (ok) {
-          unlockEvents.forEach((type) =>
-            document.removeEventListener(type, onGesture, true)
-          );
-        }
-      });
-    };
-    const unlockEvents = ["pointerdown", "keydown", "click"];
-    unlockEvents.forEach((type) =>
-      document.addEventListener(type, onGesture, { capture: true, passive: true })
-    );
-
-    const onVolume = () => {
-      if (!cancelled) setMuted(Boolean(el.muted));
-    };
-    const onError = () => {
-      if (!cancelled) setNeedsPlay(true);
-    };
-    el.addEventListener("volumechange", onVolume);
-    el.addEventListener("error", onError);
-
-    return () => {
-      cancelled = true;
-      unlockEvents.forEach((type) =>
-        document.removeEventListener(type, onGesture, true)
-      );
-      el.removeEventListener("volumechange", onVolume);
-      el.removeEventListener("error", onError);
-    };
-  }, []);
 
   useScrollReveal(
     () => {
@@ -146,35 +63,6 @@ export default function Home() {
     { scope: heroRef }
   );
 
-  const toggleMute = () => {
-    const el = videoRef.current;
-    if (!el) return;
-    if (el.muted || muted) {
-      el.defaultMuted = false;
-      el.muted = false;
-      el.volume = 1;
-      el.removeAttribute("muted");
-      setMuted(false);
-      el.play().then(() => setNeedsPlay(false)).catch(() => {});
-      return;
-    }
-    el.muted = true;
-    setMuted(true);
-  };
-
-  const handlePlayOverlay = () => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.defaultMuted = false;
-    el.muted = false;
-    el.volume = 1;
-    el.removeAttribute("muted");
-    setMuted(false);
-    el.play()
-      .then(() => setNeedsPlay(false))
-      .catch(() => setNeedsPlay(true));
-  };
-
   return (
     <AnimatedPage>
       <section className="hero hero-trailer" ref={heroRef}>
@@ -212,42 +100,11 @@ export default function Home() {
         </motion.p>
 
         <motion.div
-          className="trailer-stage"
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.55, ease: easeOut }}
         >
-          <div className="trailer-frame">
-            <video
-              ref={videoRef}
-              className="trailer-video"
-              src="/videos/square-mile-trailer.mp4"
-              poster="/cover.jpg"
-              loop
-              playsInline
-              preload="auto"
-              controls
-              aria-label="Trailer for The Veil of the Square Mile"
-            />
-            {needsPlay && (
-              <button
-                type="button"
-                className="trailer-play-sound"
-                onClick={handlePlayOverlay}
-              >
-                Play with sound
-              </button>
-            )}
-            <button
-              type="button"
-              className={`trailer-mute${muted ? " trailer-mute-on" : ""}`}
-              onClick={toggleMute}
-              aria-pressed={!muted}
-              aria-label={muted ? "Turn sound on" : "Mute trailer"}
-            >
-              {muted ? "Sound on" : "Mute"}
-            </button>
-          </div>
+          <TrailerPlayer />
         </motion.div>
 
         <motion.div
