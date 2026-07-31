@@ -1,0 +1,143 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import DeskLayout from '../../../../layouts/DeskLayout.astro';
+
+const SITE_ROOT = process.cwd();
+const siteIndex: any = JSON.parse(fs.readFileSync(
+  path.join(SITE_ROOT, 'data', 'site-index.json'), 'utf-8'
+));
+
+export function getStaticPaths() {
+  const idx: any = JSON.parse(fs.readFileSync(
+    path.join(process.cwd(), 'data', 'site-index.json'), 'utf-8'
+  ));
+  return idx.entities.map((e: any) => ({ params: { id: e.id } }));
+}
+
+const { id } = Astro.params;
+const entity = siteIndex.entities.find((e: any) => e.id === id);
+if (!entity) return Astro.redirect('/desk', 302);
+
+const entityClaims = siteIndex.claims.filter((c: any) => c.relatedEntities?.includes(id));
+const entityArticles = siteIndex.articles?.filter((a: any) => a.entityIds?.includes(id)) || [];
+const relatedEntities = entity.forcedRelationships?.map((fr: any) => {
+  const target = siteIndex.entities.find((e: any) => e.id === fr.targetEntityId);
+  return { ...fr, target };
+}).filter((r: any) => r.target) || [];
+---
+
+<DeskLayout>
+  <nav class="entity-breadcrumb">
+    <a href="/desk">Desk</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="/desk">Entities</a>
+    <span class="breadcrumb-sep">/</span>
+    <span>{entity.canonicalName}</span>
+  </nav>
+
+  <div class="entity-layout">
+    <div class="entity-main">
+      <div class="vp-glass vp-glass--card entity-card">
+        <header class="entity-header">
+          <h1>{entity.canonicalName}</h1>
+          <span class="entity-type-badge">{entity.type}</span>
+        </header>
+
+        {entity.aliases?.length > 0 && (
+          <div class="entity-section">
+            <h3>Also known as</h3>
+            <p>{entity.aliases.join(', ')}</p>
+          </div>
+        )}
+
+        {entity.manuscriptAnchors?.length > 0 && (
+          <div class="entity-section">
+            <h3>In The Veil</h3>
+            <ul class="entity-anchors">
+              {entity.manuscriptAnchors.map((a: any, i: number) => (
+                <li>
+                  <strong>Part {a.part}</strong>{a.section ? ` — ${a.section}` : ''}
+                  {a.context && <p class="anchor-context">{a.context}</p>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <aside class="entity-rail">
+      {relatedEntities.length > 0 && (
+        <div class="vp-glass vp-glass--rail rail-section">
+          <h4 class="rail-heading">Related</h4>
+          <ul class="rail-list">
+            {relatedEntities.map((r: any) => (
+              <li>
+                <a href={`/desk/entities/${r.targetEntityId}`}>
+                  {r.target.canonicalName}
+                </a>
+                <span class="rail-rel-label">{r.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {entityClaims.length > 0 && (
+        <div class="vp-glass vp-glass--rail rail-section">
+          <h4 class="rail-heading">Claims</h4>
+          <ul class="rail-list">
+            {entityClaims.map((c: any) => (
+              <li class="rail-claim-item">
+                <span class="rail-claim-label">{c.evidentiaryWeight}</span>
+                <p class="rail-claim-statement">{c.statement}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {entityArticles.length > 0 && (
+        <div class="vp-glass vp-glass--rail rail-section">
+          <h4 class="rail-heading">Desk Mentions</h4>
+          <ul class="rail-list">
+            {entityArticles.map((a: any) => (
+              <li><a href={`/desk/${a.slug}`}>{a.title}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  </div>
+</DeskLayout>
+
+<style>
+  .entity-breadcrumb { font-size: 0.85rem; color: var(--vp-text-muted); margin-bottom: var(--vp-space-6); }
+  .entity-breadcrumb a { color: var(--vp-accent-steel); text-decoration: none; }
+  .entity-breadcrumb a:hover { color: var(--vp-accent-gold); }
+  .breadcrumb-sep { margin: 0 var(--vp-space-2); }
+  .entity-layout { display: grid; grid-template-columns: 1fr 280px; gap: var(--vp-space-6); align-items: start; }
+  @media (max-width: 860px) { .entity-layout { grid-template-columns: 1fr; } }
+  .entity-card { padding: var(--vp-space-6); }
+  .entity-header { display: flex; align-items: baseline; gap: var(--vp-space-3); flex-wrap: wrap; margin-bottom: var(--vp-space-5); }
+  .entity-header h1 { font-family: 'Cinzel', serif; font-size: 1.75rem; color: var(--vp-text-primary); margin: 0; }
+  .entity-type-badge { display: inline-block; padding: 2px 10px; border: 1px solid var(--vp-edge); border-radius: var(--vp-radius-sm); font-size: 0.75rem; color: var(--vp-text-muted); text-transform: uppercase; }
+  .entity-section { margin-top: var(--vp-space-5); padding-top: var(--vp-space-4); border-top: 1px solid var(--vp-rule); }
+  .entity-section h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--vp-text-muted); margin: 0 0 var(--vp-space-3); }
+  .entity-section p { color: var(--vp-text-secondary); font-size: 0.95rem; margin: 0; }
+  .entity-anchors { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--vp-space-3); }
+  .entity-anchors li { font-size: 0.9rem; color: var(--vp-text-secondary); }
+  .entity-anchors strong { color: var(--vp-accent-steel); }
+  .anchor-context { font-size: 0.85rem; color: var(--vp-text-muted); margin: var(--vp-space-1) 0 0; }
+  .entity-rail { display: flex; flex-direction: column; gap: var(--vp-space-4); }
+  .rail-section { padding: var(--vp-space-4); }
+  .rail-heading { font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--vp-text-muted); margin: 0 0 var(--vp-space-3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .rail-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--vp-space-2); }
+  .rail-list a { color: var(--vp-accent-steel); text-decoration: none; font-size: 0.9rem; }
+  .rail-list a:hover { color: var(--vp-accent-gold); }
+  .rail-rel-label { font-size: 0.7rem; color: var(--vp-text-muted); display: block; }
+  .rail-claim-item { font-size: 0.85rem; }
+  .rail-claim-label { display: inline-block; padding: 1px 6px; background: var(--vp-glass-fill-strong); border: 1px solid var(--vp-edge); border-radius: var(--vp-radius-sm); font-size: 0.7rem; text-transform: uppercase; color: var(--vp-text-muted); margin-bottom: var(--vp-space-1); }
+  .rail-claim-statement { color: var(--vp-text-secondary); margin: 0; line-height: 1.4; }
+</style>

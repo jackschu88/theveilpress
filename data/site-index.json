@@ -1,7 +1,7 @@
 {
   "$schema": "theveil-index/v1",
   "version": 1,
-  "lastScanned": "2026-07-31T08:38:17.843Z",
+  "lastScanned": "2026-07-31T08:59:02.341Z",
   "entities": [
     {
       "id": "city-of-london-corporation",
@@ -747,10 +747,43 @@
       "companionIds": []
     }
   ],
-  "articles": [],
+  "articles": [
+    {
+      "id": "canon_cjob_17dc4764",
+      "title": "Loomer's Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty",
+      "slug": "loomer-s-ukraine-reversal-gives-trump-maga-cover-not-a-policy-treaty",
+      "status": "published",
+      "author": "The Veil Press",
+      "created": "2026-07-31T07:06:17.757Z",
+      "modified": "2026-07-31T07:06:17.757Z",
+      "tags": [
+        "Laura Loomer",
+        "Ukraine",
+        "Donald Trump",
+        "MAGA",
+        "Zelenskyy",
+        "Russia sanctions",
+        "Iran",
+        "Patriot interceptors",
+        "influencer diplomacy",
+        "narrative enforcement",
+        "America First",
+        "Rumble"
+      ],
+      "series": [],
+      "entityIds": [
+        "city-of-london-corporation",
+        "square-mile"
+      ],
+      "claimIds": [
+        "claim-002"
+      ],
+      "description": "In late July 2026, MAGA influencer Laura Loomer traveled to Kyiv and publicly reversed years of hostility to U.S. support for Ukraine — giving Trump political cover."
+    }
+  ],
   "_meta": {
     "scanReport": {
-      "scanTimestamp": "2026-07-31T08:38:17.843Z",
+      "scanTimestamp": "2026-07-31T08:59:02.341Z",
       "entitiesAdded": 0,
       "entitiesModified": 0,
       "entitiesPreserved": 28,

@@ -1,20 +1,24 @@
 ---
-canon_cjob_17dc4764
-"Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty"
-2026-07-31T07:06:17.757Z
-loomer-s-ukraine-reversal-gives-trump-maga-cover-not-a-policy-treaty
-status: published
-dek: "What happened"
-dense
-3
-veil
-"## What happened  In late July 2026, MAGA influencer and longtime Donald Trump ally Laura Loomer traveled to Kyiv, interviewed Ukrainian President Volodymyr Zel"
-["Laura Loomer", "Ukraine", "Donald Trump", "MAGA", "Zelenskyy", "Russia sanctions", "Iran", "Patriot interceptors", "influencer diplomacy", "narrative enforcement", "America First", "Rumble"]
-image: /articles/2026-07-31-loomer-s-ukraine-reversal-gives-trump-maga-cover-not-a-policy-treaty/fetched_1785479024586_1.jpg
+id: canon_cjob_17dc4764
+title: "Loomer's Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty"
+date: 2026-07-31
+slug: loomer-s-ukraine-reversal-gives-trump-maga-cover-not-a-policy-treaty
+density: dense
+framing: veil
+tags: ["Laura Loomer", "Ukraine", "Donald Trump", "MAGA", "Zelenskyy", "Russia sanctions", "Iran", "Patriot interceptors", "influencer diplomacy", "narrative enforcement", "America First", "Rumble"]
 entityIds: ["city-of-london-corporation", "square-mile"]
 claimIds: ["claim-002"]
-["https://www.aljazeera.com/news/2026/7/24/ukraine-zelenskyy-meets-with-trump-ally-laura-loomer", "https://www.pbs.org/newshour/world/from-a-kyiv-bomb-shelter-laura-loomer-explains-her-shift-on-russias-war-in-ukraine", "https://www.wired.com/story/laura-loomer-ukraine/", "https://www.aljazeera.com/news/2026/7/28/ukraines-zelenskyy-set-to-meet-trump-as-iran-and-ukraine-wars-converge"]
-"Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty"
+dek: "What happened"
+description: "In late July 2026, MAGA influencer Laura Loomer traveled to Kyiv and publicly reversed years of hostility to U.S. support for Ukraine — giving Trump political cover."
+image: /articles/2026-07-31-loomer-s-ukraine-reversal-gives-trump-maga-cover-not-a-policy-treaty/fetched_1785479024586_1.jpg
+series: []
+citations:
+  - "https://www.aljazeera.com/news/2026/7/24/ukraine-zelenskyy-meets-with-trump-ally-laura-loomer"
+  - "https://www.pbs.org/newshour/world/from-a-kyiv-bomb-shelter-laura-loomer-explains-her-shift-on-russias-war-in-ukraine"
+  - "https://www.wired.com/story/laura-loomer-ukraine/"
+  - "https://www.aljazeera.com/news/2026/7/28/ukraines-zelenskyy-set-to-meet-trump-as-iran-and-ukraine-wars-converge"
+seo_title: "Loomer's Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty"
+status: published
 ---
 
 ## What happened
