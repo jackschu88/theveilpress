@@ -1,0 +1,24 @@
+---
+import BaseLayout from './BaseLayout.astro';
+---
+
+<BaseLayout>
+  <div class="library-layout">
+    <div class="library-container">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .library-layout {
+    min-height: 100vh;
+    background: var(--vp-bg-deep);
+  }
+
+  .library-container {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--vp-space-6) var(--vp-space-5);
+  }
+</style>

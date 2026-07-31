@@ -179,6 +179,7 @@ export default function ExecutiveFounder() {
               transition={{ duration: 0.7, delay: 0.7, ease: easeOut }}
             >
               <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
+              <span className="exec-shipping">Free shipping</span>
               <span className="exec-compare">
                 <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
                 <span className="exec-save">
@@ -344,7 +345,7 @@ export default function ExecutiveFounder() {
               <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
             </div>
             <div className="exec-value-total exec-value-final">
-              <span>Limited Founders Edition</span>
+              <span>Limited Founders Edition · Free shipping</span>
               <span style={{ color: "var(--gold-bright)" }}>{formatPrice(EXECUTIVE_PRICE)}</span>
             </div>
             <div className="exec-value-save">
@@ -379,6 +380,7 @@ export default function ExecutiveFounder() {
             <h2 className="exec-purchase-title">Claim your Limited Founders Edition</h2>
             <p className="exec-purchase-price">
               <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
+              <span className="exec-shipping">Free shipping</span>
               <span className="exec-compare">
                 <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
                 <span className="exec-save">

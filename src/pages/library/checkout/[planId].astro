@@ -1,0 +1,17 @@
+---
+import LibraryLayout from '../../../layouts/LibraryLayout.astro';
+import HybridCheckoutPage from '../../../islands/HybridCheckoutPage';
+
+export function getStaticPaths() {
+  return [
+    { params: { planId: 'full' } },
+    { params: { planId: 'print-companion' } },
+  ];
+}
+
+const { planId } = Astro.params;
+---
+
+<LibraryLayout>
+  <HybridCheckoutPage client:only="react" planId={planId} />
+</LibraryLayout>

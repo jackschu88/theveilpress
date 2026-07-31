@@ -19,7 +19,7 @@ function useMagnetic() {
   return { ref, offset, onMove, onLeave, reduce };
 }
 
-export function MagneticLink({ to, className, children, ...rest }) {
+export function MagneticLink({ href, className, children, ...rest }) {
   const { ref, offset, onMove, onLeave } = useMagnetic();
   return (
     <motion.div
@@ -30,14 +30,14 @@ export function MagneticLink({ to, className, children, ...rest }) {
       transition={{ type: "spring", stiffness: 280, damping: 18, mass: 0.4 }}
       style={{ display: "inline-block" }}
     >
-      <a href={to} className={className} {...rest}>
+      <a href={href} className={className} {...rest}>
         {children}
       </a>
     </motion.div>
   );
 }
 
-export function MagneticAnchor({ href, className, children, onClick, ...rest }) {
+export function MagneticAnchor({ href, className, children, onClick, ...rest }: { href: any; className?: any; children: any; onClick?: any; [x: string]: any }) {
   const { ref, offset, onMove, onLeave } = useMagnetic();
   return (
     <motion.div

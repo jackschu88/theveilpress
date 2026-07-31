@@ -1,8 +1,3 @@
 {
-  "rewrites": [
-    {
-      "source": "/((?!audio/|videos/|assets/|icons\\.svg|favicon\\.svg|.*\\.(?:mp3|mp4|jpg|jpeg|png|webp|svg|ico|css|js|map|woff2?|txt|xml|json)$).*)",
-      "destination": "/index.html"
-    }
-  ]
+  "cleanUrls": true
 }

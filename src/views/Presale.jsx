@@ -109,9 +109,21 @@ export default function Presale() {
             >
               <div className="meta">{item.badge}</div>
               <strong>{formatPrice(item.price)}</strong>
+              {item.shippingNote ? (
+                <p
+                  className="muted"
+                  style={{
+                    margin: "0.15rem 0 0",
+                    fontSize: "0.85rem",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {item.shippingNote}
+                </p>
+              ) : null}
               <p
                 style={{
-                  margin: "0 0 0.35rem",
+                  margin: "0.35rem 0 0.35rem",
                   color: "var(--ink)",
                   fontFamily: "Cinzel, serif",
                   fontSize: "1.05rem",

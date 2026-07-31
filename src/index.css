@@ -1837,6 +1837,15 @@ a.card:hover,
   text-shadow: 0 0 40px rgba(201, 168, 76, 0.25);
 }
 
+.exec-shipping {
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6fcf97;
+  align-self: center;
+}
+
 .exec-compare {
   display: flex;
   flex-direction: column;

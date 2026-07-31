@@ -1,0 +1,8 @@
+---
+import LibraryLayout from '../../layouts/LibraryLayout.astro';
+import BooksPage from '../../islands/BooksPage';
+---
+
+<LibraryLayout>
+  <BooksPage client:only="react" />
+</LibraryLayout>

@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AboutPage from '../islands/AboutPage';
+---
+
+<BaseLayout>
+  <AboutPage client:only="react" />
+</BaseLayout>

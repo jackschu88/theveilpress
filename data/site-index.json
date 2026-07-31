@@ -1,0 +1,765 @@
+{
+  "$schema": "theveil-index/v1",
+  "version": 1,
+  "lastScanned": "2026-07-31T08:38:17.843Z",
+  "entities": [
+    {
+      "id": "city-of-london-corporation",
+      "canonicalName": "City of London Corporation",
+      "type": "institution",
+      "aliases": [
+        "The Corporation",
+        "The City",
+        "Corporation of London"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "Self-governing corporation recognized by William the Conqueror in 1067; apex of the extraction architecture"
+        },
+        {
+          "part": 2,
+          "section": "The Offshore Spider Web",
+          "context": "Clearing center for offshore flows through Crown Dependencies and Overseas Territories"
+        },
+        {
+          "part": 5,
+          "section": "High-Level Servants",
+          "context": "Recruits merchant dynasties as servants and instruments, never the prime movers"
+        },
+        {
+          "part": 13,
+          "section": "The Counter-Strike",
+          "context": "Target of measurable policy pressure in the 2025–2026 American challenge"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "court-of-common-council",
+      "canonicalName": "Court of Common Council",
+      "type": "institution",
+      "aliases": [
+        "Common Council"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "Primary elected decision-making body of the Corporation"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [
+        {
+          "targetEntityId": "city-of-london-corporation",
+          "label": "governing-body-of",
+          "source": "human-manual"
+        }
+      ],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "court-of-aldermen",
+      "canonicalName": "Court of Aldermen",
+      "type": "institution",
+      "aliases": [
+        "The Aldermen"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "Ancient court of aldermen within the Corporation's internal governance"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [
+        {
+          "targetEntityId": "city-of-london-corporation",
+          "label": "governing-body-of",
+          "source": "human-manual"
+        }
+      ],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "lord-mayor-of-london",
+      "canonicalName": "Lord Mayor of London",
+      "type": "institution",
+      "aliases": [
+        "The Lord Mayor"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "Head of the Corporation; meets the sovereign at Temple Bar in the sword ceremony"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [
+        {
+          "targetEntityId": "city-of-london-corporation",
+          "label": "head-of",
+          "source": "human-manual"
+        }
+      ],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "city-of-london-police",
+      "canonicalName": "City of London Police",
+      "type": "institution",
+      "aliases": [
+        "City Police"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "The Corporation's own police force, independent of the Metropolitan Police"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [
+        {
+          "targetEntityId": "city-of-london-corporation",
+          "label": "police-force-of",
+          "source": "human-manual"
+        }
+      ],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "remembrancer",
+      "canonicalName": "The Remembrancer",
+      "type": "institution",
+      "aliases": [
+        "City Remembrancer"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "The Corporation's parliamentary agent seated in the Commons; documented interventions on banking reform"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [
+        {
+          "targetEntityId": "city-of-london-corporation",
+          "label": "parliamentary-agent-of",
+          "source": "human-manual"
+        }
+      ],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "citys-cash",
+      "canonicalName": "City's Cash",
+      "type": "mechanism",
+      "aliases": [],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "The Corporation's private endowment, outside public budget scrutiny"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "business-vote",
+      "canonicalName": "The Business Vote",
+      "type": "mechanism",
+      "aliases": [
+        "Corporate suffrage",
+        "Business franchise"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "Businesses operating in the City hold votes alongside residents"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "charter-continuity",
+      "canonicalName": "Charter Continuity",
+      "type": "legal-framework",
+      "aliases": [
+        "The charters"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "Unbroken charter chain from 1067 through the 1648 affirmations; legal basis of the Corporation's autonomy"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "square-mile",
+      "canonicalName": "The Square Mile",
+      "type": "jurisdiction",
+      "aliases": [
+        "The City of London",
+        "The Square Mile of London"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "The roughly one-square-mile territory the Corporation governs; boundary marked by Temple Bar"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "bank-of-england",
+      "canonicalName": "Bank of England",
+      "type": "institution",
+      "aliases": [
+        "The Old Lady of Threadneedle Street"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "Founded 1694; institutionalized private money creation within the architecture"
+        },
+        {
+          "part": 15,
+          "section": "The Digital and Green Veil",
+          "context": "Digital pound development as programmable enforcement"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [
+        {
+          "targetEntityId": "city-of-london-corporation",
+          "label": "founded-within",
+          "source": "human-manual"
+        }
+      ],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "offshore-spider-web",
+      "canonicalName": "The Offshore Spider Web",
+      "type": "mechanism",
+      "aliases": [
+        "The spider web",
+        "Secrecy jurisdictions network"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 2,
+          "section": "The Offshore Spider Web",
+          "context": "Post-1945 pivot from territory to accounting: secrecy jurisdictions clearing through the City"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "eurodollar-market",
+      "canonicalName": "Eurodollar Market",
+      "type": "mechanism",
+      "aliases": [
+        "Eurodollars"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 2,
+          "section": "The Offshore Spider Web",
+          "context": "Unregulated offshore dollar ledger that rebuilt the City's global role after empire"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "crown-dependencies",
+      "canonicalName": "Crown Dependencies",
+      "type": "jurisdiction",
+      "aliases": [
+        "Jersey, Guernsey, Isle of Man"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 2,
+          "section": "The Offshore Spider Web",
+          "context": "Offshore hubs linked to the Crown, clearing through London"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "free-trade-as-weapon",
+      "canonicalName": "Free Trade as Weapon",
+      "type": "policy",
+      "aliases": [
+        "Free-trade doctrine"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 3,
+          "section": "Free Trade as Imperial Weapon",
+          "context": "Smith and Ricardo deployed as doctrine after British protectionism won; Corn Law repeal and famine administration"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "american-system",
+      "canonicalName": "The American System",
+      "type": "policy",
+      "aliases": [
+        "American System of political economy"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 3,
+          "section": "Free Trade as Imperial Weapon",
+          "context": "Hamiltonian alternative named by List and Carey"
+        },
+        {
+          "part": 8,
+          "section": "The American Rebellion",
+          "context": "Jackson, Lincoln, McKinley resistance line against British-financed recapture"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "bestial-premise",
+      "canonicalName": "The Bestial Premise",
+      "type": "concept",
+      "aliases": [
+        "Bestial View of mankind"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 1,
+          "section": "The Hidden Throne",
+          "context": "The assumption that populations are inputs to be priced and managed rather than persons"
+        },
+        {
+          "part": 4,
+          "section": "The Narco-Imperial Legacy",
+          "context": "Executed at scale in famine and opium administration"
+        },
+        {
+          "part": 16,
+          "section": "Final Synthesis",
+          "context": "Central antagonist named in the conclusion; the premise the architecture cannot absorb being rejected"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "hsbc",
+      "canonicalName": "HSBC",
+      "type": "institution",
+      "aliases": [
+        "Hongkong and Shanghai Banking Corporation"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 4,
+          "section": "The Narco-Imperial Legacy",
+          "context": "Opium-era banking lineage culminating in cartel fines; continuity of narco-clearing"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "chatham-house",
+      "canonicalName": "Chatham House",
+      "type": "institution",
+      "aliases": [
+        "Royal Institute of International Affairs",
+        "RIIA"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 6,
+          "section": "The Policy Machines",
+          "context": "Middle-ring narrative production for the rules-based order"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [
+        {
+          "targetEntityId": "city-of-london-corporation",
+          "label": "middle-ring-of",
+          "source": "human-manual"
+        }
+      ],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "council-on-foreign-relations",
+      "canonicalName": "Council on Foreign Relations",
+      "type": "institution",
+      "aliases": [
+        "CFR"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 6,
+          "section": "The Policy Machines",
+          "context": "American counterpart founded in the same post-war breath as Chatham House"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "world-economic-forum",
+      "canonicalName": "World Economic Forum",
+      "type": "institution",
+      "aliases": [
+        "WEF",
+        "Davos"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 6,
+          "section": "The Policy Machines",
+          "context": "Annual convening layer of the policy machines; stakeholder-capitalism narrative"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "five-eyes",
+      "canonicalName": "Five Eyes",
+      "type": "institution",
+      "aliases": [
+        "UKUSA",
+        "UKUSA Agreement",
+        "FVEY"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 7,
+          "section": "Enforcement Arms",
+          "context": "UKUSA-fused signals intelligence alliance; enforcement continuum when seminars fail"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "nato",
+      "canonicalName": "NATO",
+      "type": "institution",
+      "aliases": [
+        "North Atlantic Treaty Organization"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 7,
+          "section": "Enforcement Arms",
+          "context": "Expeditionary enforcement era; alliance structure aligned with the architecture"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "international-monetary-fund",
+      "canonicalName": "International Monetary Fund",
+      "type": "institution",
+      "aliases": [
+        "IMF"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 7,
+          "section": "Enforcement Arms",
+          "context": "Structural adjustment and debt discipline as enforcement continuum"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "federal-reserve",
+      "canonicalName": "Federal Reserve",
+      "type": "institution",
+      "aliases": [
+        "The Fed"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 8,
+          "section": "The American Rebellion",
+          "context": "1913 Act as the recapture moment of the American rebellion"
+        },
+        {
+          "part": 9,
+          "section": "US Political Subservience",
+          "context": "Anchor of post-war monetary continuity"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "bretton-woods",
+      "canonicalName": "Bretton Woods System",
+      "type": "legal-framework",
+      "aliases": [
+        "Bretton Woods"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 9,
+          "section": "US Political Subservience",
+          "context": "1944 monetary order; dollar-gold framework severed in 1971"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "managed-dialectics",
+      "canonicalName": "Managed Dialectics",
+      "type": "mechanism",
+      "aliases": [
+        "Controlled opposition"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 12,
+          "section": "Managed Dialectics",
+          "context": "Opposing sides sharing the same clearing; Gaddafi as the red line"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    },
+    {
+      "id": "brics-plus",
+      "canonicalName": "BRICS+",
+      "type": "institution",
+      "aliases": [
+        "BRICS"
+      ],
+      "manuscriptAnchors": [
+        {
+          "part": 14,
+          "section": "The Endgame",
+          "context": "Counter-plumbing bloc: BRI, CIPS, mBridge rails outside the old levers"
+        }
+      ],
+      "companionAnchors": [],
+      "editorialNotes": [],
+      "forcedRelationships": [],
+      "createdBy": "seed",
+      "humanModified": null
+    }
+  ],
+  "observations": [],
+  "claims": [
+    {
+      "id": "claim-001",
+      "statement": "The City of London Corporation's legal status — its charters, corporate suffrage, Remembrancer, police force, and courts — is documented fact, not inference.",
+      "manuscriptParts": [
+        1
+      ],
+      "evidentiaryWeight": "strong",
+      "status": "asserted",
+      "relatedEntities": [
+        "city-of-london-corporation",
+        "remembrancer",
+        "business-vote",
+        "city-of-london-police",
+        "charter-continuity"
+      ],
+      "supportingSources": [],
+      "contradictedBy": [],
+      "editorialNote": null,
+      "createdBy": "seed"
+    },
+    {
+      "id": "claim-002",
+      "statement": "After the Second World War the territorial empire contracted, but the City's methods reconstituted as an invisible financial empire built on offshore jurisdictions and unregulated capital flows.",
+      "manuscriptParts": [
+        1,
+        2
+      ],
+      "evidentiaryWeight": "strong",
+      "status": "asserted",
+      "relatedEntities": [
+        "city-of-london-corporation",
+        "offshore-spider-web",
+        "eurodollar-market",
+        "crown-dependencies"
+      ],
+      "supportingSources": [],
+      "contradictedBy": [],
+      "editorialNote": null,
+      "createdBy": "seed"
+    },
+    {
+      "id": "claim-003",
+      "statement": "Named banking families — Rothschild, Sassoon, Warburg, Baring, Morgan — were servants and instruments the institution recruited by utility, never the prime movers.",
+      "manuscriptParts": [
+        5
+      ],
+      "evidentiaryWeight": "strong",
+      "status": "asserted",
+      "relatedEntities": [
+        "city-of-london-corporation"
+      ],
+      "supportingSources": [],
+      "contradictedBy": [],
+      "editorialNote": null,
+      "createdBy": "seed"
+    }
+  ],
+  "books": [
+    {
+      "id": "square-mile",
+      "title": "The Veil of the Square Mile",
+      "volume": 1,
+      "status": "presale",
+      "formats": [
+        {
+          "name": "print",
+          "price": 47.99,
+          "url": "",
+          "channel": "ingram"
+        },
+        {
+          "name": "ebook",
+          "price": 15.99,
+          "url": "https://theveilpress.gumroad.com/l/riwlqv",
+          "channel": "gumroad"
+        },
+        {
+          "name": "audiobook",
+          "price": 17.99,
+          "url": "https://theveilpress.gumroad.com/l/rphkx",
+          "channel": "gumroad"
+        },
+        {
+          "name": "companion-pdf",
+          "price": 24.99,
+          "url": "",
+          "channel": "gumroad"
+        }
+      ],
+      "companionIds": []
+    }
+  ],
+  "articles": [],
+  "_meta": {
+    "scanReport": {
+      "scanTimestamp": "2026-07-31T08:38:17.843Z",
+      "entitiesAdded": 0,
+      "entitiesModified": 0,
+      "entitiesPreserved": 28,
+      "claimsAdded": 0,
+      "claimsPreserved": 3,
+      "observationsAdded": 0,
+      "observationsPreserved": 0,
+      "conflicts": [],
+      "manualReviewRequired": []
+    }
+  }
+}

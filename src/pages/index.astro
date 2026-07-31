@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <section class="vp-home">
+    <div class="vp-glass vp-glass--hero vp-hero-panel">
+      <h1 class="vp-hero-heading">The Veil Press</h1>
+      <p class="vp-hero-dek">
+        Independent press documenting durable power — architecture, money,
+        narrative, access — with books as the deep layer and the desk as the
+        continuous signal.
+      </p>
+      <div class="vp-hero-actions">
+        <a href="/library" class="vp-btn vp-btn--primary">Browse the Library</a>
+        <a href="/desk" class="vp-btn vp-btn--secondary">Read the Desk</a>
+      </div>
+    </div>
+    <p class="vp-coming-soon">Coming Summer 2026</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .vp-home {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--vp-space-7) var(--vp-space-5);
+    gap: var(--vp-space-8);
+  }
+
+  .vp-hero-panel {
+    max-width: 42rem;
+    width: 100%;
+    padding: var(--vp-space-7) var(--vp-space-6);
+  }
+
+  .vp-hero-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-5);
+    letter-spacing: 0.04em;
+  }
+
+  .vp-hero-dek {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--vp-text-secondary);
+    margin: 0 auto var(--vp-space-6);
+    max-width: 34rem;
+  }
+
+  .vp-hero-actions {
+    display: flex;
+    gap: var(--vp-space-4);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .vp-btn {
+    display: inline-block;
+    padding: var(--vp-space-3) var(--vp-space-5);
+    border-radius: var(--vp-radius-sm);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color var(--vp-duration) var(--vp-ease),
+                box-shadow var(--vp-duration) var(--vp-ease);
+  }
+
+  .vp-btn--primary {
+    background: var(--vp-accent-gold);
+    color: #0c0e14;
+  }
+
+  .vp-btn--primary:hover {
+    background: var(--vp-accent-gold-hi);
+    box-shadow: 0 4px 20px rgba(196, 165, 116, 0.25);
+  }
+
+  .vp-btn--secondary {
+    border: 1px solid var(--vp-edge);
+    color: var(--vp-text-primary);
+    background: transparent;
+  }
+
+  .vp-btn--secondary:hover {
+    border-color: var(--vp-edge-hot);
+  }
+
+  .vp-coming-soon {
+    color: var(--vp-text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+</style>

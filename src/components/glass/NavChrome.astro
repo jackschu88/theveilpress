@@ -1,0 +1,148 @@
+---
+const { url } = Astro;
+const path = url.pathname;
+---
+
+<nav class="nav-chrome vp-glass--chrome" id="nav-chrome">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">The Veil Press</a>
+    <ul class="nav-links">
+      <li>
+        <a href="/desk" class={`nav-link${path.startsWith('/desk') ? ' active' : ''}`}>
+          Desk
+        </a>
+      </li>
+      <li>
+        <a href="/library" class={`nav-link${path.startsWith('/library') ? ' active' : ''}`}>
+          Library
+        </a>
+      </li>
+      <li>
+        <a href="/watch" class={`nav-link${path.startsWith('/watch') ? ' active' : ''}`}>
+          Watch
+        </a>
+      </li>
+      <li>
+        <a href="/brief" class={`nav-link${path.startsWith('/brief') ? ' active' : ''}`}>
+          Brief
+        </a>
+      </li>
+      <li>
+        <a href="/about" class={`nav-link${path.startsWith('/about') ? ' active' : ''}`}>
+          About
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const nav = document.getElementById('nav-chrome');
+  if (nav) {
+    const handleScroll = () => {
+      nav.classList.toggle('nav-chrome--solid', window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+  }
+</script>
+
+<style>
+  .nav-chrome {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition:
+      background-color var(--vp-duration) var(--vp-ease),
+      backdrop-filter var(--vp-duration) var(--vp-ease),
+      border-color var(--vp-duration) var(--vp-ease);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .nav-chrome--solid {
+    backdrop-filter: blur(12px) saturate(1.15);
+    -webkit-backdrop-filter: blur(12px) saturate(1.15);
+    border-bottom: 1px solid var(--vp-edge);
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(255, 255, 255, 0) 30%
+      ),
+      var(--vp-glass-fill-strong);
+  }
+
+  .nav-inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--vp-accent-gold);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--vp-accent-steel);
+    text-decoration: none;
+    transition: color var(--vp-duration-fast) var(--vp-ease);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--vp-accent-gold);
+  }
+
+  @media (max-width: 768px) {
+    .nav-inner {
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .nav-links {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .nav-logo {
+      font-size: 1rem;
+    }
+
+    .nav-link {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .nav-chrome--solid {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: var(--vp-bg-elevated);
+    }
+  }
+</style>

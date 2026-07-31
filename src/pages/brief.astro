@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <section class="brief-page">
+    <div class="vp-glass vp-glass--card brief-card">
+      <h1 class="brief-heading">The Brief</h1>
+      <p class="brief-desc">
+        A weekly signal through the noise. No spam, no resale.
+      </p>
+      <form class="brief-form" method="post" action="#">
+        <input
+          class="brief-input"
+          type="email"
+          name="email"
+          placeholder="Your email address"
+          required
+        />
+        <button class="brief-submit" type="submit">Subscribe</button>
+      </form>
+      <p class="vp-text-muted brief-disclaimer">
+        Listmonk integration coming soon. Your address stays private.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .brief-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--vp-space-7) var(--vp-space-5);
+  }
+
+  .brief-card {
+    max-width: 30rem;
+    width: 100%;
+    padding: var(--vp-space-6);
+    text-align: center;
+  }
+
+  .brief-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-4);
+  }
+
+  .brief-desc {
+    color: var(--vp-text-secondary);
+    margin: 0 auto var(--vp-space-5);
+    max-width: 24rem;
+    line-height: 1.6;
+  }
+
+  .brief-form {
+    display: flex;
+    gap: var(--vp-space-2);
+    max-width: 24rem;
+    margin: 0 auto var(--vp-space-4);
+  }
+
+  .brief-input {
+    flex: 1;
+    padding: var(--vp-space-3) var(--vp-space-4);
+    border: 1px solid var(--vp-edge);
+    border-radius: var(--vp-radius-sm);
+    background: var(--vp-bg-deep);
+    color: var(--vp-text-primary);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  .brief-input:focus {
+    outline: none;
+    border-color: var(--vp-edge-hot);
+  }
+
+  .brief-submit {
+    padding: var(--vp-space-3) var(--vp-space-5);
+    border: none;
+    border-radius: var(--vp-radius-sm);
+    background: var(--vp-accent-gold);
+    color: #0c0e14;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--vp-duration) var(--vp-ease);
+  }
+
+  .brief-submit:hover {
+    background: var(--vp-accent-gold-hi);
+  }
+
+  .brief-disclaimer {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <section class="journey-page">
+    <div class="vp-glass vp-glass--card journey-card">
+      <h1 class="journey-heading">The Journey</h1>
+      <div class="journey-prose">
+        <p>
+          The Veil Press publishes institutional histories — careful maps of how
+          power is organized, financed, and made durable. Each volume examines a
+          load-bearing piece of the modern order: money, law, narrative,
+          enforcement.
+        </p>
+        <p>
+          Claims are owned in the first person; incompleteness is stated when
+          the evidence runs out. The goal is not to persuade but to document
+          what can be shown on the record.
+        </p>
+        <p>
+          Books are the deep layer. The desk is the continuous signal. Both
+          serve the same premise: durable power is visible once you know what
+          to look for.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .journey-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--vp-space-7) var(--vp-space-5);
+  }
+
+  .journey-card {
+    max-width: 36rem;
+    width: 100%;
+    padding: var(--vp-space-6);
+  }
+
+  .journey-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-5);
+  }
+
+  .journey-prose {
+    color: var(--vp-text-secondary);
+    line-height: 1.7;
+  }
+
+  .journey-prose p {
+    margin: 0 0 var(--vp-space-4);
+  }
+
+  .journey-prose p:last-child {
+    margin-bottom: 0;
+  }
+</style>

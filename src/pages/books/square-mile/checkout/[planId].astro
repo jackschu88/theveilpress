@@ -1,0 +1,10 @@
+---
+export function getStaticPaths() {
+  return [
+    { params: { planId: 'full' } },
+    { params: { planId: 'print-companion' } },
+  ];
+}
+
+return Astro.redirect(`/library/checkout/${Astro.params.planId}`, 301);
+---

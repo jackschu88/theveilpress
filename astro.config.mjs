@@ -1,0 +1,31 @@
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  integrations: [react(), sitemap()],
+  output: 'static',
+  site: 'https://theveilpress.com',
+  server: {
+    port: 5180,
+  },
+  redirects: {
+    '/presale': '/library/founders',
+    '/presale/executive': '/library/founders',
+    '/presale/executive/thank-you': '/library/founders/thank-you',
+    '/books': '/library',
+    '/books/square-mile': '/library/veil',
+    '/books/square-mile/companion': '/library/map',
+    '/books/square-mile/companion/print': '/library/map',
+    '/books/square-mile/companion/ebook': '/library/map',
+  },
+  vite: {
+    server: {
+      strictPort: true,
+    },
+    preview: {
+      port: 5180,
+      strictPort: true,
+    },
+  },
+});

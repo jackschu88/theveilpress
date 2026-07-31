@@ -1,0 +1,17 @@
+---
+import DeskLayout from '../../layouts/DeskLayout.astro';
+---
+
+<DeskLayout>
+  <section class="desk-stub">
+    <div class="vp-glass vp-glass--card">
+      <h1>Desk</h1>
+      <p class="vp-text-secondary">News &amp; analysis. The desk opens when the pipeline lands.</p>
+    </div>
+  </section>
+</DeskLayout>
+
+<style>
+  .desk-stub { max-width: 72rem; margin: 0 auto; padding: var(--vp-space-7) var(--vp-space-5); }
+  .vp-glass--card { padding: var(--vp-space-6); text-align: center; }
+</style>

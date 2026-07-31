@@ -11,7 +11,7 @@
  * Optional overlay: append ?wanted=true
  *
  * Standalone:
- *   Print book ............... $42.99  (IngramSpark)
+ *   Print book ............... $47.99  (IngramSpark; includes $5 shipping)
  *   Digital Edition .......... $15.99  (Gumroad)
  *   Audiobook ................ $17.99  (Gumroad)
  *   Companion Guide .......... $24.99  (Gumroad)
@@ -20,6 +20,8 @@
  *   Main product at full price; each add-on 20% off.
  *   Full (everything) bundle: main full price; each add-on 25% off.
  *   Then each bundle is lowered to a retail .99 price (e.g. $29.99).
+ *
+ * Physical list prices include $5 shipping (except Limited Founders: free shipping).
  */
 
 /**
@@ -38,9 +40,12 @@ export function formatPrice(n) {
   return `$${n.toFixed(2)}`;
 }
 
-/** Standalone list prices (source of truth). */
+/** Flat shipping included in physical product list prices. */
+export const SHIPPING_FEE = 5;
+
+/** Standalone list prices (source of truth). Print includes $5 shipping. */
 export const STANDALONE = {
-  print: 42.99,
+  print: 47.99,
   ebook: 15.99,
   audiobook: 17.99,
   companion: 24.99,
@@ -171,14 +176,14 @@ export const hybridPlans = {
     name: "Full Bundle",
     price: prices.bundleFull,
     blurb:
-      "Print ships via IngramSpark. Digital Edition, audiobook, and Companion unlock instantly on Gumroad.",
+      "Print ships via IngramSpark (includes $5 shipping). Digital Edition, audiobook, and Companion unlock instantly on Gumroad.",
     steps: [
       {
         id: "print",
         channel: "ingram",
         title: "Order the print book",
         detail:
-          "Trade paperback through IngramSpark (or linked retail). Ships to you.",
+          "Trade paperback through IngramSpark (or linked retail). Includes $5 shipping.",
         price: prices.print,
         url: INGRAM_PRINT_URL,
         label: `Order print · ${formatPrice(prices.print)}`,
@@ -207,7 +212,8 @@ export const hybridPlans = {
         id: "print",
         channel: "ingram",
         title: "Order the print book",
-        detail: "Trade paperback through IngramSpark (or linked retail).",
+        detail:
+          "Trade paperback through IngramSpark (or linked retail). Includes $5 shipping.",
         price: prices.print,
         url: INGRAM_PRINT_URL,
         label: `Order print · ${formatPrice(prices.print)}`,
@@ -233,7 +239,8 @@ export const products = {
     price: prices.print,
     label: `Buy Print · ${formatPrice(prices.print)}`,
     url: INGRAM_PRINT_URL,
-    blurb: "Trade paperback via IngramSpark. Ships to you.",
+    blurb: "Trade paperback via IngramSpark. Includes $5 shipping.",
+    shippingNote: "Includes $5 shipping",
     checkout: "external",
   },
   ebook: {
@@ -269,7 +276,8 @@ export const products = {
     path: hybridPlans["print-companion"].path,
     checkout: "hybrid",
     blurb:
-      "Print via IngramSpark + Companion on Gumroad. Guided two-step checkout.",
+      "Print via IngramSpark + Companion on Gumroad. Print includes $5 shipping. Guided two-step checkout.",
+    shippingNote: "Includes $5 shipping",
   },
   bundleEbookCompanion: {
     name: "Digital Edition + Companion",
@@ -315,7 +323,8 @@ export const products = {
     path: hybridPlans.full.path,
     checkout: "hybrid",
     blurb:
-      "Print (IngramSpark) + all digital (Gumroad). Guided two-step checkout — print full price; digital add-ons 25% off.",
+      "Print (IngramSpark) + all digital (Gumroad). Print includes $5 shipping. Guided two-step checkout — print full price; digital add-ons 25% off.",
+    shippingNote: "Includes $5 shipping",
   },
 };
 
@@ -341,24 +350,26 @@ export function getHybridPlan(productOrId) {
 
 /**
  * Presale / Limited Founders list prices (source of truth for stack math).
+ * Physical SKUs include $5 shipping in the list price.
  *
- * Softcover .............. $39.99
- * Hardcover (unsigned) ... $45.99
- * Companion hardcover .... $59.99
- * Founders (signed HC) ... $59.99
+ * Softcover .............. $44.99  (includes $5 shipping)
+ * Hardcover (unsigned) ... $50.99  (includes $5 shipping)
+ * Companion hardcover .... $64.99  (includes $5 shipping)
+ * Founders (signed HC) ... $64.99  (includes $5 shipping)
  * Digital ebook .......... $15.99  (STANDALONE)
  * Audiobook .............. $17.99  (STANDALONE)
  * Companion PDF .......... $24.99  (STANDALONE)
  *
  * Limited Founders includes signed HC book + signed HC companion + all digital.
+ * Pack $129.99 with free shipping.
  * Solo stack values the signed main book at Founders Edition price (not unsigned hardcover).
  */
 export const PRESALE_LIST = {
-  softcover: 39.99,
-  hardcover: 45.99,
-  companionHardcover: 59.99,
+  softcover: 44.99,
+  hardcover: 50.99,
+  companionHardcover: 64.99,
   /** Signed hardcover alone (Founders Edition). */
-  foundersSignedHardcover: 59.99,
+  foundersSignedHardcover: 64.99,
   ebook: STANDALONE.ebook,
   audiobook: STANDALONE.audiobook,
   companionPdf: STANDALONE.companion,
@@ -390,13 +401,17 @@ export const EXECUTIVE_TOTAL_SOLO = money(
 );
 
 /**
- * Limited Founders pack price.
- * Solo total: $59.99 + $59.99 + $15.99 + $17.99 + $24.99 = $178.95
- * Pack $124.99 → save $53.96 (~30% off combined solo).
+ * Limited Founders pack price — free shipping.
+ * Solo total: $64.99 + $64.99 + $15.99 + $17.99 + $24.99 = $188.95
+ * Pack $129.99 → save $58.96 (~31% off combined solo).
  */
-export const EXECUTIVE_PRICE = 124.99;
+export const EXECUTIVE_PRICE = 129.99;
 
 export const EXECUTIVE_SAVINGS = money(EXECUTIVE_TOTAL_SOLO - EXECUTIVE_PRICE);
+
+/** Shipping line for physical presale SKUs (price already includes SHIPPING_FEE). */
+export const SHIPPING_NOTE = "Includes $5 shipping";
+export const FREE_SHIPPING_NOTE = "Free shipping";
 
 /**
  * Presale products — live at /presale.
@@ -407,13 +422,15 @@ export const PRESALE = {
     name: "Softcover Book",
     price: PRESALE_LIST.softcover,
     url: "https://theveilpress.gumroad.com/l/jytnb",
-    blurb: "Trade paperback. Pre-order the first volume.",
+    blurb: "Trade paperback. Pre-order the first volume. Includes $5 shipping.",
+    shippingNote: SHIPPING_NOTE,
   },
   hardcover: {
     name: "Hardcover Book",
     price: PRESALE_LIST.hardcover,
     url: "https://theveilpress.gumroad.com/l/pntwl",
-    blurb: "Hardcover edition. Pre-order the first volume.",
+    blurb: "Hardcover edition. Pre-order the first volume. Includes $5 shipping.",
+    shippingNote: SHIPPING_NOTE,
   },
   companionPdf: {
     name: "Companion Guide (PDF)",
@@ -426,13 +443,17 @@ export const PRESALE = {
     name: "Companion Guide (Hardcover)",
     price: PRESALE_LIST.companionHardcover,
     url: "https://theveilpress.gumroad.com/l/jawnaq",
-    blurb: "Hardcover companion guide. The apparatus for the main volume.",
+    blurb:
+      "Hardcover companion guide. The apparatus for the main volume. Includes $5 shipping.",
+    shippingNote: SHIPPING_NOTE,
   },
   foundersPack: {
     name: "Founders Edition",
     price: PRESALE_LIST.foundersSignedHardcover,
     url: "https://theveilpress.gumroad.com/l/jnnnft",
-    blurb: "Signed hardcover of The Veil of the Square Mile. Special presale price.",
+    blurb:
+      "Signed hardcover of The Veil of the Square Mile. Special presale price. Includes $5 shipping.",
+    shippingNote: SHIPPING_NOTE,
   },
   /** Alias kept as executiveFounderPack for existing page imports. */
   executiveFounderPack: {
@@ -440,7 +461,8 @@ export const PRESALE = {
     price: EXECUTIVE_PRICE,
     url: "https://theveilpress.gumroad.com/l/uehrv",
     blurb:
-      "Signed hardcover book + signed hardcover Companion Guide + all digital (ebook, audiobook, Companion PDF). Numbered limited edition.",
+      "Signed hardcover book + signed hardcover Companion Guide + all digital (ebook, audiobook, Companion PDF). Numbered limited edition. Free shipping.",
+    shippingNote: FREE_SHIPPING_NOTE,
   },
 };
 
