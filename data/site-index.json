@@ -750,12 +750,12 @@
   "articles": [
     {
       "id": "canon_cjob_17dc4764",
-      "title": "Loomer's Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty",
+      "title": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty",
       "slug": "loomer-s-ukraine-reversal-gives-trump-maga-cover-not-a-policy-treaty",
       "status": "published",
-      "author": "The Veil Press",
-      "created": "2026-07-31T07:06:17.757Z",
-      "modified": "2026-07-31T07:06:17.757Z",
+      "author": "Veil Press Desk",
+      "created": "2026-08-02T03:33:47.106Z",
+      "modified": "2026-08-02T03:33:47.106Z",
       "tags": [
         "Laura Loomer",
         "Ukraine",
@@ -773,12 +773,13 @@
       "series": [],
       "entityIds": [
         "city-of-london-corporation",
-        "square-mile"
+        "lord-mayor-of-london",
+        "city-of-london-police",
+        "square-mile",
+        "american-system"
       ],
-      "claimIds": [
-        "claim-002"
-      ],
-      "description": "In late July 2026, MAGA influencer Laura Loomer traveled to Kyiv and publicly reversed years of hostility to U.S. support for Ukraine — giving Trump political cover."
+      "claimIds": [],
+      "description": "A Kyiv interview, a Russia–Iran frame, and Truth Social amplification move the base-permission layer while sanctions and Patriot production do the formal work."
     }
   ],
   "_meta": {

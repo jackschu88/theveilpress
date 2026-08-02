@@ -1,0 +1,16 @@
+{
+  "id": "obs_cjob_17dc4764_square-mile",
+  "entityId": "square-mile",
+  "source": "cjob_17dc4764",
+  "sourceType": "article",
+  "timestamp": "2026-08-02T03:33:47.106Z",
+  "scores": {
+    "veil": 7,
+    "cathedral": 0,
+    "archive": 0,
+    "squareMile": 0,
+    "nciTechnique": 3
+  },
+  "signalStrength": 1,
+  "context": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty (diag: dense)"
+}
