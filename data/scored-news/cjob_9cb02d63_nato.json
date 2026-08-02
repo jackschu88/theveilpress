@@ -1,0 +1,16 @@
+{
+  "id": "obs_cjob_9cb02d63_nato",
+  "entityId": "nato",
+  "source": "cjob_9cb02d63",
+  "sourceType": "article",
+  "timestamp": "2026-08-02T07:08:43.208Z",
+  "scores": {
+    "veil": 7,
+    "cathedral": 0,
+    "archive": 0,
+    "squareMile": 0,
+    "nciTechnique": 3
+  },
+  "signalStrength": 1,
+  "context": "Trump cancels Iran strike package—subject to rapid Hormuz and nuclear deal (diag: dense)"
+}

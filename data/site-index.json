@@ -1,7 +1,7 @@
 {
   "$schema": "theveil-index/v1",
   "version": 1,
-  "lastScanned": "2026-07-31T08:59:02.341Z",
+  "lastScanned": "2026-08-02T05:19:14.417Z",
   "entities": [
     {
       "id": "city-of-london-corporation",
@@ -653,7 +653,88 @@
       "humanModified": null
     }
   ],
-  "observations": [],
+  "observations": [
+    {
+      "id": "obs_cjob_17dc4764_american-system",
+      "entityId": "american-system",
+      "source": "cjob_17dc4764",
+      "sourceType": "article",
+      "timestamp": "2026-08-02T03:33:47.106Z",
+      "scores": {
+        "veil": 7,
+        "cathedral": 0,
+        "archive": 0,
+        "squareMile": 0,
+        "nciTechnique": 3
+      },
+      "signalStrength": 1,
+      "context": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty (diag: dense)"
+    },
+    {
+      "id": "obs_cjob_17dc4764_city-of-london-corporation",
+      "entityId": "city-of-london-corporation",
+      "source": "cjob_17dc4764",
+      "sourceType": "article",
+      "timestamp": "2026-08-02T03:33:47.106Z",
+      "scores": {
+        "veil": 7,
+        "cathedral": 0,
+        "archive": 0,
+        "squareMile": 0,
+        "nciTechnique": 3
+      },
+      "signalStrength": 1,
+      "context": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty (diag: dense)"
+    },
+    {
+      "id": "obs_cjob_17dc4764_city-of-london-police",
+      "entityId": "city-of-london-police",
+      "source": "cjob_17dc4764",
+      "sourceType": "article",
+      "timestamp": "2026-08-02T03:33:47.106Z",
+      "scores": {
+        "veil": 7,
+        "cathedral": 0,
+        "archive": 0,
+        "squareMile": 0,
+        "nciTechnique": 3
+      },
+      "signalStrength": 1,
+      "context": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty (diag: dense)"
+    },
+    {
+      "id": "obs_cjob_17dc4764_lord-mayor-of-london",
+      "entityId": "lord-mayor-of-london",
+      "source": "cjob_17dc4764",
+      "sourceType": "article",
+      "timestamp": "2026-08-02T03:33:47.106Z",
+      "scores": {
+        "veil": 7,
+        "cathedral": 0,
+        "archive": 0,
+        "squareMile": 0,
+        "nciTechnique": 3
+      },
+      "signalStrength": 1,
+      "context": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty (diag: dense)"
+    },
+    {
+      "id": "obs_cjob_17dc4764_square-mile",
+      "entityId": "square-mile",
+      "source": "cjob_17dc4764",
+      "sourceType": "article",
+      "timestamp": "2026-08-02T03:33:47.106Z",
+      "scores": {
+        "veil": 7,
+        "cathedral": 0,
+        "archive": 0,
+        "squareMile": 0,
+        "nciTechnique": 3
+      },
+      "signalStrength": 1,
+      "context": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty (diag: dense)"
+    }
+  ],
   "claims": [
     {
       "id": "claim-001",
@@ -749,6 +830,34 @@
   ],
   "articles": [
     {
+      "id": "canon_cjob_9cb02d63",
+      "title": "Trump cancels Iran strike package—subject to rapid Hormuz and nuclear deal",
+      "slug": "trump-cancels-iran-strike-package-subject-to-rapid-hormuz-and-nuclear-deal",
+      "status": "published",
+      "author": "Veil Press Desk",
+      "created": "2026-08-02T07:08:43.208Z",
+      "modified": "2026-08-02T07:08:43.208Z",
+      "tags": [
+        "Trump Iran",
+        "Strait of Hormuz",
+        "Abbas Araghchi",
+        "Iran nuclear",
+        "Mohammed bin Salman",
+        "US Iran war 2026",
+        "Al-Azraq",
+        "IRGC",
+        "ceasefire framework",
+        "Middle East shipping",
+        "Hakan Fidan"
+      ],
+      "series": [],
+      "entityIds": [
+        "nato"
+      ],
+      "claimIds": [],
+      "description": "Araghchi tells Turkey, Pakistan, and Saudi Arabia Iran will answer further US ‘aggression’ decisively; Riyadh pressed de-escalation as energy targets were reportedly on the table."
+    },
+    {
       "id": "canon_cjob_6cd650a8",
       "title": "IRGC Claims Strikes on US-Escorted Tankers in Hormuz as Trump Holds Camp David War Cabinet",
       "slug": "irgc-claims-strikes-on-us-escorted-tankers-in-hormuz-as-trump-holds-camp-david-w",
@@ -811,14 +920,14 @@
   ],
   "_meta": {
     "scanReport": {
-      "scanTimestamp": "2026-07-31T08:59:02.341Z",
+      "scanTimestamp": "2026-08-02T05:19:14.417Z",
       "entitiesAdded": 0,
       "entitiesModified": 0,
       "entitiesPreserved": 28,
       "claimsAdded": 0,
       "claimsPreserved": 3,
       "observationsAdded": 0,
-      "observationsPreserved": 0,
+      "observationsPreserved": 5,
       "conflicts": [],
       "manualReviewRequired": []
     }
