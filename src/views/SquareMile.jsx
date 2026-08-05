@@ -84,7 +84,8 @@ export default function SquareMile() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.9, ease: easeOut }}
           >
-            The invisible British financial empire — documented, not dramatized.
+            A serious examination of how durable power actually works — and why the
+            structure outlasts the story.
           </motion.p>
 
           <motion.p
@@ -137,13 +138,25 @@ export default function SquareMile() {
           <div className="card card-glow argument-card">
             <div className="meta">The argument</div>
             <p className="argument-lead">
-              For centuries, the City of London Corporation has been among the
-              most durable institutional settings in which the large decisions of
-              the modern world have been prepared, financed, and locked in.
+              Most Americans can feel that the systems shaping their lives do not fully
+              match the story they are told about how power works. Elections change
+              faces. Narratives shift. Beneath that surface, certain structures of
+              financial and institutional power persist with remarkable continuity.
+              They influence markets, capital flows, debt conditions, and the
+              boundaries of what is treated as possible. Most people experience the
+              effects without being shown the architecture.
+            </p>
+            <p className="muted" style={{ marginBottom: "1rem", fontSize: "1.1rem" }}>
+              <em>The Veil of the Square Mile</em> examines one of the most durable of
+              those structures — the City of London Corporation — not as a distant
+              British peculiarity, but as a continuous institutional form that has
+              maintained financial centrality and operational continuity across
+              centuries, with consequences that reach well beyond the United Kingdom.
             </p>
             <p className="muted" style={{ marginBottom: 0, fontSize: "1.1rem" }}>
-              Fifteen parts — foundations to the digital veil. Not cabals: a
-              corporate order and a premise about what a human being is.
+              This is not a book about British politics. It is a documented study of how
+              durable power actually operates: through architecture, money,
+              jurisdiction, narrative, and access. Volume I follows the record.
             </p>
           </div>
         </Reveal>
@@ -269,8 +282,9 @@ export default function SquareMile() {
               <div className="meta">Companion · {COMING_LABEL}</div>
               <h3>The Map</h3>
               <p>
-                Glossary, timelines, dynastic trees, bibliography, steelman —
-                the apparatus for Volume I. Standalone {COMING_LABEL}; included
+                The book is the journey. The Companion Guide is the map — primary
+                sources, timelines, institutional lineages, and supporting material
+                that make the argument legible. Standalone {COMING_LABEL}; included
                 (signed) in Limited Founders.
               </p>
               <div className="actions" style={{ marginTop: "1rem" }}>
@@ -286,10 +300,11 @@ export default function SquareMile() {
           <StaggerItem>
             <div className="card card-glow">
               <div className="meta">Founders</div>
-              <h3>Signed &amp; limited</h3>
+              <h3>Signed & limited</h3>
               <p>
                 Founders Edition (signed hardcover) and Limited Founders (signed
-                book + signed Companion + all digital, free shipping).
+                book + signed Companion + all digital, free shipping). For readers
+                who want the complete apparatus from the start.
               </p>
               <div className="actions" style={{ marginTop: "1rem" }}>
                 <MagneticLink
