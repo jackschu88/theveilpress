@@ -1,7 +1,7 @@
 {
   "$schema": "theveil-index/v1",
   "version": 1,
-  "lastScanned": "2026-08-02T05:19:14.417Z",
+  "lastScanned": "2026-08-05T15:04:24.373Z",
   "entities": [
     {
       "id": "city-of-london-corporation",
@@ -733,6 +733,22 @@
       },
       "signalStrength": 1,
       "context": "Loomer’s Ukraine Reversal Gives Trump MAGA Cover—Not a Policy Treaty (diag: dense)"
+    },
+    {
+      "id": "obs_cjob_9cb02d63_nato",
+      "entityId": "nato",
+      "source": "cjob_9cb02d63",
+      "sourceType": "article",
+      "timestamp": "2026-08-02T07:08:43.208Z",
+      "scores": {
+        "veil": 7,
+        "cathedral": 0,
+        "archive": 0,
+        "squareMile": 0,
+        "nciTechnique": 3
+      },
+      "signalStrength": 1,
+      "context": "Trump cancels Iran strike package—subject to rapid Hormuz and nuclear deal (diag: dense)"
     }
   ],
   "claims": [
@@ -830,6 +846,33 @@
   ],
   "articles": [
     {
+      "id": "canon_cjob_64be267a",
+      "title": "Trump: Hormuz opens soon or Iran is 'hit very hard' as oil hits multi-week lows",
+      "slug": "trump-hormuz-opens-soon-or-iran-is-hit-very-hard-as-oil-hits-multi-week-lows",
+      "status": "published",
+      "author": "Veil Press Desk",
+      "created": "2026-08-05T15:15:34.936Z",
+      "modified": "2026-08-05T15:15:34.936Z",
+      "tags": [
+        "Strait of Hormuz",
+        "Donald Trump",
+        "Iran",
+        "oil prices",
+        "Marco Rubio",
+        "Oman",
+        "Brent crude",
+        "US Iran war",
+        "shipping",
+        "Axios deal report",
+        "CENTCOM",
+        "Scott Bessent"
+      ],
+      "series": [],
+      "entityIds": [],
+      "claimIds": [],
+      "description": "Fox threat paired with deal talk; Rubio cites Iran–Oman progress without finality as Brent and WTI price restored tanker flow."
+    },
+    {
       "id": "canon_cjob_9cb02d63",
       "title": "Trump cancels Iran strike package—subject to rapid Hormuz and nuclear deal",
       "slug": "trump-cancels-iran-strike-package-subject-to-rapid-hormuz-and-nuclear-deal",
@@ -920,14 +963,14 @@
   ],
   "_meta": {
     "scanReport": {
-      "scanTimestamp": "2026-08-02T05:19:14.417Z",
+      "scanTimestamp": "2026-08-05T15:04:24.373Z",
       "entitiesAdded": 0,
       "entitiesModified": 0,
       "entitiesPreserved": 28,
       "claimsAdded": 0,
       "claimsPreserved": 3,
       "observationsAdded": 0,
-      "observationsPreserved": 5,
+      "observationsPreserved": 6,
       "conflicts": [],
       "manualReviewRequired": []
     }
