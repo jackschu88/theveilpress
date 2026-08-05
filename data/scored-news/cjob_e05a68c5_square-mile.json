@@ -1,0 +1,16 @@
+{
+  "id": "obs_cjob_e05a68c5_square-mile",
+  "entityId": "square-mile",
+  "source": "cjob_e05a68c5",
+  "sourceType": "article",
+  "timestamp": "2026-08-05T17:07:22.336Z",
+  "scores": {
+    "veil": 7,
+    "cathedral": 0,
+    "archive": 0,
+    "squareMile": 0,
+    "nciTechnique": 3
+  },
+  "signalStrength": 1,
+  "context": "Netanyahu says Trump is a ‘great friend’ but Israel will do ‘whatever it takes’ for security (diag: thin)"
+}
