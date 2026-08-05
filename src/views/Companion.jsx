@@ -11,6 +11,7 @@ import {
 } from "../commerce";
 import { gsap } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { trackVideoPlay } from "../lib/analytics";
 
 export default function Companion() {
   const noteRef = useRef(null);
@@ -89,6 +90,7 @@ export default function Companion() {
               playsInline
               preload="metadata"
               aria-label="Cinematic trailer for the Companion Guide"
+              onPlay={() => trackVideoPlay("companion-trailer", { source: "companion_page" })}
             />
           </div>
           <p className="muted companion-trailer-caption">
@@ -193,10 +195,10 @@ export default function Companion() {
         <Reveal>
           <div className="actions" style={{ marginTop: "1.25rem" }}>
             <MagneticLink className="btn" to="/library/founders">
-              Founders &amp; limited
+              Founders & limited
             </MagneticLink>
             <MagneticLink className="btn btn-shimmer" to="/library/veil#buy">
-              Softcover &amp; hardcover presale
+              Softcover & hardcover presale
             </MagneticLink>
           </div>
         </Reveal>
