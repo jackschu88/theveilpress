@@ -1,6 +1,10 @@
-import AppRoot from './AppRoot';
+import ProductShell from './ProductShell';
 import ThankYou from '../views/ThankYou';
 
 export default function ThankYouPage() {
-  return <AppRoot><ThankYou /></AppRoot>;
+  return (
+    <ProductShell>
+      <ThankYou />
+    </ProductShell>
+  );
 }

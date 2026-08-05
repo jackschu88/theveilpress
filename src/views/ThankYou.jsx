@@ -50,9 +50,9 @@ export default function ThankYou() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.7, ease: easeOut }}
           >
-            This is not the end of the purchase. It is the beginning of your part
+            This is not the end of the pre-order. It is the beginning of your part
             in the journey. The books will ship on release. Digital items will
-            arrive on launch day. You will be notified.
+            arrive per the campaign timeline. You will be notified.
           </motion.p>
 
           <motion.div
@@ -65,7 +65,7 @@ export default function ThankYou() {
             <MagneticLink className="btn btn-primary btn-shimmer" to="/">
               Return home
             </MagneticLink>
-            <MagneticLink className="btn" to="/presale">
+            <MagneticLink className="btn" to="/library/founders">
               Other presale options
             </MagneticLink>
           </motion.div>

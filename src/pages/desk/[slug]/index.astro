@@ -1,81 +1,89 @@
 ---
+/**
+ * Article detail — file-based load from content/articles (Bezalel packages).
+ */
 import fs from 'node:fs';
 import path from 'node:path';
+import { marked } from 'marked';
 import DeskLayout from '../../../layouts/DeskLayout.astro';
-import { getCollection } from 'astro:content';
-import matter from 'gray-matter';
+import AdSlot from '../../../components/ads/AdSlot.astro';
+import { loadArticleBySlug, uniqueArticleSlugs } from '../../../lib/loadArticles';
 
 const SITE_ROOT = process.cwd();
-const siteIndex: any = JSON.parse(fs.readFileSync(
-  path.join(SITE_ROOT, 'data', 'site-index.json'), 'utf-8'
-));
+const siteIndex: any = JSON.parse(
+  fs.readFileSync(path.join(SITE_ROOT, 'data', 'site-index.json'), 'utf-8'),
+);
 
-export async function getStaticPaths() {
-  const AD = path.join(process.cwd(), 'content', 'articles');
-  const entries: { params: { slug: string } }[] = [];
-  if (fs.existsSync(AD)) {
-    for (const file of fs.readdirSync(AD)) {
-      if (!file.endsWith('.md')) continue;
-      const raw = fs.readFileSync(path.join(AD, file), 'utf-8');
-      const fm = matter(raw);
-      if (fm.data?.status === 'draft') continue;
-      if (fm.data?.slug) {
-        entries.push({ params: { slug: fm.data.slug } });
-      }
-    }
-  }
-  return entries;
+export function getStaticPaths() {
+  return uniqueArticleSlugs().map((slug) => ({ params: { slug } }));
 }
 
 const { slug } = Astro.params;
-const articles = await getCollection('articles');
-const article = articles.find((a: any) => a.data.slug === slug);
+const article = loadArticleBySlug(slug!);
 
-if (!article) return Astro.redirect('/desk', 302);
+if (!article) {
+  return new Response(`Article not found: ${slug}`, {
+    status: 404,
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  });
+}
 
-const { Content } = await article.render();
+const html = await marked.parse(article.body);
+const data = article.data;
+const seoDesc = data.dek || data.description || '';
+const tags: string[] = Array.isArray(data.tags) ? data.tags : [];
+const entityIds: string[] = Array.isArray(data.entityIds) ? data.entityIds : [];
+const claimIds: string[] = Array.isArray(data.claimIds) ? data.claimIds : [];
+const citations: string[] = Array.isArray(data.citations) ? data.citations : [];
 
-const entityMap = new Map<string, any>(siteIndex.entities.map((e: any) => [e.id, e]));
-const claimMap = new Map<string, any>(siteIndex.claims.map((c: any) => [c.id, c]));
+const entityMap = new Map<string, any>((siteIndex.entities || []).map((e: any) => [e.id, e]));
+const claimMap = new Map<string, any>((siteIndex.claims || []).map((c: any) => [c.id, c]));
 
-const seoDesc = article.data.dek || article.data.description || '';
+const dateObj = data.date ? new Date(data.date) : null;
+const dateLabel =
+  dateObj && !Number.isNaN(dateObj.getTime())
+    ? dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : '';
+const dateIso = dateObj && !Number.isNaN(dateObj.getTime()) ? dateObj.toISOString() : '';
+const pageTitle = data.seo_title || data.title || slug;
+const pageImage = typeof data.image === 'string' ? data.image : undefined;
 ---
 
-<DeskLayout>
+<DeskLayout title={pageTitle} description={seoDesc} image={pageImage}>
   <article class="article-page">
     <nav class="article-breadcrumb">
       <a href="/desk">Desk</a>
       <span class="breadcrumb-sep">/</span>
-      <span>{article.data.title}</span>
+      <span>{data.title}</span>
     </nav>
 
     <div class="article-layout">
       <div class="article-body">
         <header class="article-header">
-          <h1>{article.data.title}</h1>
+          <h1>{data.title}</h1>
           {seoDesc && <p class="article-dek">{seoDesc}</p>}
           <div class="article-meta">
-            <time datetime={String(article.data.date)}>
-              {new Date(article.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-            {article.data.tags.length > 0 && (
+            {dateIso && <time datetime={dateIso}>{dateLabel}</time>}
+            {tags.length > 0 && (
               <span class="article-tags">
-                {article.data.tags.map((t: string) => (<span class="vp-tag">{t}</span>))}
+                {tags.map((t) => (
+                  <span class="vp-tag">{t}</span>
+                ))}
               </span>
             )}
           </div>
         </header>
 
-        <div class="article-content">
-          <Content />
-        </div>
+        <div class="article-content" set:html={html} />
 
-        {article.data.citations && article.data.citations.length > 0 && (
+        {citations.length > 0 && (
           <section class="article-citations">
             <h3>Sources</h3>
             <ol>
-              {article.data.citations.map((url: string) => (
-                <li><a href={url} target="_blank" rel="noopener noreferrer">{url}</a></li>
+              {citations.map((url) => (
+                <li>
+                  <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+                </li>
               ))}
             </ol>
           </section>
@@ -83,27 +91,27 @@ const seoDesc = article.data.dek || article.data.description || '';
       </div>
 
       <aside class="article-rail">
-        {article.data.entityIds && article.data.entityIds.length > 0 && (
+        {entityIds.length > 0 && (
           <div class="vp-glass vp-glass--rail rail-section">
             <h4 class="rail-heading">Entities</h4>
             <ul class="rail-list">
-              {article.data.entityIds.map((eid: string) => {
+              {entityIds.map((eid) => {
                 const entity = entityMap.get(eid);
                 return (
-                  <li><a href={`/desk/entities/${eid}`}>
-                    {entity ? entity.canonicalName : eid}
-                  </a></li>
+                  <li>
+                    <a href={`/desk/entities/${eid}`}>{entity ? entity.canonicalName : eid}</a>
+                  </li>
                 );
               })}
             </ul>
           </div>
         )}
 
-        {article.data.claimIds && article.data.claimIds.length > 0 && (
+        {claimIds.length > 0 && (
           <div class="vp-glass vp-glass--rail rail-section">
             <h4 class="rail-heading">Claims</h4>
             <ul class="rail-list">
-              {article.data.claimIds.map((cid: string) => {
+              {claimIds.map((cid) => {
                 const claim = claimMap.get(cid);
                 return claim ? (
                   <li class="rail-claim-item">
@@ -116,11 +124,7 @@ const seoDesc = article.data.dek || article.data.description || '';
           </div>
         )}
 
-        <div class="vp-glass vp-glass--rail rail-section rail-cta">
-          <h4 class="rail-heading">The Book</h4>
-          <p class="rail-cta-text">The Veil of the Square Mile — the architecture behind the headlines.</p>
-          <a href="/library/veil" class="rail-cta-link">Read The Veil →</a>
-        </div>
+        <AdSlot slot="article-rail" />
 
         <div class="vp-glass vp-glass--rail rail-section">
           <h4 class="rail-heading">The Brief</h4>
@@ -140,23 +144,77 @@ const seoDesc = article.data.dek || article.data.description || '';
   .breadcrumb-sep { margin: 0 var(--vp-space-2); }
   .article-layout { display: grid; grid-template-columns: 1fr 280px; gap: var(--vp-space-6); align-items: start; }
   @media (max-width: 860px) { .article-layout { grid-template-columns: 1fr; } }
-  .article-body { background: var(--vp-bg-elevated); border-radius: var(--vp-radius-md); padding: var(--vp-space-6); min-width: 0; }
+  .article-body {
+    background: var(--vp-bg-elevated);
+    border-radius: var(--vp-radius-md);
+    padding: var(--vp-space-6);
+    min-width: 0;
+    border: 1px solid var(--vp-edge);
+  }
   .article-header { margin-bottom: var(--vp-space-6); border-bottom: 1px solid var(--vp-rule); padding-bottom: var(--vp-space-5); }
-  .article-header h1 { font-family: 'Cinzel', serif; font-size: 1.75rem; color: var(--vp-text-primary); margin: 0 0 var(--vp-space-3); line-height: 1.3; }
-  .article-dek { font-size: 1.1rem; color: var(--vp-text-secondary); margin: 0 0 var(--vp-space-4); line-height: 1.6; }
-  .article-meta { display: flex; align-items: center; gap: var(--vp-space-3); flex-wrap: wrap; font-size: 0.8rem; color: var(--vp-text-muted); }
-  .article-content { color: var(--vp-text-primary); line-height: 1.75; font-size: 1.05rem; }
-  .article-content :global(h2) { font-family: 'Cinzel', serif; font-size: 1.3rem; margin: var(--vp-space-6) 0 var(--vp-space-3); color: var(--vp-text-primary); }
-  .article-content :global(h3) { font-family: 'Cinzel', serif; font-size: 1.1rem; margin: var(--vp-space-5) 0 var(--vp-space-2); }
+  .article-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-3);
+    line-height: 1.25;
+  }
+  .article-dek {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.25rem;
+    color: var(--vp-text-secondary);
+    margin: 0 0 var(--vp-space-4);
+    line-height: 1.55;
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--vp-space-3);
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: var(--vp-text-muted);
+  }
+  .article-content {
+    color: var(--vp-text-primary);
+    line-height: 1.75;
+    font-size: 1.08rem;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    max-width: 42rem;
+  }
+  .article-content :global(h2) {
+    font-family: 'Cinzel', serif;
+    font-size: 1.35rem;
+    margin: var(--vp-space-7) 0 var(--vp-space-3);
+    color: var(--vp-text-primary);
+  }
+  .article-content :global(h3) {
+    font-family: 'Cinzel', serif;
+    font-size: 1.12rem;
+    margin: var(--vp-space-5) 0 var(--vp-space-2);
+  }
   .article-content :global(p) { margin: 0 0 var(--vp-space-4); }
-  .article-content :global(a) { color: var(--vp-accent-steel); }
-  .article-content :global(strong) { color: var(--vp-text-primary); }
-  .article-content :global(blockquote) { border-left: 2px solid var(--vp-accent-gold); padding-left: var(--vp-space-4); margin: var(--vp-space-4) 0; color: var(--vp-text-secondary); }
+  .article-content :global(a) { color: var(--vp-accent-steel); text-underline-offset: 2px; }
+  .article-content :global(a:hover) { color: var(--vp-accent-gold); }
+  .article-content :global(strong) { color: var(--vp-text-primary); font-weight: 600; }
+  .article-content :global(blockquote) {
+    border-left: 2px solid var(--vp-accent-gold);
+    padding: var(--vp-space-2) 0 var(--vp-space-2) var(--vp-space-4);
+    margin: var(--vp-space-5) 0;
+    color: var(--vp-text-secondary);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.2rem;
+  }
+  .article-content :global(ul),
+  .article-content :global(ol) {
+    margin: 0 0 var(--vp-space-4);
+    padding-left: var(--vp-space-5);
+  }
+  .article-content :global(li) { margin-bottom: var(--vp-space-2); }
   .article-citations { margin-top: var(--vp-space-6); padding-top: var(--vp-space-5); border-top: 1px solid var(--vp-rule); }
   .article-citations h3 { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--vp-text-muted); margin: 0 0 var(--vp-space-3); }
   .article-citations ol { font-size: 0.8rem; color: var(--vp-text-muted); padding-left: var(--vp-space-5); }
   .article-citations a { color: var(--vp-accent-steel); word-break: break-all; }
-  .article-rail { display: flex; flex-direction: column; gap: var(--vp-space-4); }
+  .article-rail { display: flex; flex-direction: column; gap: var(--vp-space-4); position: relative; z-index: 1; }
   .rail-section { padding: var(--vp-space-4); }
   .rail-heading { font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--vp-text-muted); margin: 0 0 var(--vp-space-3); text-transform: uppercase; letter-spacing: 0.05em; }
   .rail-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--vp-space-2); }
@@ -168,5 +226,4 @@ const seoDesc = article.data.dek || article.data.description || '';
   .rail-cta-text { font-size: 0.85rem; color: var(--vp-text-secondary); margin: 0 0 var(--vp-space-2); }
   .rail-cta-link { color: var(--vp-accent-gold); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
   .rail-cta-link:hover { color: var(--vp-accent-gold-hi); }
-  .vp-tag { display: inline-block; padding: 2px 8px; border: 1px solid var(--vp-rule); border-radius: var(--vp-radius-sm); font-size: 0.75rem; color: var(--vp-text-muted); margin-right: var(--vp-space-1); }
 </style>

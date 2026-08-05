@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="You're on the list" description="Thanks for joining The Brief." noindex={true}>
+  <section class="brief-page">
+    <div class="vp-glass vp-glass--card brief-card">
+      <h1 class="brief-heading">You're on the list</h1>
+      <p class="brief-desc">
+        Thanks for joining The Brief. We'll send signal only — no spam, no resale.
+      </p>
+      <p class="brief-links">
+        <a href="/desk">Read the Desk</a>
+        <span aria-hidden="true"> · </span>
+        <a href="/library">Visit the Library</a>
+        <span aria-hidden="true"> · </span>
+        <a href="/">Home</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .brief-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--vp-space-7) var(--vp-space-5);
+  }
+
+  .brief-card {
+    max-width: 30rem;
+    width: 100%;
+    padding: var(--vp-space-6);
+    text-align: center;
+  }
+
+  .brief-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-4);
+  }
+
+  .brief-desc {
+    color: var(--vp-text-secondary);
+    margin: 0 auto var(--vp-space-5);
+    max-width: 24rem;
+    line-height: 1.6;
+  }
+
+  .brief-links {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .brief-links a {
+    color: var(--vp-accent-gold);
+    text-decoration: none;
+  }
+
+  .brief-links a:hover {
+    color: var(--vp-accent-gold-hi);
+    text-decoration: underline;
+  }
+</style>

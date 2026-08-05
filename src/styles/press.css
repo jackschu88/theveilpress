@@ -1,0 +1,296 @@
+/* Shared press UI — buttons, type, shells (not page-specific layout) */
+
+.vp-text-secondary {
+  color: var(--vp-text-secondary);
+}
+
+.vp-text-muted {
+  color: var(--vp-text-muted);
+}
+
+.vp-page {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--vp-space-7) var(--vp-space-5);
+}
+
+.vp-page-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  color: var(--vp-text-primary);
+  margin: 0 0 var(--vp-space-2);
+  letter-spacing: 0.03em;
+}
+
+.vp-page-dek {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--vp-text-secondary);
+  margin: 0 0 var(--vp-space-6);
+  max-width: 36rem;
+}
+
+.vp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.75rem 1.35rem;
+  border-radius: var(--vp-radius-sm);
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--vp-duration) var(--vp-ease),
+    border-color var(--vp-duration) var(--vp-ease),
+    box-shadow var(--vp-duration) var(--vp-ease),
+    color var(--vp-duration) var(--vp-ease);
+}
+
+.vp-btn--primary {
+  background: var(--vp-accent-gold);
+  color: #0c0e14;
+  border-color: transparent;
+}
+
+.vp-btn--primary:hover {
+  background: var(--vp-accent-gold-hi);
+  box-shadow: 0 4px 20px rgba(196, 165, 116, 0.28);
+}
+
+.vp-btn--secondary {
+  background: transparent;
+  color: var(--vp-text-primary);
+  border-color: var(--vp-edge);
+}
+
+.vp-btn--secondary:hover {
+  border-color: var(--vp-edge-hot);
+  color: var(--vp-accent-gold);
+}
+
+.vp-btn--ghost {
+  background: transparent;
+  color: var(--vp-accent-steel);
+  border-color: transparent;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.vp-btn--ghost:hover {
+  color: var(--vp-accent-gold);
+}
+
+.vp-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--vp-rule);
+  border-radius: var(--vp-radius-sm);
+  font-size: 0.75rem;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  color: var(--vp-text-muted);
+  letter-spacing: 0.02em;
+}
+
+.vp-eyebrow {
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--vp-accent-steel);
+  margin: 0 0 var(--vp-space-3);
+}
+
+.vp-section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vp-text-muted);
+  margin: 0 0 var(--vp-space-4);
+}
+
+/* Stage depth — soft, no film-grain noise */
+html {
+  background-color: var(--vp-bg-deep);
+}
+
+body {
+  background-color: transparent;
+  min-height: 100vh;
+}
+
+/* Kill heavy SPA grain if any island mounts it */
+.grain-canvas {
+  opacity: 0.03 !important;
+  mix-blend-mode: soft-light !important;
+}
+
+/* Product pages — production SquareMile + polished press atmosphere */
+.product-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 70vh;
+  color: var(--ink, #f0ebe0);
+  --ink: #f0ebe0;
+  --ink-muted: #a89f8c;
+  --gold: #c9a84c;
+  --gold-bright: #f0d78c;
+  --gold-dim: #8a7340;
+  --bg: #05060a;
+  --max: 72rem;
+  --text: 38rem;
+  padding-bottom: 5rem; /* room for GlobalMusicBar */
+}
+
+/* Soft drifting fog (not film grain / static) */
+.product-atmosphere {
+  pointer-events: none !important;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.product-fog {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+  opacity: 0.55;
+}
+
+.product-fog--a {
+  width: min(75vw, 780px);
+  height: min(75vw, 780px);
+  top: -18%;
+  left: 15%;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.2), transparent 68%);
+  animation: product-fog-a 32s ease-in-out infinite alternate;
+}
+
+.product-fog--b {
+  width: min(60vw, 620px);
+  height: min(60vw, 620px);
+  top: 20%;
+  right: -12%;
+  background: radial-gradient(circle, rgba(80, 100, 160, 0.18), transparent 70%);
+  animation: product-fog-b 40s ease-in-out infinite alternate;
+}
+
+.product-fog--c {
+  width: min(50vw, 480px);
+  height: min(50vw, 480px);
+  bottom: 5%;
+  left: -8%;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.1), transparent 72%);
+  animation: product-fog-c 36s ease-in-out infinite alternate;
+}
+
+.product-fog--d {
+  width: min(90vw, 900px);
+  height: min(50vw, 420px);
+  bottom: -10%;
+  left: 20%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.55), transparent 70%);
+  animation: product-fog-d 44s ease-in-out infinite alternate;
+}
+
+.product-atmosphere .atmosphere-glow,
+.product-atmosphere .atmosphere-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+@keyframes product-fog-a {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(5%, 8%) scale(1.1); }
+}
+@keyframes product-fog-b {
+  from { transform: translate(0, 0) scale(1.05); }
+  to { transform: translate(-7%, 4%) scale(1); }
+}
+@keyframes product-fog-c {
+  from { transform: translate(0, 0); }
+  to { transform: translate(10%, -6%); }
+}
+@keyframes product-fog-d {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(-4%, -3%) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-fog {
+    animation: none !important;
+  }
+}
+
+.product-shell-content {
+  position: relative;
+  z-index: 1;
+}
+
+.product-shell .shell {
+  width: min(var(--max), calc(100% - 2.5rem));
+  margin: 0 auto;
+}
+
+.product-shell .hero {
+  position: relative;
+  z-index: 1;
+  padding-top: 1rem;
+}
+
+/* Kill any residual grain static */
+.product-shell .grain-canvas {
+  display: none !important;
+}
+
+.product-shell a,
+.product-shell button,
+.product-shell .btn {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Trailer block on book page */
+.product-trailer {
+  margin: 2rem 0 0.5rem;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  background: #000;
+}
+
+.product-trailer video {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+}
+
+.product-shell .section {
+  position: relative;
+  z-index: 1;
+  margin-top: 2.5rem;
+}
+
+.product-shell .price-row {
+  position: relative;
+  z-index: 1;
+}
+
+/* Music bar sits above content */
+.product-shell .music-global-bar {
+  z-index: 50;
+}
+

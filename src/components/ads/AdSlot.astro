@@ -1,0 +1,200 @@
+---
+/**
+ * House / direct ads only — no third-party networks.
+ * data/ads.json: [{ id, slot, href, title, dek?, image?, label?, active? }]
+ * Empty inventory → house defaults for that slot.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface AdItem {
+  id: string;
+  slot: string;
+  href: string;
+  title: string;
+  dek?: string;
+  image?: string;
+  label?: string;
+  active?: boolean;
+}
+
+interface Props {
+  slot: string;
+  class?: string;
+}
+
+const { slot, class: className = '' } = Astro.props;
+
+const HOUSE: AdItem[] = [
+  {
+    id: 'house-veil',
+    slot: 'desk-rail',
+    href: '/library/veil',
+    title: 'The Veil of the Square Mile',
+    dek: 'The architecture behind the headlines.',
+    image: '/cover.jpg',
+    label: 'Library',
+    active: true,
+  },
+  {
+    id: 'house-veil-home',
+    slot: 'home-mid',
+    href: '/library/veil',
+    title: 'The Veil of the Square Mile',
+    dek: 'Volume I — deep layer under the desk signal.',
+    image: '/cover.jpg',
+    label: 'Library',
+    active: true,
+  },
+  {
+    id: 'house-brief',
+    slot: 'desk-inline',
+    href: '/brief',
+    title: 'The Brief',
+    dek: 'Weekly signal. No resale.',
+    label: 'Newsletter',
+    active: true,
+  },
+  {
+    id: 'house-map',
+    slot: 'article-rail',
+    href: '/library/map',
+    title: 'The Map',
+    dek: 'Companion to the journey.',
+    image: '/companion-cover.jpg',
+    label: 'Companion',
+    active: true,
+  },
+];
+
+function loadAds(): AdItem[] {
+  try {
+    const p = path.join(process.cwd(), 'data', 'ads.json');
+    if (!fs.existsSync(p)) return [];
+    const raw = JSON.parse(fs.readFileSync(p, 'utf-8'));
+    return Array.isArray(raw) ? raw : [];
+  } catch {
+    return [];
+  }
+}
+
+const inventory = loadAds().filter((a) => a.active !== false && a.slot === slot);
+const ads = inventory.length > 0 ? inventory : HOUSE.filter((a) => a.slot === slot);
+---
+
+{
+  ads.length > 0 && (
+    <div class={`ad-slot ad-slot--${slot} ${className}`.trim()} data-ad-slot={slot}>
+      {ads.map((ad) => (
+        <a href={ad.href} class="ad-card vp-glass vp-glass--rail">
+          {ad.label && <span class="ad-label">{ad.label}</span>}
+          {ad.image && (
+            <div class="ad-media">
+              <img src={ad.image} alt="" loading="lazy" />
+            </div>
+          )}
+          <div class="ad-body">
+            <span class="ad-title">{ad.title}</span>
+            {ad.dek && <span class="ad-dek">{ad.dek}</span>}
+          </div>
+        </a>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .ad-slot {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vp-space-3);
+  }
+
+  .ad-slot--home-mid {
+    margin: var(--vp-space-6) 0;
+  }
+
+  .ad-slot--desk-inline {
+    margin: var(--vp-space-5) 0;
+  }
+
+  .ad-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vp-space-3);
+    padding: var(--vp-space-4);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--vp-duration) var(--vp-ease);
+  }
+
+  .ad-card:hover {
+    border-color: var(--vp-edge-hot);
+  }
+
+  .ad-label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--vp-text-muted);
+    margin: 0 0 var(--vp-space-1);
+    line-height: 1.2;
+  }
+
+  .ad-media {
+    border-radius: var(--vp-radius-sm);
+    overflow: hidden;
+    max-height: 100px;
+  }
+
+  .ad-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 100px;
+    object-fit: cover;
+  }
+
+  .ad-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vp-space-2);
+    min-width: 0;
+  }
+
+  .ad-title {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--vp-text-primary);
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  .ad-dek {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--vp-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .ad-slot--home-mid .ad-card {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--vp-space-4);
+    padding: var(--vp-space-5);
+  }
+
+  .ad-slot--home-mid .ad-media {
+    width: 72px;
+    max-height: 96px;
+    flex-shrink: 0;
+  }
+
+  .ad-slot--home-mid .ad-media img {
+    max-height: 96px;
+  }
+</style>

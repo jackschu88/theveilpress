@@ -1,18 +1,176 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const films = [
+  {
+    id: 'brain-on-propaganda',
+    title: 'This is your brain on propaganda',
+    dek: 'Hidden Throne teaser — short cut from the Complete set.',
+    src: '/videos/teaser-brain-on-propaganda.mp4',
+    poster: '/videos/teaser-brain-on-propaganda-poster.jpg',
+    aspect: 'landscape',
+  },
+  {
+    id: 'timeline-1',
+    title: 'Timeline 1',
+    dek: 'Vertical teaser from the Complete set — built for short-form feeds.',
+    src: '/videos/teaser-timeline-1.mp4',
+    poster: '/videos/teaser-timeline-1-poster.jpg',
+    aspect: 'portrait',
+  },
+  {
+    id: 'trailer',
+    title: 'The Veil — trailer',
+    dek: 'Opening cut for The Veil of the Square Mile.',
+    src: '/videos/square-mile-trailer.mp4',
+    poster: '/cover.jpg',
+    aspect: 'landscape',
+  },
+  {
+    id: 'companion',
+    title: 'Companion — trailer',
+    dek: 'Map and companion walkthrough.',
+    src: '/videos/companion_trailer.mp4',
+    poster: '/companion-cover.jpg',
+    aspect: 'landscape',
+  },
+  {
+    id: 'journey',
+    title: 'Journey — main',
+    dek: 'Cinematic journey cut.',
+    src: '/videos/journey-main.mp4',
+    poster: '/videos/journey-fogboy-poster.jpg',
+    aspect: 'landscape',
+  },
+];
 ---
 
-<BaseLayout>
-  <section class="watch-stub">
-    <div class="vp-glass vp-glass--card">
-      <h1>Watch</h1>
-      <p class="vp-text-secondary">Cinema and visual storytelling</p>
-      <p class="vp-text-muted">Video walkthroughs and the reader app are in development.</p>
+<BaseLayout
+  title="Watch"
+  description="Trailers and film from The Veil Press — Volume I teasers, Companion Map, and short-form cuts."
+  image="/videos/teaser-brain-on-propaganda-poster.jpg"
+>
+  <div class="vp-page watch-page">
+    <header class="watch-header">
+      <h1 class="vp-page-title">Watch</h1>
+      <p class="vp-page-dek">
+        Cinema and visual essays. Short cuts now; longer work as assembly stays local.
+      </p>
+    </header>
+
+    <div class="watch-grid">
+      {films.map((film) => (
+        <article
+          class={`watch-card vp-glass vp-glass--card${film.aspect === 'portrait' ? ' watch-card--portrait' : ''}`}
+          id={film.id}
+        >
+          <div class={`watch-frame watch-frame--${film.aspect || 'landscape'}`}>
+            <video
+              controls
+              playsinline
+              preload="metadata"
+              poster={film.poster}
+            >
+              <source src={film.src} type="video/mp4" />
+            </video>
+          </div>
+          <div class="watch-card-body">
+            <h2 class="watch-card-title">{film.title}</h2>
+            <p class="watch-card-dek">{film.dek}</p>
+          </div>
+        </article>
+      ))}
     </div>
-  </section>
+
+    <p class="watch-foot vp-text-muted">
+      Also on{' '}
+      <a href="https://x.com/deepdivefile" target="_blank" rel="noopener noreferrer">X</a>
+      ,{' '}
+      <a href="https://www.youtube.com/channel/UC1inbgx19VivnXyWGDWbaiw" target="_blank" rel="noopener noreferrer">YouTube</a>
+      ,{' '}
+      <a href="https://www.tiktok.com/@theveilpress" target="_blank" rel="noopener noreferrer">TikTok</a>
+      , and{' '}
+      <a href="https://www.facebook.com/profile.php?id=61592600831684" target="_blank" rel="noopener noreferrer">Facebook</a>
+      . Canonical files stay on this site.
+    </p>
+  </div>
 </BaseLayout>
 
 <style>
-  .watch-stub { max-width: 72rem; margin: 0 auto; padding: var(--vp-space-7) var(--vp-space-5); }
-  .vp-glass--card { padding: var(--vp-space-6); text-align: center; }
+  .watch-header {
+    margin-bottom: var(--vp-space-6);
+  }
+
+  .watch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--vp-space-5);
+  }
+
+  .watch-card {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .watch-frame {
+    background: #000;
+    border-bottom: 1px solid var(--vp-edge);
+  }
+
+  .watch-frame video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .watch-frame--portrait {
+    display: flex;
+    justify-content: center;
+    background: #05060a;
+  }
+
+  .watch-frame--portrait video {
+    width: auto;
+    max-width: 100%;
+    max-height: 28rem;
+    aspect-ratio: 9 / 16;
+    object-fit: contain;
+  }
+
+  .watch-card--portrait {
+    max-width: 22rem;
+  }
+
+  .watch-foot a {
+    color: var(--vp-accent-gold, var(--gold));
+    text-decoration: none;
+  }
+
+  .watch-foot a:hover {
+    text-decoration: underline;
+  }
+
+  .watch-card-body {
+    padding: var(--vp-space-5);
+  }
+
+  .watch-card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-2);
+  }
+
+  .watch-card-dek {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--vp-text-secondary);
+    margin: 0;
+  }
+
+  .watch-foot {
+    margin: var(--vp-space-6) 0 0;
+    font-size: 0.85rem;
+  }
 </style>

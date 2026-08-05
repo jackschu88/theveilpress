@@ -1,26 +1,51 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const formAction = import.meta.env.PUBLIC_BRIEF_FORM_ACTION;
+const hasFormAction = typeof formAction === 'string' && formAction.trim().length > 0;
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="The Brief"
+  description="A weekly signal through the noise from The Veil Press. No spam, no resale."
+>
   <section class="brief-page">
     <div class="vp-glass vp-glass--card brief-card">
       <h1 class="brief-heading">The Brief</h1>
       <p class="brief-desc">
         A weekly signal through the noise. No spam, no resale.
       </p>
-      <form class="brief-form" method="post" action="#">
-        <input
-          class="brief-input"
-          type="email"
-          name="email"
-          placeholder="Your email address"
-          required
-        />
-        <button class="brief-submit" type="submit">Subscribe</button>
-      </form>
+      {
+        hasFormAction ? (
+          <form class="brief-form" method="post" action={formAction}>
+            <input
+              class="brief-input"
+              type="email"
+              name="email"
+              placeholder="Your email address"
+              required
+            />
+            <input type="hidden" name="_subject" value="The Veil Press Brief" />
+            <input type="hidden" name="_next" value="https://theveilpress.com/brief/thank-you" />
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+            <button class="brief-submit" type="submit">Subscribe</button>
+          </form>
+        ) : (
+          <div class="brief-form brief-form--disabled">
+            <input
+              class="brief-input"
+              type="email"
+              placeholder="Your email address"
+              disabled
+            />
+            <button class="brief-submit" type="button" disabled>Subscribe</button>
+          </div>
+        )
+      }
       <p class="vp-text-muted brief-disclaimer">
-        Listmonk integration coming soon. Your address stays private.
+        {hasFormAction
+          ? 'We\'ll send the Brief only. No resale. Interim form until listmonk.'
+          : 'Subscriptions not configured yet. Check back soon.'}
       </p>
     </div>
   </section>
@@ -100,5 +125,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .brief-disclaimer {
     font-size: 0.85rem;
     margin: 0;
+  }
+
+  .brief-form--disabled .brief-input {
+    opacity: 0.5;
+  }
+
+  .brief-form--disabled .brief-submit {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style>

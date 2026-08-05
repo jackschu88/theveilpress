@@ -1,6 +1,10 @@
-import AppRoot from './AppRoot';
+import ProductShell from './ProductShell';
 import ExecutiveFounder from '../views/ExecutiveFounder';
 
 export default function ExecutiveFounderPage() {
-  return <AppRoot><ExecutiveFounder /></AppRoot>;
+  return (
+    <ProductShell>
+      <ExecutiveFounder />
+    </ProductShell>
+  );
 }

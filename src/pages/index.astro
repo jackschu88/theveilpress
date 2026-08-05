@@ -1,102 +1,502 @@
 ---
+/**
+ * Press home — charter shape:
+ * one lead desk story · book CTA · film · brief capture
+ * Not a product wall. Not "coming soon."
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import AdSlot from '../components/ads/AdSlot.astro';
+
+const ARTICLES_DIR = path.join(process.cwd(), 'content', 'articles');
+type ArticleCard = {
+  slug: string;
+  title: string;
+  dek: string;
+  date: string;
+  image?: string;
+  tags: string[];
+};
+
+function loadPublished(): ArticleCard[] {
+  if (!fs.existsSync(ARTICLES_DIR)) return [];
+  const out: ArticleCard[] = [];
+  for (const file of fs.readdirSync(ARTICLES_DIR)) {
+    if (!file.endsWith('.md')) continue;
+    const raw = fs.readFileSync(path.join(ARTICLES_DIR, file), 'utf-8');
+    const fm = matter(raw);
+    if (!fm.data || fm.data.status === 'draft' || !fm.data.slug) continue;
+    out.push({
+      slug: fm.data.slug,
+      title: fm.data.title || fm.data.slug,
+      dek: fm.data.dek || fm.data.description || '',
+      date: String(fm.data.date || ''),
+      image: fm.data.image,
+      tags: Array.isArray(fm.data.tags) ? fm.data.tags : [],
+    });
+  }
+  return out.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+const published = loadPublished();
+const lead = published[0] ?? null;
+const secondary = published.slice(1, 3);
 ---
 
-<BaseLayout>
-  <section class="vp-home">
-    <div class="vp-glass vp-glass--hero vp-hero-panel">
-      <h1 class="vp-hero-heading">The Veil Press</h1>
-      <p class="vp-hero-dek">
-        Independent press documenting durable power — architecture, money,
-        narrative, access — with books as the deep layer and the desk as the
-        continuous signal.
-      </p>
-      <div class="vp-hero-actions">
-        <a href="/library" class="vp-btn vp-btn--primary">Browse the Library</a>
-        <a href="/desk" class="vp-btn vp-btn--secondary">Read the Desk</a>
+<BaseLayout
+  title="The Veil Press"
+  description="Independent press documenting durable power — architecture, money, narrative, access. Books as the deep layer. The desk as the continuous signal."
+  image={lead?.image || '/cover.jpg'}
+>
+  <div class="home">
+    <!-- Brand hero -->
+    <section class="home-hero">
+      <div class="home-hero-stage" aria-hidden="true"></div>
+      <div class="vp-glass vp-glass--hero home-hero-panel">
+        <p class="vp-eyebrow">Independent press · durable power</p>
+        <h1 class="home-hero-title">The Veil Press</h1>
+        <p class="home-hero-dek">
+          Architecture, money, narrative, access — documented with sources.
+          Books as the deep layer. The desk as the continuous signal.
+        </p>
+        <div class="home-hero-actions">
+          <a href={lead ? `/desk/${lead.slug}` : '/desk'} class="vp-btn vp-btn--primary">
+            {lead ? 'Latest from the Desk' : 'Open the Desk'}
+          </a>
+          <a href="/library/veil" class="vp-btn vp-btn--primary">Pre-order print &amp; Founders</a>
+        </div>
       </div>
-    </div>
-    <p class="vp-coming-soon">Coming Summer 2026</p>
-  </section>
+    </section>
+
+    <!-- Lead desk story -->
+    <section class="home-section home-lead">
+      <div class="home-section-inner">
+        <h2 class="vp-section-label">From the Desk</h2>
+        {lead ? (
+          <a href={`/desk/${lead.slug}`} class="lead-card vp-glass vp-glass--card">
+            {lead.image && (
+              <div class="lead-card-media">
+                <img src={lead.image} alt="" loading="eager" />
+              </div>
+            )}
+            <div class="lead-card-body">
+              <p class="vp-eyebrow">Lead</p>
+              <h3 class="lead-card-title">{lead.title}</h3>
+              {lead.dek && <p class="lead-card-dek">{lead.dek}</p>}
+              <div class="lead-card-meta">
+                {lead.date && (
+                  <time datetime={lead.date}>
+                    {new Date(lead.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
+                )}
+                <span class="lead-card-more">Continue reading →</span>
+              </div>
+            </div>
+          </a>
+        ) : (
+          <div class="vp-glass vp-glass--card empty-panel">
+            <p class="vp-text-secondary">The desk opens when the next package lands.</p>
+            <a href="/desk" class="vp-btn vp-btn--ghost">Desk index</a>
+          </div>
+        )}
+
+        {secondary.length > 0 && (
+          <ul class="secondary-list">
+            {secondary.map((a) => (
+              <li>
+                <a href={`/desk/${a.slug}`} class="secondary-row">
+                  <span class="secondary-title">{a.title}</span>
+                  {a.date && (
+                    <time datetime={a.date}>
+                      {new Date(a.date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </time>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <p class="section-foot">
+          <a href="/desk" class="vp-btn vp-btn--ghost">All desk pieces →</a>
+        </p>
+
+        <AdSlot slot="home-mid" />
+      </div>
+    </section>
+
+    <!-- Book + film row -->
+    <section class="home-section home-depth">
+      <div class="home-section-inner home-depth-grid">
+        <div class="vp-glass vp-glass--card depth-card">
+          <p class="vp-eyebrow">Library · Print &amp; Founders on presale</p>
+          <h2 class="depth-title">The Veil of the Square Mile</h2>
+          <p class="depth-dek">
+            The invisible British financial empire — architecture of money and access,
+            documented for the long record. Softcover, hardcover, and both Founders
+            editions on presale through August 26, 2026. Digital formats and Companion:
+            Coming August 26th.
+          </p>
+          <div class="depth-actions">
+            <a href="/library/veil" class="vp-btn vp-btn--primary">Pre-order print &amp; Founders</a>
+            <a href="/library/map" class="vp-btn vp-btn--secondary">The Map</a>
+          </div>
+          <img
+            class="depth-cover"
+            src="/cover.jpg"
+            alt="The Veil of the Square Mile cover"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="vp-glass vp-glass--card depth-card depth-film">
+          <p class="vp-eyebrow">Watch</p>
+          <h2 class="depth-title">Cinema</h2>
+          <p class="depth-dek">Teasers and visual essays. Full watch room expands as cuts land.</p>
+          <div class="film-frame">
+            <video
+              class="film-video"
+              controls
+              playsinline
+              preload="metadata"
+              poster="/videos/teaser-brain-on-propaganda-poster.jpg"
+            >
+              <source src="/videos/teaser-brain-on-propaganda.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <a href="/watch" class="vp-btn vp-btn--ghost">Watch room →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brief -->
+    <section class="home-section home-brief">
+      <div class="home-section-inner">
+        <div class="vp-glass vp-glass--card brief-strip">
+          <div class="brief-strip-copy">
+            <p class="vp-eyebrow">Owned signal</p>
+            <h2 class="depth-title">The Brief</h2>
+            <p class="depth-dek">
+              Weekly signal through the noise. No spam, no resale — when the list is ready.
+            </p>
+          </div>
+          <a href="/brief" class="vp-btn vp-btn--primary">Join the Brief</a>
+        </div>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
-  .vp-home {
-    min-height: 80vh;
+  .home {
+    padding-bottom: var(--vp-space-8);
+  }
+
+  .home-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: min(78vh, 640px);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    padding: var(--vp-space-7) var(--vp-space-5);
-    gap: var(--vp-space-8);
+    padding: var(--vp-space-8) var(--vp-space-5);
   }
 
-  .vp-hero-panel {
-    max-width: 42rem;
+  .home-hero-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 40%, rgba(16, 19, 28, 0.2), transparent 70%),
+      url('/limited-founders-hero-wide.jpg') center / cover no-repeat;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .home-hero-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(7, 8, 12, 0.55) 0%,
+      rgba(7, 8, 12, 0.75) 55%,
+      var(--vp-bg-deep) 100%
+    );
+  }
+
+  .home-hero-panel {
+    position: relative;
+    z-index: 2;
+    max-width: 40rem;
     width: 100%;
     padding: var(--vp-space-7) var(--vp-space-6);
+    text-align: center;
   }
 
-  .vp-hero-heading {
+  /* Gentle enter motion */
+  .home-hero-panel,
+  .home-lead,
+  .home-depth,
+  .home-brief {
+    animation: home-rise 0.85s var(--vp-ease) both;
+  }
+  .home-lead { animation-delay: 0.08s; }
+  .home-depth { animation-delay: 0.16s; }
+  .home-brief { animation-delay: 0.24s; }
+
+  @keyframes home-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-hero-panel,
+    .home-lead,
+    .home-depth,
+    .home-brief {
+      animation: none;
+    }
+  }
+
+  .lead-card,
+  .secondary-row,
+  .vp-btn {
+    cursor: pointer;
+  }
+
+  .home-hero-title {
     font-family: 'Cinzel', serif;
-    font-size: 2.6rem;
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 600;
     color: var(--vp-text-primary);
-    margin: 0 0 var(--vp-space-5);
+    margin: 0 0 var(--vp-space-4);
     letter-spacing: 0.04em;
+    line-height: 1.15;
   }
 
-  .vp-hero-dek {
-    font-size: 1.1rem;
+  .home-hero-dek {
+    font-size: 1.08rem;
     line-height: 1.7;
     color: var(--vp-text-secondary);
     margin: 0 auto var(--vp-space-6);
-    max-width: 34rem;
+    max-width: 32rem;
   }
 
-  .vp-hero-actions {
+  .home-hero-actions {
     display: flex;
-    gap: var(--vp-space-4);
-    justify-content: center;
     flex-wrap: wrap;
+    gap: var(--vp-space-3);
+    justify-content: center;
   }
 
-  .vp-btn {
-    display: inline-block;
-    padding: var(--vp-space-3) var(--vp-space-5);
-    border-radius: var(--vp-radius-sm);
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
+  .home-section.home-lead,
+  .home-section.home-depth,
+  .home-section.home-brief {
+    padding: var(--vp-space-6) var(--vp-space-5);
+  }
+
+  .home-section-inner {
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+
+  .lead-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+    gap: 0;
     text-decoration: none;
-    transition: border-color var(--vp-duration) var(--vp-ease),
-                box-shadow var(--vp-duration) var(--vp-ease);
+    overflow: hidden;
+    padding: 0;
   }
 
-  .vp-btn--primary {
-    background: var(--vp-accent-gold);
-    color: #0c0e14;
+  .lead-card-media {
+    min-height: 220px;
+    background: var(--vp-bg-fog);
   }
 
-  .vp-btn--primary:hover {
-    background: var(--vp-accent-gold-hi);
-    box-shadow: 0 4px 20px rgba(196, 165, 116, 0.25);
+  .lead-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  .vp-btn--secondary {
-    border: 1px solid var(--vp-edge);
+  .lead-card-body {
+    padding: var(--vp-space-6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .lead-card-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.25rem, 2.5vw, 1.65rem);
     color: var(--vp-text-primary);
-    background: transparent;
+    margin: 0 0 var(--vp-space-3);
+    line-height: 1.3;
   }
 
-  .vp-btn--secondary:hover {
-    border-color: var(--vp-edge-hot);
+  .lead-card-dek {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--vp-text-secondary);
+    margin: 0 0 var(--vp-space-4);
   }
 
-  .vp-coming-soon {
+  .lead-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--vp-space-4);
+    font-size: 0.85rem;
     color: var(--vp-text-muted);
-    font-size: 0.9rem;
+  }
+
+  .lead-card-more {
+    color: var(--vp-accent-gold);
+    font-weight: 500;
+  }
+
+  .secondary-list {
+    list-style: none;
+    margin: var(--vp-space-5) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--vp-rule);
+  }
+
+  .secondary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--vp-space-4);
+    padding: var(--vp-space-4) 0;
+    border-bottom: 1px solid var(--vp-rule);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .secondary-row:hover .secondary-title {
+    color: var(--vp-accent-gold);
+  }
+
+  .secondary-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--vp-text-primary);
+    transition: color var(--vp-duration-fast) var(--vp-ease);
+  }
+
+  .secondary-row time {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    color: var(--vp-text-muted);
+  }
+
+  .section-foot {
+    margin: var(--vp-space-4) 0 0;
+  }
+
+  .home-depth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--vp-space-5);
+  }
+
+  .depth-card {
+    padding: var(--vp-space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vp-space-3);
+  }
+
+  .depth-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.35rem;
+    color: var(--vp-text-primary);
     margin: 0;
+    line-height: 1.3;
+  }
+
+  .depth-dek {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--vp-text-secondary);
+    margin: 0;
+    flex: 1;
+  }
+
+  .depth-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vp-space-3);
+    margin-top: var(--vp-space-2);
+  }
+
+  .depth-cover {
+    width: 120px;
+    border-radius: var(--vp-radius-sm);
+    margin-top: var(--vp-space-3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .film-frame {
+    border-radius: var(--vp-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--vp-edge);
+    background: #000;
+    margin: var(--vp-space-2) 0;
+  }
+
+  .film-video {
+    display: block;
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+  }
+
+  .brief-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vp-space-5);
+    padding: var(--vp-space-6);
+  }
+
+  .brief-strip-copy {
+    flex: 1;
+    min-width: 16rem;
+  }
+
+  .empty-panel {
+    padding: var(--vp-space-6);
+    text-align: center;
+  }
+
+  @media (max-width: 800px) {
+    .lead-card {
+      grid-template-columns: 1fr;
+    }
+    .lead-card-media {
+      min-height: 180px;
+    }
+    .home-depth-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

@@ -1,6 +1,10 @@
-import AppRoot from './AppRoot';
+import ProductShell from './ProductShell';
 import Companion from '../views/Companion';
 
 export default function CompanionPage() {
-  return <AppRoot><Companion /></AppRoot>;
+  return (
+    <ProductShell>
+      <Companion />
+    </ProductShell>
+  );
 }

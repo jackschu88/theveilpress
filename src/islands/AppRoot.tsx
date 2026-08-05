@@ -3,7 +3,6 @@ import SoundtrackProvider from '../components/cinematic/SoundtrackProvider';
 import SmoothScroll from '../components/cinematic/SmoothScroll';
 import Grain from '../components/cinematic/Grain';
 import CustomCursor from '../components/cinematic/CustomCursor';
-import VeilIntro from '../components/cinematic/VeilIntro';
 import Spotlight from '../components/cinematic/Spotlight';
 import FogReveal from '../components/cinematic/FogReveal';
 import GoldDust from '../components/cinematic/GoldDust';
@@ -14,12 +13,12 @@ interface Props {
 }
 
 export default function AppRoot({ children }: Props) {
+  /* VeilIntro / opening curtain is sitewide in BaseLayout (once per session). */
   return (
     <SoundtrackProvider>
       <SmoothScroll />
       <Grain />
       <CustomCursor />
-      <VeilIntro />
       <Spotlight />
       <FogReveal />
       <div className="atmosphere" aria-hidden>

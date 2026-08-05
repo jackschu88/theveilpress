@@ -1,5 +1,4 @@
 import { lazy, Suspense, useRef } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
@@ -115,12 +114,12 @@ export default function Home() {
         >
           <MagneticLink
             className="btn btn-primary btn-shimmer"
-            to="/presale"
+            to="/library/founders"
           >
             Pre-order now
           </MagneticLink>
-          <MagneticLink className="btn" to="/presale">
-            View presale offerings
+          <MagneticLink className="btn" to="/library/founders">
+            View founders offerings
           </MagneticLink>
         </motion.div>
       </section>
@@ -136,9 +135,9 @@ export default function Home() {
           </div>
         </Reveal>
         <Reveal>
-          <Link
+          <a
             ref={featuredRef}
-            to="/presale"
+            href="/library/founders"
             className="feature-panel feature-wow"
           >
             <div className="feature-visual">
@@ -165,7 +164,7 @@ export default function Home() {
                 Pre-order now
               </span>
             </div>
-          </Link>
+          </a>
         </Reveal>
       </section>
 
@@ -177,28 +176,28 @@ export default function Home() {
         </Reveal>
         <Stagger className="card-grid three">
           <StaggerItem>
-            <Link className="card card-lift card-glow" to="/presale">
+            <a className="card card-lift card-glow" href="/library/veil">
               <div className="meta">01</div>
               <h3>The book</h3>
               <p>Continuous argument — the journey. Pre-order now.</p>
-            </Link>
+            </a>
           </StaggerItem>
           <StaggerItem>
-            <Link className="card card-lift card-glow" to="/presale">
+            <a className="card card-lift card-glow" href="/library/map">
               <div className="meta">02</div>
               <h3>The Companion</h3>
               <p>Sources, trees, bibliography — the map. Available for pre-order.</p>
-            </Link>
+            </a>
           </StaggerItem>
           <StaggerItem>
-            <Link className="card card-lift card-glow" to="/presale">
+            <a className="card card-lift card-glow" href="/library/founders">
               <div className="meta">03</div>
               <h3>Founders editions</h3>
               <p>
                 Founders Edition (signed hardcover) and Limited Founders Edition
                 (both signed hardcovers + all digital). Pre-order now.
               </p>
-            </Link>
+            </a>
           </StaggerItem>
         </Stagger>
       </section>

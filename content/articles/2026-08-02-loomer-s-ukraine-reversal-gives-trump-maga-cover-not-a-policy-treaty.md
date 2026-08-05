@@ -10,7 +10,6 @@ framing: default
 dek: "A Kyiv interview, a Russia–Iran frame, and Truth Social amplification move the base-permission layer while sanctions and Patriot production do the formal work."
 description: "A Kyiv interview, a Russia–Iran frame, and Truth Social amplification move the base-permission layer while sanctions and Patriot production do the formal work."
 tags: ["Laura Loomer", "Ukraine", "Donald Trump", "MAGA", "Zelenskyy", "Russia sanctions", "Iran", "Patriot interceptors", "influencer diplomacy", "narrative enforcement", "America First", "Rumble"]
-image: /articles/2026-08-02-loomer-s-ukraine-reversal-gives-trump-maga-cover-not-a-policy-treaty/fetched_1785479024586_1.jpg
 entityIds: ["city-of-london-corporation", "lord-mayor-of-london", "city-of-london-police", "square-mile", "american-system"]
 key_entities: ["Donald Trump", "Laura Loomer", "Ukrainian President Volodymyr Zelenskyy", "Rumble", "Ukraine", "Russian", "Nazis", "Moscow", "Trump", "Truth Social", "Zelenskyy", "Loomer", "Pentagon", "Oval Office", "An Al Jazeera", "Surface", "McDonald", "First", "Figures", "Tucker Carlson", "Candace Owens", "Marjorie Taylor Greene", "Israel", "Her Ukraine", "Open Measures", "Jared Holt", "WIRED", "Second", "America First", "Atlanticist", "Russia", "United States", "European", "Third", "February", "Hosting", "Telegram", "Ukrainian", "Trump
 

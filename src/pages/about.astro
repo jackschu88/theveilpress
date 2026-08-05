@@ -1,8 +1,267 @@
 ---
+/**
+ * About — new press chrome only (no AppRoot / FogReveal / grain).
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import AboutPage from '../islands/AboutPage';
+import { SOCIALS } from '../data/socials.js';
 ---
 
-<BaseLayout>
-  <AboutPage client:only="react" />
+<BaseLayout
+  title="About"
+  description="The Veil Press — independent press documenting durable power. Books as the deep layer. The desk as the continuous signal."
+>
+  <div class="about-page">
+    <header class="about-hero vp-glass vp-glass--hero">
+      <p class="vp-eyebrow">Imprint</p>
+      <h1 class="vp-page-title">About The Veil Press</h1>
+      <p class="vp-page-dek about-lede">
+        Independent press documenting durable power — architecture, money,
+        narrative, access — with books as the deep layer and the desk as the
+        continuous signal.
+      </p>
+    </header>
+
+    <div class="about-grid">
+      <section class="about-block vp-glass vp-glass--card">
+        <h2>What we publish</h2>
+        <p>
+          The Veil Press publishes institutional histories: careful maps of how
+          power is organized, financed, and made durable. We do not chase cabals
+          in the shadows. We follow corporations, charters, markets, and the
+          premises that hold them up.
+        </p>
+        <p>
+          Work lands on two surfaces. The <strong>Desk</strong> carries sourced
+          analysis as packages clear review. The <strong>Library</strong> holds
+          the long record — volumes you can keep, cite, and return to.
+        </p>
+      </section>
+
+      <section class="about-block vp-glass vp-glass--card">
+        <h2>The series</h2>
+        <p>
+          Each volume under The Veil examines a load-bearing piece of the modern
+          order. Volume I is <em>The Veil of the Square Mile</em> — the invisible
+          British financial empire, from the City of London Corporation through
+          offshore finance, policy machines, and the digital green veil.
+        </p>
+        <p>
+          The Companion Guide (The Map) is the apparatus: glossary, timelines,
+          dynastic trees, bibliography, and steelman counter-arguments. Further
+          volumes will follow under the same imprint and the same standard of
+          evidence.
+        </p>
+        <p class="about-links">
+          <a href="/library/veil">Volume I →</a>
+          <a href="/library/map">The Map →</a>
+          <a href="/library/founders">Founders →</a>
+        </p>
+      </section>
+
+      <section class="about-block vp-glass vp-glass--card">
+        <h2>How we work</h2>
+        <p>
+          Claims are owned in the first person. Sources are listed. When the
+          record runs out, we say so. The site is a projection of approved
+          packages — not a second brain inventing entities or scores for show.
+        </p>
+        <p>
+          Softcover, hardcover, and Founders editions are on
+          <strong> presale through August 26, 2026</strong>. Digital formats and
+          the standalone Companion Guide:
+          <strong> Coming August 26th</strong>. Limited Founders includes the
+          signed hardcovers plus the full digital set.
+        </p>
+      </section>
+
+      <section class="about-block vp-glass vp-glass--card">
+        <h2>The author</h2>
+        <p>
+          Jack Schumacher writes institutional history for readers who want the
+          record, not the melodrama. The press is independent. Checkout runs
+          through Gumroad; shipping and fulfillment follow each product listing.
+        </p>
+        <p class="muted">
+          Press and inquiries:
+          <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
+        </p>
+      </section>
+
+      <section class="about-block vp-glass vp-glass--card about-follow">
+        <h2>Follow</h2>
+        <p>
+          Social went live first so the signal has a place to land. The site is
+          the home of record for desk pieces, trailers, and pre-order.
+        </p>
+        <ul class="about-social-list">
+          {SOCIALS.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="noopener noreferrer">
+                <span class="about-social-label">{s.label}</span>
+                <span class="about-social-handle">{s.handle}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="about-block vp-glass vp-glass--card">
+        <h2>Start here</h2>
+        <ul class="about-start">
+          <li>
+            <a href="/desk">The Desk</a>
+            <span>— latest sourced pieces</span>
+          </li>
+          <li>
+            <a href="/library/veil">Volume I</a>
+            <span>— pre-order print &amp; Founders</span>
+          </li>
+          <li>
+            <a href="/watch">Watch</a>
+            <span>— trailers and short cuts</span>
+          </li>
+          <li>
+            <a href="/brief">The Brief</a>
+            <span>— weekly owned list</span>
+          </li>
+        </ul>
+        <div class="about-actions">
+          <a class="vp-btn vp-btn--primary" href="/library/founders">Pre-order Founders</a>
+          <a class="vp-btn vp-btn--ghost" href="/library">Library catalogue</a>
+        </div>
+      </section>
+    </div>
+  </div>
 </BaseLayout>
+
+<style>
+  .about-page {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--vp-space-6) var(--vp-space-5) var(--vp-space-8);
+  }
+
+  .about-hero {
+    padding: var(--vp-space-6) var(--vp-space-6);
+    margin-bottom: var(--vp-space-6);
+  }
+
+  .about-lede {
+    max-width: 40rem;
+    margin: 0;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--vp-space-5);
+  }
+
+  .about-block {
+    padding: var(--vp-space-5) var(--vp-space-6);
+  }
+
+  .about-block h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-3);
+  }
+
+  .about-block p {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--vp-text-secondary);
+    margin: 0 0 var(--vp-space-3);
+  }
+
+  .about-block p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-block .muted,
+  .about-block .muted a {
+    color: var(--vp-text-muted);
+  }
+
+  .about-block a {
+    color: var(--vp-accent-gold);
+    text-decoration: none;
+  }
+
+  .about-block a:hover {
+    text-decoration: underline;
+  }
+
+  .about-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: var(--vp-space-2) !important;
+  }
+
+  .about-social-list {
+    list-style: none;
+    margin: var(--vp-space-3) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .about-social-list a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.85rem;
+    text-decoration: none;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--vp-edge);
+  }
+
+  .about-social-list a:hover {
+    border-color: var(--vp-edge-hot);
+    text-decoration: none;
+  }
+
+  .about-social-label {
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--vp-accent-gold);
+  }
+
+  .about-social-handle {
+    color: var(--vp-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .about-start {
+    list-style: none;
+    margin: 0 0 var(--vp-space-5);
+    padding: 0;
+  }
+
+  .about-start li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.65rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--vp-edge);
+    color: var(--vp-text-muted);
+    font-size: 0.98rem;
+  }
+
+  .about-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 800px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -42,6 +42,19 @@ export default function VeilIntro() {
           aria-hidden
         >
           <motion.div
+            className="veil-intro-fog veil-intro-fog--a"
+            initial={{ opacity: 0.85, scale: 1 }}
+            animate={{ opacity: 0.15, scale: 1.12, x: "6%" }}
+            transition={{ duration: 2.8, ease: easeOut }}
+          />
+          <motion.div
+            className="veil-intro-fog veil-intro-fog--b"
+            initial={{ opacity: 0.7, scale: 1.05 }}
+            animate={{ opacity: 0.1, scale: 1.2, x: "-8%" }}
+            transition={{ duration: 3.0, delay: 0.15, ease: easeOut }}
+          />
+
+          <motion.div
             className="veil-curtain left"
             initial={{ x: 0 }}
             animate={{ x: "-108%" }}

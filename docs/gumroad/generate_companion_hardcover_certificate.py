@@ -164,7 +164,7 @@ def build():
         ("Author", "Jack Schumacher"),
         ("Edition", "Hardcover apparatus volume"),
         ("Platform", "Gumroad · theveilpress.gumroad.com"),
-        ("Amount paid", "$59.99 USD"),
+        ("Amount paid", "$64.99 USD"),
         ("SKU / product", "jawnaq"),
     ]
 

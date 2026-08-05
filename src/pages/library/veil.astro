@@ -1,8 +1,39 @@
 ---
+/**
+ * Volume I — original cinematic SquareMile product page (exact content/layout),
+ * hydrated under Astro Nav + LibraryLayout. Paths remapped /books → /library.
+ */
 import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import SquareMilePage from '../../islands/SquareMilePage';
 ---
 
-<LibraryLayout>
-  <SquareMilePage client:only="react" />
+<LibraryLayout
+  title="The Veil of the Square Mile"
+  description="Volume I from The Veil Press. Softcover, hardcover, and Founders editions on presale through August 26, 2026."
+  image="/cover.jpg"
+>
+  <div class="veil-island">
+    <SquareMilePage client:only="react">
+      <div slot="fallback" class="veil-fallback">
+        <p class="vp-eyebrow">Volume I · The Veil Press</p>
+        <h1 class="vp-page-title">The Veil of the Square Mile</h1>
+        <p class="vp-page-dek">Loading the book page…</p>
+      </div>
+    </SquareMilePage>
+  </div>
 </LibraryLayout>
+
+<style>
+  .veil-island {
+    position: relative;
+    z-index: 1;
+    min-height: 80vh;
+  }
+
+  .veil-fallback {
+    padding: var(--vp-space-7) var(--vp-space-5);
+    min-height: 40vh;
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+</style>

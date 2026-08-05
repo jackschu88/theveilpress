@@ -1,8 +1,18 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex } = Astro.props;
 ---
 
-<BaseLayout>
+<BaseLayout title={title} description={description} image={image} noindex={noindex}>
+  <!-- VeilIntro / curtain open is mounted once in BaseLayout (sitewide, per session). -->
   <div class="library-layout">
     <div class="library-container">
       <slot />
@@ -12,13 +22,23 @@ import BaseLayout from './BaseLayout.astro';
 
 <style>
   .library-layout {
-    min-height: 100vh;
-    background: var(--vp-bg-deep);
+    position: relative;
+    z-index: 1;
+    min-height: 60vh;
+    background: transparent;
   }
 
   .library-container {
     max-width: 72rem;
     margin: 0 auto;
-    padding: var(--vp-space-6) var(--vp-space-5);
+    padding: var(--vp-space-5) var(--vp-space-5) var(--vp-space-6);
+  }
+
+  /* Product islands (veil/map/founders) need full width for hero grid */
+  .library-container:has([data-product-shell]) {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
   }
 </style>

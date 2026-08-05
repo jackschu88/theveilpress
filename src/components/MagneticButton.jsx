@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { toAstroPath } from "../lib/astroPaths";
 
 function useMagnetic() {
   const ref = useRef(null);
@@ -21,6 +22,7 @@ function useMagnetic() {
 
 export function MagneticLink({ to, className, children, ...rest }) {
   const { ref, offset, onMove, onLeave } = useMagnetic();
+  const href = toAstroPath(to) || to;
   return (
     <motion.div
       ref={ref}
@@ -30,7 +32,7 @@ export function MagneticLink({ to, className, children, ...rest }) {
       transition={{ type: "spring", stiffness: 280, damping: 18, mass: 0.4 }}
       style={{ display: "inline-block" }}
     >
-      <a href={to} className={className} {...rest}>
+      <a href={href} className={className} {...rest}>
         {children}
       </a>
     </motion.div>

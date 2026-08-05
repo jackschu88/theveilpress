@@ -18,6 +18,8 @@ export default defineConfig({
     '/books/square-mile/companion': '/library/map',
     '/books/square-mile/companion/print': '/library/map',
     '/books/square-mile/companion/ebook': '/library/map',
+    '/books/square-mile/checkout/full': '/library/checkout/full',
+    '/books/square-mile/checkout/print-companion': '/library/checkout/print-companion',
   },
   vite: {
     server: {

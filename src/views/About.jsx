@@ -1,9 +1,9 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal } from "../components/Reveal";
 import { gsap } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { SOCIALS } from "../data/socials.js";
 
 export default function About() {
   const proseRef = useRef(null);
@@ -66,34 +66,35 @@ export default function About() {
           Press and inquiries:{" "}
           <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
         </p>
-        <p className="muted">
-          On X:{" "}
-          <a
-            href="https://x.com/deepdivefile"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @deepdivefile
-          </a>
-        </p>
+        <h2>Follow</h2>
+        <ul className="about-socials">
+          {SOCIALS.map((s) => (
+            <li key={s.id}>
+              <a href={s.href} target="_blank" rel="noopener noreferrer">
+                {s.label}
+              </a>
+              <span className="muted"> · {s.handle}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <Reveal>
         <div className="actions">
-          <Link className="btn btn-primary" to="/presale">
+          <a className="btn btn-primary" href="/library/founders">
             Pre-order now
-          </Link>
+          </a>
           <a
             className="btn"
-            href="https://x.com/deepdivefile"
+            href={SOCIALS[0].href}
             target="_blank"
             rel="noopener noreferrer"
           >
             Follow on X
           </a>
-          <Link className="btn" to="/presale">
-            Presale
-          </Link>
+          <a className="btn" href="/library">
+            Library
+          </a>
         </div>
       </Reveal>
     </AnimatedPage>

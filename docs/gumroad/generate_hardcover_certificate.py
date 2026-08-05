@@ -14,7 +14,7 @@ from reportlab.pdfgen import canvas
 
 OUT = Path(__file__).with_name("Hardcover-Book-Certificate-Receipt.pdf")
 
-PRICE = "45.99"
+PRICE = "50.99"
 SKU = "pntwl"
 
 INK = HexColor("#1a1814")

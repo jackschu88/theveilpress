@@ -76,5 +76,13 @@ Paste a real `https://...` URL → button goes live (opens in new tab).
 - [ ] Fill `src/commerce.js` with live URLs
 - [ ] Real PDF / Companion file delivery on Gumroad/Lemon
 
+## Env (public)
+
+All env vars are `PUBLIC_` prefixed for Astro client-side exposure. Set in Vercel project settings or `.env.local`.
+
+| Var | Purpose | Required |
+|-----|---------|----------|
+| `PUBLIC_BRIEF_FORM_ACTION` | Form endpoint for /brief (Formspree, Formspark, etc.) | No — form shows disabled state if unset |
+| `PUBLIC_PLAUSIBLE_DOMAIN` | Plausible domain for analytics (only if using Plausible) | No |
 
 

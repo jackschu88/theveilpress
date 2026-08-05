@@ -9,28 +9,77 @@ import {
   EXECUTIVE_VALUE_STACK,
   EXECUTIVE_TOTAL_SOLO,
   EXECUTIVE_PRICE,
+  EXECUTIVE_SAVINGS,
+  EXECUTIVE_SAVINGS_PCT,
   formatPrice,
 } from "../commerce";
 import { easeOut } from "../motion";
 
-/** Portrait journey films (9:16 player). Landscape pieces live only in mediaLibrary. */
+/**
+ * Journey films: aspect must match the file (portrait 9:16 vs landscape 16:9).
+ * main-ad is 1920×1080 landscape; lazboy/crowd are 720×1280 portrait.
+ */
 const journeyVideos = [
-  { id: "main-ad", title: "The Veil of the Square Mile", src: "/videos/journey-main.mp4", poster: "/cover.jpg" },
-  { id: "lazy-boy", title: "The news from somewhere else", src: "/videos/journey-lazboy.mp4", poster: "" },
-  { id: "crowd", title: "In the crowd", src: "/videos/journey-crowd.mp4", poster: "" },
+  {
+    id: "main-ad",
+    title: "The Veil of the Square Mile",
+    src: "/videos/journey-main.mp4",
+    poster: "/cover.jpg",
+    aspect: "landscape",
+  },
+  {
+    id: "lazy-boy",
+    title: "The news from somewhere else",
+    src: "/videos/journey-lazboy.mp4",
+    poster: "",
+    aspect: "portrait",
+  },
+  {
+    id: "crowd",
+    title: "In the crowd",
+    src: "/videos/journey-crowd.mp4",
+    poster: "",
+    aspect: "portrait",
+  },
 ];
 
-/** Explore more — portrait clips first; landscape “Through the fog” last (full-width). */
+/** Explore more — landscape trailers full-width; portrait clips stay phone-frame thumbs. */
 const mediaLibrary = [
-  { title: "The Veil — Main Trailer", src: "/videos/square-mile-trailer.mp4", poster: "/cover.jpg" },
-  { title: "Companion Guide Trailer", src: "/videos/companion_trailer.mp4", poster: "/companion-cover.jpg" },
-  { title: "The Journey — Main Ad", src: "/videos/journey-main.mp4", poster: "/cover.jpg" },
-  { title: "The news from somewhere else", src: "/videos/journey-lazboy.mp4", poster: "" },
-  { title: "In the crowd", src: "/videos/journey-crowd.mp4", poster: "" },
+  {
+    title: "The Veil — Main Trailer",
+    src: "/videos/square-mile-trailer.mp4",
+    poster: "/cover.jpg",
+    aspect: "landscape",
+  },
+  {
+    title: "Companion Guide Trailer",
+    src: "/videos/companion_trailer.mp4",
+    poster: "/companion-cover.jpg",
+    aspect: "landscape",
+  },
+  {
+    title: "The Journey — Main Ad",
+    src: "/videos/journey-main.mp4",
+    poster: "/cover.jpg",
+    aspect: "landscape",
+  },
+  {
+    title: "The news from somewhere else",
+    src: "/videos/journey-lazboy.mp4",
+    poster: "",
+    aspect: "portrait",
+  },
+  {
+    title: "In the crowd",
+    src: "/videos/journey-crowd.mp4",
+    poster: "",
+    aspect: "portrait",
+  },
   {
     title: "Through the fog",
     src: "/videos/journey-fogboy.mp4",
     poster: "/videos/journey-fogboy-poster.jpg",
+    aspect: "landscape",
   },
 ];
 
@@ -45,7 +94,7 @@ const included = [
   },
   {
     title: "All Digital Assets",
-    desc: "Digital Edition (ebook), audiobook, and Companion PDF — instant delivery on Gumroad at launch.",
+    desc: "Digital Edition (ebook), audiobook, and Companion PDF — Gumroad pre-order; delivery at launch / campaign timeline.",
   },
   {
     title: "Personal Message",
@@ -62,8 +111,8 @@ const included = [
 ];
 
 export default function ExecutiveFounder() {
-  const savings = EXECUTIVE_TOTAL_SOLO - EXECUTIVE_PRICE;
-  const savingsPct = Math.round((savings / EXECUTIVE_TOTAL_SOLO) * 100);
+  const savings = EXECUTIVE_SAVINGS;
+  const savingsPct = EXECUTIVE_SAVINGS_PCT;
 
   const [activeVideo, setActiveVideo] = useState(journeyVideos[0].id);
   const [needsPlay, setNeedsPlay] = useState(false);
@@ -201,7 +250,7 @@ export default function ExecutiveFounder() {
               >
                 Why Limited Founders Edition
               </button>
-              <MagneticLink className="btn" to="/presale">
+              <MagneticLink className="btn" to="/library/founders">
                 All presale options
               </MagneticLink>
             </motion.div>
@@ -224,7 +273,11 @@ export default function ExecutiveFounder() {
 
           <Reveal>
             <div className="journey-player">
-              <div className="journey-frame">
+              <div
+                className={`journey-frame${
+                  currentVideo?.aspect === "landscape" ? " journey-frame-landscape" : ""
+                }`}
+              >
                 <video
                   ref={videoRef}
                   className="journey-video"
@@ -280,13 +333,20 @@ export default function ExecutiveFounder() {
           </Reveal>
           <Stagger className="exec-media-grid">
             {mediaLibrary.map((m) => (
-              <StaggerItem key={m.title}>
+              <StaggerItem
+                key={m.title}
+                className={m.aspect === "landscape" ? "exec-media-item-landscape" : undefined}
+              >
                 <button
                   type="button"
                   className="exec-media-card"
                   onClick={() => setModalVideo(m)}
                 >
-                  <div className="exec-media-thumb">
+                  <div
+                    className={`exec-media-thumb${
+                      m.aspect === "landscape" ? " exec-media-thumb-landscape" : ""
+                    }`}
+                  >
                     {m.poster ? (
                       <img src={m.poster} alt={m.title} />
                     ) : (
@@ -324,7 +384,10 @@ export default function ExecutiveFounder() {
       <section className="section exec-value-section">
         <Reveal>
           <h2 className="exec-section-headline">The value</h2>
-          <p className="exec-section-sub">What each piece costs on its own vs. the pack price.</p>
+          <p className="exec-section-sub">
+            What each piece costs on its own (product + shipping where it applies)
+            vs. the Limited Founders pack price.
+          </p>
         </Reveal>
         <Reveal>
           <div className="exec-value-card">
@@ -334,14 +397,29 @@ export default function ExecutiveFounder() {
             </div>
             {EXECUTIVE_VALUE_STACK.map((v) => (
               <div key={v.item} className="exec-value-row">
-                <span>{v.item}</span>
-                <span className={v.solo ? "" : "exec-included"}>
-                  {v.solo ? formatPrice(v.solo) : "Included"}
+                <span>
+                  {v.item}
+                  {v.detail ? (
+                    <span
+                      className="muted"
+                      style={{
+                        display: "block",
+                        fontSize: "0.8rem",
+                        fontWeight: 400,
+                        marginTop: "0.15rem",
+                      }}
+                    >
+                      {v.detail}
+                    </span>
+                  ) : null}
+                </span>
+                <span className={v.solo != null ? "" : "exec-included"}>
+                  {v.solo != null ? formatPrice(v.solo) : "Included"}
                 </span>
               </div>
             ))}
             <div className="exec-value-total">
-              <span>Total separately</span>
+              <span>Total if purchased separately</span>
               <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
             </div>
             <div className="exec-value-total exec-value-final">
@@ -376,8 +454,8 @@ export default function ExecutiveFounder() {
       <section className="section exec-purchase" id="purchase">
         <Reveal>
           <div className="exec-purchase-card">
-            <p className="exec-purchase-eyebrow">Ready when you are</p>
-            <h2 className="exec-purchase-title">Claim your Limited Founders Edition</h2>
+            <p className="exec-purchase-eyebrow">Presale through August 26, 2026</p>
+            <h2 className="exec-purchase-title">Pre-order your Limited Founders Edition</h2>
             <p className="exec-purchase-price">
               <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
               <span className="exec-shipping">Free shipping</span>
@@ -395,7 +473,7 @@ export default function ExecutiveFounder() {
                 comingSoonLabel="Pre-order link pending"
                 className="btn btn-primary btn-shimmer btn-exec btn-exec-lg"
               />
-              <MagneticLink className="btn" to="/presale">
+              <MagneticLink className="btn" to="/library/founders">
                 All presale options
               </MagneticLink>
             </div>
@@ -414,7 +492,11 @@ export default function ExecutiveFounder() {
             >
               Close
             </button>
-            <div className="exec-modal-frame">
+            <div
+              className={`exec-modal-frame${
+                modalVideo.aspect === "landscape" ? " exec-modal-frame-landscape" : ""
+              }`}
+            >
               <video
                 ref={modalVideoRef}
                 className="exec-modal-video"
@@ -425,6 +507,11 @@ export default function ExecutiveFounder() {
                 playsInline
                 muted
                 preload="auto"
+                style={
+                  modalVideo.aspect === "portrait"
+                    ? { aspectRatio: "9 / 16", maxHeight: "78vh", margin: "0 auto" }
+                    : undefined
+                }
               />
             </div>
             <p className="exec-modal-label">{modalVideo.title}</p>

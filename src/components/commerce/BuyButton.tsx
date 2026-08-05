@@ -1,5 +1,10 @@
 import { MagneticAnchor } from "../cinematic/MagneticButton";
-import { isHybridProduct } from "../../commerce";
+import {
+  isHybridProduct,
+  isComingSoon,
+  COMING_LABEL,
+  productCtaLabel,
+} from "../../commerce";
 
 interface Product {
   name: string;
@@ -7,27 +12,31 @@ interface Product {
   url: string;
   path?: string;
   checkout?: string;
+  saleStatus?: "presale" | "coming";
 }
 
 export function BuyButton({
   href,
   label,
   className = "btn btn-primary btn-shimmer",
-  comingSoonLabel = "Coming soon",
+  comingSoonLabel = COMING_LABEL,
   magnetic = true,
+  disabled = false,
 }: {
   href: string;
   label: string;
   className?: string;
   comingSoonLabel?: string;
   magnetic?: boolean;
+  disabled?: boolean;
 }) {
-  const ready = typeof href === "string" && href.trim().length > 0;
+  const ready =
+    !disabled && typeof href === "string" && href.trim().length > 0;
 
   if (!ready) {
     return (
       <span className="btn btn-disabled" aria-disabled="true">
-        {comingSoonLabel}
+        {comingSoonLabel || COMING_LABEL}
       </span>
     );
   }
@@ -49,7 +58,7 @@ export function BuyButton({
 export function ProductBuyButton({
   product,
   className = "btn btn-primary btn-shimmer",
-  comingSoonLabel = "Checkout pending",
+  comingSoonLabel = COMING_LABEL,
   hybridLabel,
 }: {
   product: Product | null;
@@ -65,10 +74,18 @@ export function ProductBuyButton({
     );
   }
 
+  if (isComingSoon(product)) {
+    return (
+      <span className="btn btn-disabled" aria-disabled="true">
+        {COMING_LABEL}
+      </span>
+    );
+  }
+
   if (isHybridProduct(product)) {
     return (
       <a href={product.path} className={className}>
-        {hybridLabel || `Continue · ${product.name}`}
+        {hybridLabel || productCtaLabel(product) || `Continue · ${product.name}`}
       </a>
     );
   }
@@ -76,7 +93,7 @@ export function ProductBuyButton({
   return (
     <BuyButton
       href={product.url}
-      label={product.label}
+      label={productCtaLabel(product)}
       className={className}
       comingSoonLabel={comingSoonLabel}
     />

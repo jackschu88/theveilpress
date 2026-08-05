@@ -1,23 +1,32 @@
 import { MagneticAnchor, MagneticLink } from "./MagneticButton";
-import { isHybridProduct } from "../commerce";
+import {
+  isHybridProduct,
+  isComingSoon,
+  COMING_LABEL,
+  productCtaLabel,
+} from "../commerce";
+import { toAstroPath } from "../lib/astroPaths";
 
 /**
  * External checkout button — only renders primary action if URL is set.
- * Otherwise shows muted "Coming soon".
+ * Otherwise shows muted coming / pending label.
  */
 export function BuyButton({
   href,
   label,
   className = "btn btn-primary btn-shimmer",
-  comingSoonLabel = "Coming soon",
+  comingSoonLabel = COMING_LABEL,
   magnetic = true,
+  /** When true, never open checkout (digital/companion wait). */
+  disabled = false,
 }) {
-  const ready = typeof href === "string" && href.trim().length > 0;
+  const ready =
+    !disabled && typeof href === "string" && href.trim().length > 0;
 
   if (!ready) {
     return (
       <span className="btn btn-disabled" aria-disabled="true">
-        {comingSoonLabel}
+        {comingSoonLabel || COMING_LABEL}
       </span>
     );
   }
@@ -37,13 +46,14 @@ export function BuyButton({
 }
 
 /**
- * Product CTA — hybrid products go to the on-site guided path;
- * single-platform products open external checkout (Gumroad / Ingram).
+ * Product CTA — respects saleStatus:
+ *   presale → Gumroad / hybrid path
+ *   coming  → disabled "Coming August 26th"
  */
 export function ProductBuyButton({
   product,
   className = "btn btn-primary btn-shimmer",
-  comingSoonLabel = "Checkout pending",
+  comingSoonLabel = COMING_LABEL,
   hybridLabel,
 }) {
   if (!product) {
@@ -54,10 +64,18 @@ export function ProductBuyButton({
     );
   }
 
+  if (isComingSoon(product)) {
+    return (
+      <span className="btn btn-disabled" aria-disabled="true">
+        {COMING_LABEL}
+      </span>
+    );
+  }
+
   if (isHybridProduct(product)) {
     return (
-      <MagneticLink to={product.path} className={className}>
-        {hybridLabel || `Continue · ${product.name}`}
+      <MagneticLink to={toAstroPath(product.path) || product.path} className={className}>
+        {hybridLabel || productCtaLabel(product) || `Continue · ${product.name}`}
       </MagneticLink>
     );
   }
@@ -65,7 +83,7 @@ export function ProductBuyButton({
   return (
     <BuyButton
       href={product.url}
-      label={product.label}
+      label={productCtaLabel(product)}
       className={className}
       comingSoonLabel={comingSoonLabel}
     />

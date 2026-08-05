@@ -1,8 +1,41 @@
 ---
 import NavChrome from '../components/glass/NavChrome.astro';
+import LibraryIntro from '../islands/LibraryIntro';
 import '../styles/tokens.css';
 import '../styles/glass.css';
+import '../styles/press.css';
 import '../index.css';
+import Analytics from '@vercel/analytics/astro';
+import { SOCIALS } from '../data/socials.js';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title: titleProp,
+  description: descriptionProp,
+  image: imageProp,
+  noindex = false,
+} = Astro.props;
+
+const siteName = 'The Veil Press';
+const defaultDescription =
+  'The Veil Press — institutional histories that strip the fog from power. Architecture, money, narrative, access — documented with sources.';
+const title = titleProp
+  ? titleProp.includes(siteName)
+    ? titleProp
+    : `${titleProp} · ${siteName}`
+  : siteName;
+const description = descriptionProp || defaultDescription;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://theveilpress.com');
+const ogImagePath = imageProp || '/cover.jpg';
+const ogImage = ogImagePath.startsWith('http')
+  ? ogImagePath
+  : new URL(ogImagePath, Astro.site ?? 'https://theveilpress.com').href;
 ---
 
 <!doctype html>
@@ -10,7 +43,23 @@ import '../index.css';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="The Veil Press — institutional histories that strip the fog from power." />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL.href} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link rel="icon" type="image/png" href="/cover.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,37 +70,176 @@ import '../index.css';
     />
   </head>
   <body>
-    <NavChrome />
+    <!-- Opening curtain / fog — outside shell so fixed overlay is never trapped by isolation -->
+    <LibraryIntro client:only="react" />
 
-    <main>
-      <slot />
-    </main>
+    <!-- Soft fog atmosphere (not grain/static). pointer-events none so links work. -->
+    <div class="vp-atmosphere" aria-hidden="true">
+      <div class="vp-fog vp-fog--a"></div>
+      <div class="vp-fog vp-fog--b"></div>
+      <div class="vp-fog vp-fog--c"></div>
+    </div>
 
-    <footer class="site-footer">
-      <div class="shell footer-inner">
-        <div>
-          <p class="brand" style="margin-bottom:0.5rem">The Veil Press</p>
-          <p>
-            Institutional histories. The fog removed.<br />
-            &copy; {new Date().getFullYear()} Jack Schumacher<br />
-            <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
+    <div class="vp-shell">
+      <NavChrome />
+
+      <main class="vp-main">
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <div class="shell footer-inner">
+          <div>
+            <p class="brand" style="margin-bottom:0.5rem">The Veil Press</p>
+            <p>
+              Institutional histories. The fog removed.<br />
+              &copy; {new Date().getFullYear()} Jack Schumacher<br />
+              <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
+            </p>
+          </div>
+          <div class="footer-links">
+            <a href="/">Home</a>
+            <a href="/desk">Desk</a>
+            <a href="/library">Library</a>
+            <a href="/watch">Watch</a>
+            <a href="/brief">Brief</a>
+            <a href="/about">About</a>
+          </div>
+        </div>
+        <div class="shell footer-social-row">
+          <nav class="footer-social" aria-label="Social media">
+            {SOCIALS.map((s) => (
+              <a href={s.href} target="_blank" rel="noopener noreferrer">
+                {s.label}
+              </a>
+            ))}
+          </nav>
+          <p class="muted footer-tagline">
+            Desk builds the signal. Library holds the deep layer. Brief is the owned list.
           </p>
         </div>
-        <div class="footer-links">
-          <a href="/">Home</a>
-          <a href="/desk">Desk</a>
-          <a href="/library">Library</a>
-          <a href="/watch">Watch</a>
-          <a href="/brief">Brief</a>
-          <a href="/about">About</a>
-          <a href="https://x.com/deepdivefile" target="_blank" rel="noopener noreferrer">X</a>
-        </div>
-      </div>
-      <div class="shell" style="margin-top:1.5rem">
-        <p class="muted" style="font-size:0.95rem;margin:0">
-          Book + Companion are the foundation. Video walkthroughs and the reader app are in development.
-        </p>
-      </div>
-    </footer>
+      </footer>
+    </div>
+    <Analytics />
   </body>
 </html>
+
+<style is:global>
+  .footer-social-row {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.15rem;
+  }
+
+  .footer-social a {
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted, var(--vp-text-muted));
+    text-decoration: none;
+  }
+
+  .footer-social a:hover {
+    color: var(--gold, var(--vp-accent-gold));
+  }
+
+  .footer-tagline {
+    font-size: 0.9rem;
+    margin: 0;
+    color: var(--vp-text-muted, var(--ink-muted));
+  }
+
+  .vp-atmosphere {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .vp-fog {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.45;
+    will-change: transform;
+  }
+
+  .vp-fog--a {
+    width: min(70vw, 720px);
+    height: min(70vw, 720px);
+    top: -15%;
+    left: 20%;
+    background: radial-gradient(circle, rgba(122, 146, 181, 0.22), transparent 68%);
+    animation: vp-fog-drift-a 28s ease-in-out infinite alternate;
+  }
+
+  .vp-fog--b {
+    width: min(55vw, 560px);
+    height: min(55vw, 560px);
+    bottom: 5%;
+    right: -8%;
+    background: radial-gradient(circle, rgba(196, 165, 116, 0.12), transparent 70%);
+    animation: vp-fog-drift-b 36s ease-in-out infinite alternate;
+  }
+
+  .vp-fog--c {
+    width: min(45vw, 420px);
+    height: min(45vw, 420px);
+    top: 40%;
+    left: -10%;
+    background: radial-gradient(circle, rgba(16, 19, 40, 0.55), transparent 72%);
+    animation: vp-fog-drift-c 32s ease-in-out infinite alternate;
+  }
+
+  @keyframes vp-fog-drift-a {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(4%, 6%) scale(1.08); }
+  }
+  @keyframes vp-fog-drift-b {
+    from { transform: translate(0, 0) scale(1.05); }
+    to { transform: translate(-6%, -4%) scale(1); }
+  }
+  @keyframes vp-fog-drift-c {
+    from { transform: translate(0, 0); }
+    to { transform: translate(8%, -5%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vp-fog {
+      animation: none;
+    }
+  }
+
+  .vp-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vp-main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    isolation: isolate;
+  }
+
+  /* Ensure interactive content stays above decorative layers */
+  .vp-main a,
+  .vp-main button {
+    position: relative;
+    z-index: 1;
+  }
+</style>

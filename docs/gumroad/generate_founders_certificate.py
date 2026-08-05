@@ -170,7 +170,7 @@ def build():
     # Receipt box
     y -= 36
     box_w = 5.4 * inch
-    box_h = 2.05 * inch
+    box_h = 2.2 * inch
     box_x = cx - box_w / 2
     box_y = y - box_h
 
@@ -182,11 +182,11 @@ def build():
     # Receipt header
     c.setFont("Georgia-Bold", 8.5)
     c.setFillColor(GOLD_DIM)
-    c.drawCentredString(cx, box_y + box_h - 18, "RECEIPT  ·  ORDER SUMMARY")
+    c.drawCentredString(cx, box_y + box_h - 16, "RECEIPT  ·  ORDER SUMMARY")
 
     c.setStrokeColor(RULE)
     c.setLineWidth(0.4)
-    c.line(box_x + 18, box_y + box_h - 26, box_x + box_w - 18, box_y + box_h - 26)
+    c.line(box_x + 18, box_y + box_h - 24, box_x + box_w - 18, box_y + box_h - 24)
 
     rows = [
         ("Product", "Founders Edition — Signed Hardcover"),
@@ -194,21 +194,22 @@ def build():
         ("Author", "Jack Schumacher"),
         ("Edition", "Founders Edition (signed hard copy)"),
         ("Platform", "Gumroad · theveilpress.gumroad.com"),
-        ("Amount paid", "$59.99 USD"),
+        ("Amount paid", "$64.99 USD"),
+        ("Shipping", "Includes $5 shipping"),
         ("SKU / product", "jnnnft"),
     ]
 
-    row_y = box_y + box_h - 42
+    row_y = box_y + box_h - 38
     label_x = box_x + 22
     value_x = box_x + 118
     for label, value in rows:
-        c.setFont("Georgia", 8)
+        c.setFont("Georgia", 7.5)
         c.setFillColor(MUTED)
         c.drawString(label_x, row_y, label.upper())
-        c.setFont("Georgia", 9)
+        c.setFont("Georgia", 8.5)
         c.setFillColor(INK)
         c.drawString(value_x, row_y, value)
-        row_y -= 14
+        row_y -= 13
 
     y = box_y - 22
 

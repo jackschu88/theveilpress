@@ -3,6 +3,20 @@ import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import CompanionPage from '../../islands/CompanionPage';
 ---
 
-<LibraryLayout>
-  <CompanionPage client:only="react" />
+<LibraryLayout
+  title="The Map — Companion Guide"
+  description="Companion Guide to The Veil of the Square Mile — glossary, timelines, trees, bibliography. Coming August 26th; included signed in Limited Founders."
+  image="/companion-cover.jpg"
+>
+  <CompanionPage client:only="react">
+    <div slot="fallback" class="veil-fallback">
+      <p class="vp-eyebrow">Companion</p>
+      <h1 class="vp-page-title">The Map</h1>
+      <p class="vp-page-dek">Loading…</p>
+    </div>
+  </CompanionPage>
 </LibraryLayout>
+
+<style>
+  .veil-fallback { padding: var(--vp-space-6) 0; min-height: 40vh; }
+</style>

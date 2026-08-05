@@ -1,5 +1,4 @@
 import { lazy, Suspense, useRef } from "react";
-import { Link } from "react-router-dom";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal } from "../components/Reveal";
 import { gsap } from "../scroll";
@@ -56,8 +55,8 @@ export default function Books() {
       <div ref={listRef}>
         <ul className="list-clean list-animated">
           <li className="list-link">
-            <Link
-              to="/presale"
+            <a
+              href="/library/veil"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -87,7 +86,7 @@ export default function Books() {
                 </p>
               </div>
               <span className="value">Pre-order</span>
-            </Link>
+            </a>
           </li>
           <li className="soon">
             <div>

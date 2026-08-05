@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import VeilIntro from "./VeilIntro";
 import Spotlight from "./Spotlight";
 import FogReveal from "./FogReveal";
 import GoldDust from "./GoldDust";
@@ -45,7 +44,7 @@ export default function Layout() {
       <SmoothScroll />
       <Grain />
       <CustomCursor />
-      <VeilIntro />
+      {/* VeilIntro is sitewide in BaseLayout (Astro) once per session */}
       <Spotlight />
       <FogReveal />
       <div className="atmosphere" aria-hidden>
@@ -114,6 +113,27 @@ export default function Layout() {
               rel="noopener noreferrer"
             >
               X
+            </a>
+            <a
+              href="https://www.youtube.com/channel/UC1inbgx19VivnXyWGDWbaiw"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              YouTube
+            </a>
+            <a
+              href="https://www.tiktok.com/@theveilpress"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              TikTok
+            </a>
+            <a
+              href="https://www.facebook.com/profile.php?id=61592600831684"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Facebook
             </a>
           </div>
         </div>

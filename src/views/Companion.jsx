@@ -1,10 +1,14 @@
 import { useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
-import { BuyButton, ProductBuyButton } from "../components/BuyButton";
+import { ProductBuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
-import { products, formatPrice } from "../commerce";
+import {
+  products,
+  formatPrice,
+  COMING_LABEL,
+  PRESALE_ENDS_LABEL,
+} from "../commerce";
 import { gsap } from "../scroll";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
@@ -33,7 +37,9 @@ export default function Companion() {
     { scope: noteRef }
   );
 
-  const { pathname } = useLocation();
+  // Astro multi-page: no react-router. print/ebook deep-links redirect to /library/map.
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
   const fromBookPath =
     pathname.endsWith("/print") || pathname.endsWith("/ebook");
 
@@ -64,10 +70,10 @@ export default function Companion() {
         </p>
         {fromBookPath && (
           <p className="note-box" style={{ marginTop: "1.25rem" }}>
-            Book-buyer path. Companion Guide is{" "}
-            {formatPrice(companion.price)}. Full Bundle (
-            {formatPrice(fullBundle.price)}) pairs IngramSpark print with the
-            full digital set on Gumroad.
+            From the book page. Companion Guide ({formatPrice(companion.price)})
+            and digital formats are {COMING_LABEL}. Softcover, hardcover, and
+            both Founders editions are on presale through {PRESALE_ENDS_LABEL}.
+            Limited Founders includes signed Companion + all digital.
           </p>
         )}
       </Reveal>
@@ -86,7 +92,7 @@ export default function Companion() {
             />
           </div>
           <p className="muted companion-trailer-caption">
-            Companion Guide · {formatPrice(companion.price)}
+            Companion Guide · {formatPrice(companion.price)} + $5 shipping
           </p>
         </div>
       </Reveal>
@@ -116,27 +122,34 @@ export default function Companion() {
       <section className="section">
         <Reveal>
           <div className="section-head">
-            <h2>Access</h2>
+            <h2>Get the Companion</h2>
             <p className="muted" style={{ margin: "0.5rem 0 0" }}>
-              Sold on Gumroad. Instant digital delivery.
+              Standalone Companion and digital bundles are {COMING_LABEL}. Pre-order
+              Limited Founders now for signed Companion + all digital + signed book.
             </p>
           </div>
         </Reveal>
         <Stagger className="price-row">
           <StaggerItem className="price-card price-glow">
-            <div className="meta">Standalone</div>
+            <div className="meta">{COMING_LABEL}</div>
             <strong>{formatPrice(companion.price)}</strong>
+            <p
+              style={{
+                margin: "0 0 0.35rem",
+                color: "var(--ink)",
+                fontFamily: "Cinzel, serif",
+                fontSize: "1.05rem",
+              }}
+            >
+              {companion.name}
+            </p>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
               {companion.blurb}
             </p>
-            <BuyButton
-              href={companion.url}
-              label={companion.label}
-              comingSoonLabel="Checkout pending"
-            />
+            <ProductBuyButton product={companion} />
           </StaggerItem>
           <StaggerItem className="price-card price-glow">
-            <div className="meta">Bundle</div>
+            <div className="meta">{COMING_LABEL}</div>
             <strong>{formatPrice(products.bundleEbookCompanion.price)}</strong>
             <p
               style={{
@@ -151,17 +164,11 @@ export default function Companion() {
             <p className="muted" style={{ margin: "0 0 1rem" }}>
               {products.bundleEbookCompanion.blurb}
             </p>
-            <BuyButton
-              href={products.bundleEbookCompanion.url}
-              label={products.bundleEbookCompanion.label}
-              comingSoonLabel="Checkout pending"
-            />
+            <ProductBuyButton product={products.bundleEbookCompanion} />
           </StaggerItem>
           <StaggerItem className="price-card price-glow price-card-featured">
-            <div className="meta">Recommended</div>
-            <strong>
-              {formatPrice(products.bundleEbookAudioCompanion.price)}
-            </strong>
+            <div className="meta">On presale · Recommended</div>
+            <strong>{formatPrice(fullBundle.price)}</strong>
             <p
               style={{
                 margin: "0 0 0.35rem",
@@ -170,29 +177,27 @@ export default function Companion() {
                 fontSize: "1.05rem",
               }}
             >
-              {products.bundleEbookAudioCompanion.name}
+              {fullBundle.name}
             </p>
             <p className="muted" style={{ margin: "0 0 1rem" }}>
-              {products.bundleEbookAudioCompanion.blurb}
+              {fullBundle.blurb}
             </p>
-            <BuyButton
-              href={products.bundleEbookAudioCompanion.url}
-              label={products.bundleEbookAudioCompanion.label}
-              comingSoonLabel="Checkout pending"
+            <ProductBuyButton
+              product={fullBundle}
+              className="btn btn-primary btn-shimmer"
+              hybridLabel={`Pre-order Limited Founders · ${formatPrice(fullBundle.price)}`}
             />
           </StaggerItem>
         </Stagger>
 
         <Reveal>
           <div className="actions" style={{ marginTop: "1.25rem" }}>
-            <MagneticLink className="btn" to="/presale">
-              Pre-order
+            <MagneticLink className="btn" to="/library/founders">
+              Founders &amp; limited
             </MagneticLink>
-            <ProductBuyButton
-              product={fullBundle}
-              className="btn btn-shimmer"
-              hybridLabel={`Full Bundle · ${formatPrice(fullBundle.price)}`}
-            />
+            <MagneticLink className="btn btn-shimmer" to="/library/veil#buy">
+              Softcover &amp; hardcover presale
+            </MagneticLink>
           </div>
         </Reveal>
       </section>
@@ -217,9 +222,9 @@ export default function Companion() {
 
       <Reveal className="section">
         <div className="actions">
-          <Link className="btn" to="/presale">
+          <a className="btn" href="/library/founders">
             Pre-order
-          </Link>
+          </a>
         </div>
         <p className="muted" style={{ marginTop: "1.5rem", fontSize: "1rem" }}>
           Book + Companion are the foundation. Video walkthroughs and the reader

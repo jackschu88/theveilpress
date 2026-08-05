@@ -1,1 +1,42 @@
-﻿[]
+[
+  {
+    "id": "house-veil-rail",
+    "slot": "article-rail",
+    "href": "/library/veil",
+    "title": "The Veil of the Square Mile",
+    "dek": "The architecture behind the headlines.",
+    "image": "/cover.jpg",
+    "label": "Library",
+    "active": true
+  },
+  {
+    "id": "house-map-rail",
+    "slot": "article-rail",
+    "href": "/library/map",
+    "title": "The Map",
+    "dek": "Companion to the journey.",
+    "image": "/companion-cover.jpg",
+    "label": "Companion",
+    "active": true
+  },
+  {
+    "id": "house-brief-desk",
+    "slot": "desk-inline",
+    "href": "/brief",
+    "title": "The Brief",
+    "dek": "Weekly signal through the noise.",
+    "label": "Newsletter",
+    "active": true
+  },
+  {
+    "id": "house-veil-home",
+    "slot": "home-mid",
+    "href": "/library/veil",
+    "title": "The Veil of the Square Mile",
+    "dek": "Volume I — the deep layer under the continuous desk signal.",
+    "image": "/cover.jpg",
+    "label": "Library",
+    "active": true
+  }
+]
+

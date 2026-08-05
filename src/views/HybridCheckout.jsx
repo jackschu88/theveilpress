@@ -1,4 +1,4 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
@@ -7,27 +7,40 @@ import {
   hybridPlans,
   formatPrice,
   hasUrl,
+  COMING_LABEL,
+  isComingSoon,
 } from "../commerce";
 
 const CHANNEL_META = {
   ingram: {
     eyebrow: "Step · Print",
     platform: "IngramSpark",
-    note: "Physical book — ships to your address.",
+    note: "Physical book — ships after the presale window (through August 26, 2026).",
   },
   gumroad: {
     eyebrow: "Step · Digital",
     platform: "Gumroad",
-    note: "Instant delivery to your email.",
+    note: "Digital steps: Coming August 26th unless part of Limited Founders.",
   },
 };
 
-export default function HybridCheckout() {
-  const { planId } = useParams();
+/** @param {{ planId?: string }} props */
+export default function HybridCheckout({ planId: planIdProp } = {}) {
+  const planId =
+    planIdProp ||
+    (typeof window !== "undefined"
+      ? window.location.pathname.split("/").filter(Boolean).pop()
+      : undefined);
   const plan = hybridPlans[planId];
 
+  useEffect(() => {
+    if (!plan && typeof window !== "undefined") {
+      window.location.replace("/library/veil#buy");
+    }
+  }, [plan]);
+
   if (!plan) {
-    return <Navigate to="/books/square-mile#buy" replace />;
+    return null;
   }
 
   const stepTotal = plan.steps.reduce((sum, s) => sum + s.price, 0);
@@ -39,8 +52,8 @@ export default function HybridCheckout() {
         <p className="eyebrow">Two platforms · one complete set</p>
         <h1>{plan.name}</h1>
         <p className="lede">
-          Print and digital live on different storefronts. Complete both steps
-          below — order takes a minute each.
+          Softcover is on presale now. Digital and Companion steps are{" "}
+          {COMING_LABEL}. Prefer everything in one cart? Pre-order Limited Founders.
         </p>
         <p className="muted prose">
           {plan.blurb} Combined storefront total{" "}
@@ -67,10 +80,9 @@ export default function HybridCheckout() {
           >
             Why two checkouts?
           </strong>
-          The paperback is fulfilled through IngramSpark. Digital Edition,
-          audiobook, and Companion Guide are sold on Gumroad for instant
-          download. No single cart can process both — this path walks you
-          through each side in order.
+          Softcover print is on Gumroad presale now. Standalone digital formats
+          and Companion Guide are {COMING_LABEL}. Limited Founders is the one-cart
+          path that includes signed hardcovers plus digital today.
         </div>
       </Reveal>
 
@@ -92,7 +104,6 @@ export default function HybridCheckout() {
         <Stagger className="hybrid-steps">
           {plan.steps.map((step, index) => {
             const meta = CHANNEL_META[step.channel] || CHANNEL_META.gumroad;
-            const ready = hasUrl(step.url);
             return (
               <StaggerItem key={step.id} className="card card-glow hybrid-step">
                 <div className="meta">
@@ -128,17 +139,20 @@ export default function HybridCheckout() {
                 <BuyButton
                   href={step.url}
                   label={step.label}
+                  disabled={isComingSoon(step)}
                   comingSoonLabel={
-                    step.channel === "ingram"
-                      ? "Print link pending"
-                      : "Checkout pending"
+                    isComingSoon(step)
+                      ? COMING_LABEL
+                      : step.channel === "ingram"
+                        ? "Print pre-order link pending"
+                        : "Pre-order link pending"
                   }
                   className="btn btn-primary btn-shimmer"
                 />
-                {!ready && step.channel === "ingram" && (
+                {isComingSoon(step) && (
                   <p className="muted" style={{ margin: "0.75rem 0 0", fontSize: "0.95rem" }}>
-                    Print storefront link coming soon. Digital step is available
-                    now if you already have the book (or will order separately).
+                    {COMING_LABEL}. Softcover is on presale alone, or pre-order
+                    Limited Founders for the complete set.
                   </p>
                 )}
               </StaggerItem>
@@ -149,8 +163,8 @@ export default function HybridCheckout() {
         {!anyStepReady && (
           <Reveal>
             <p className="muted" style={{ marginTop: "1.5rem" }}>
-              Checkout links are still being connected. Digital Gumroad SKUs may
-              already be live from the main buy section.
+              Pre-order links are still being connected. Digital Gumroad SKUs may
+              already be live from the main pre-order section.
             </p>
           </Reveal>
         )}
@@ -158,12 +172,12 @@ export default function HybridCheckout() {
 
       <Reveal className="section">
         <div className="actions">
-          <MagneticLink className="btn" to="/books/square-mile#buy">
+          <MagneticLink className="btn" to="/library/veil#buy">
             All formats &amp; bundles
           </MagneticLink>
-          <Link className="btn btn-shimmer" to="/books/square-mile/companion">
+          <a className="btn btn-shimmer" href="/library/map">
             Companion · watch why
-          </Link>
+          </a>
         </div>
       </Reveal>
     </AnimatedPage>
