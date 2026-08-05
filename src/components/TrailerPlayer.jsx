@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { trackVideoPlay, trackVideoUnmute } from "../lib/analytics";
 
 /**
  * Square Mile trailer with autoplay + sound unlock.
@@ -10,15 +11,34 @@ export default function TrailerPlayer({
   ariaLabel = "Trailer for The Veil of the Square Mile",
   className = "",
   frameClassName = "",
+  /** Analytics id — defaults derived from src filename */
+  videoId,
 }) {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(false);
   const [needsPlay, setNeedsPlay] = useState(false);
+  const trackedPlay = useRef(false);
+
+  const resolvedId =
+    videoId ||
+    (typeof src === "string"
+      ? src.split("/").pop()?.replace(/\.mp4$/i, "") || "trailer"
+      : "trailer");
 
   useEffect(() => {
     const el = videoRef.current;
     if (!el) return;
     let cancelled = false;
+    trackedPlay.current = false;
+
+    const markPlay = (withSound) => {
+      if (trackedPlay.current || cancelled) return;
+      trackedPlay.current = true;
+      trackVideoPlay(resolvedId, {
+        muted: withSound ? "false" : "true",
+        source: "trailer_player",
+      });
+    };
 
     const withSound = () => {
       el.defaultMuted = false;
@@ -33,6 +53,7 @@ export default function TrailerPlayer({
       el.muted = true;
       try {
         await el.play();
+        markPlay(false);
         if (!cancelled) {
           setMuted(true);
           setNeedsPlay(true);
@@ -49,6 +70,7 @@ export default function TrailerPlayer({
       try {
         await el.play();
         withSound();
+        markPlay(true);
         if (!cancelled) setNeedsPlay(false);
         return true;
       } catch {
@@ -80,8 +102,12 @@ export default function TrailerPlayer({
     const onError = () => {
       if (!cancelled) setNeedsPlay(true);
     };
+    const onPlay = () => {
+      markPlay(!el.muted);
+    };
     el.addEventListener("volumechange", onVolume);
     el.addEventListener("error", onError);
+    el.addEventListener("play", onPlay);
 
     return () => {
       cancelled = true;
@@ -90,8 +116,9 @@ export default function TrailerPlayer({
       );
       el.removeEventListener("volumechange", onVolume);
       el.removeEventListener("error", onError);
+      el.removeEventListener("play", onPlay);
     };
-  }, [src]);
+  }, [src, resolvedId]);
 
   const toggleMute = () => {
     const el = videoRef.current;
@@ -102,6 +129,7 @@ export default function TrailerPlayer({
       el.volume = 1;
       el.removeAttribute("muted");
       setMuted(false);
+      trackVideoUnmute(resolvedId, { source: "trailer_mute_toggle" });
       el.play().then(() => setNeedsPlay(false)).catch(() => {});
       return;
     }
@@ -117,6 +145,8 @@ export default function TrailerPlayer({
     el.volume = 1;
     el.removeAttribute("muted");
     setMuted(false);
+    trackVideoUnmute(resolvedId, { source: "play_with_sound" });
+    trackVideoPlay(resolvedId, { muted: "false", source: "play_with_sound" });
     el.play()
       .then(() => setNeedsPlay(false))
       .catch(() => setNeedsPlay(true));
