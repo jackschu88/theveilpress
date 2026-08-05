@@ -1,0 +1,16 @@
+{
+  "id": "obs_cjob_370c4b6b_square-mile",
+  "entityId": "square-mile",
+  "source": "cjob_370c4b6b",
+  "sourceType": "article",
+  "timestamp": "2026-08-05T16:59:37.759Z",
+  "scores": {
+    "veil": 7,
+    "cathedral": 0,
+    "archive": 0,
+    "squareMile": 1,
+    "nciTechnique": 3
+  },
+  "signalStrength": 1,
+  "context": "Ceuta’s Switch: Law, Fence, and Who Holds Europe’s African Border (diag: dense)"
+}
