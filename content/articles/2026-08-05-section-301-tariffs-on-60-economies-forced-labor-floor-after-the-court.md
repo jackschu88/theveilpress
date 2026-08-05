@@ -1,0 +1,28 @@
+---
+id: canon_cjob_5f3cd989
+title: "Section 301 Tariffs on 60 Economies: Forced-Labor Floor After the Court"
+date: 2026-08-05T15:30:51.224Z
+slug: section-301-tariffs-on-60-economies-forced-labor-floor-after-the-court
+status: published
+density: dense
+nci_overall: 8
+framing: default
+dek: "USTR’s 10–12.5% duties replace the expired Section 122 surcharge. Rare-earth “blackmail” and “empire” claims are advocacy framing—not the statute’s design."
+description: "USTR’s 10–12.5% duties replace the expired Section 122 surcharge. Rare-earth “blackmail” and “empire” claims are advocacy framing—not the statute’s design."
+tags: ["Section 301", "Trump tariffs", "forced labor tariffs", "USTR Jamieson Greer", "Trade Act 1974", "IEEPA Supreme Court", "tariff refunds", "Canada Section 338", "rare earths", "Global Research", "60 trading partners", "Court of International Trade"]
+entityIds: ["court-of-common-council", "court-of-aldermen", "business-vote", "american-system"]
+claimIds: ["claim-001"]
+key_entities: ["Reasserting", "American System
+On July", "Office", "Trade Representative", "Section", "Acting", "Trade Act", "President Trump", "USTR Ambassador Jamieson Greer", "Supreme Court", "American System", "Hamilton", "Lincoln", "Where", "American", "Partners", "Canada", "Mexico", "United Kingdom", "India", "Indonesia", "The European Union", "Japan", "Korea", "Taiwan", "Switzerland", "Remaining", "China", "Critical", "After", "IEEPA", "Separate", "USMCA", "Tariff Act", "Corporate", "Court", "Firms", "On August", "International Trade", "United States", "Whether"]
+citations: ["https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ustr-takes-action-forced-labor-section-301-investigations", "https://www.reuters.com/world/us/trump-imposes-forced-labor-duties-60-trading-partners-as-10-us-tariffs-expire-2026-07-24/", "https://www.globalresearch.ca/trump-sets-tariffs-60-countries-blackmail-china-rare-earths/5935847", "https://www.whitehouse.gov/fact-sheets/2026/07/fact-sheet-president-donald-j-trump-imposes-additional-tariffs-on-canada/", "https://www.theguardian.com/us-news/2026/jul/14/trump-tariffs-us-refunds", "https://finance.yahoo.com/economy/policy/articles/25-states-sue-trump-over-114357835.html"]
+---
+
+Reasserting the American System
+On July 23–24, 2026, the Office of the U.S. Trade Representative finalized a new Section 301 action applying 10% or 12.5% tariffs on goods from 60 trading partners—covering the vast majority of U.S. imports. The stated basis was clear: many of these partners had failed to impose and effectively enforce prohibitions on goods produced with forced labor. Acting under the Trade Act of 1974 at the direction of President Trump, USTR Ambassador Jamieson Greer moved to restore a durable tariff floor after earlier emergency measures were struck down by the Supreme Court.
+This is not novelty for novelty’s sake. It is a return to a core principle of the American System—the tradition running from Hamilton through Clay and Lincoln that treated trade policy as an instrument of national strength rather than pure free-flow ideology. Where forced labor undercuts American workers and honest producers, the state retains the authority to draw a line.
+Partners that maintain a ban, a reciprocal-trade commitment, or a partial regime limiting forced-labor goods face the lower 10% rate. That group includes Canada, Mexico, the United Kingdom, India, Indonesia, and a number of others. The European Union, Japan, Korea, Taiwan, and Switzerland were structured so that the net effect lands at 10% or 12.5% on non-exempt products. Remaining investigated economies, including China, were assigned 12.5%. Critical minerals, rare earths, energy products, fertilizer, certain foods, and goods already covered by Section 232 national-security duties were broadly exempted—evidence that the action was targeted rather than indiscriminate.
+The measure replaced a temporary 10% global surcharge under Section 122 that had reached its statutory limit. After the Supreme Court invalidated the earlier IEEPA-based tariff architecture, the administration shifted to Section 301, a statute with a longer and more established litigation record. The goal was continuity of a near-universal floor while the legal foundation was rebuilt on firmer ground.
+Separate tracks remain distinct. Canada sits in the 10% forced-labor tier (with USMCA-qualifying goods carved out), while a different statutory tool—Section 338 of the Tariff Act of 1930—was used to address longstanding discrimination against U.S. dairy, alcoholic beverages, and motor-vehicle commerce. That is parallel policy, not the same instrument.
+Corporate refunds from the invalidated IEEPA duties have been substantial—roughly $81 billion paid in the current fiscal year—reflecting the Court’s decision. Firms will decide how, or whether, to pass those recoveries downstream. That is a commercial question, not a statutory household rebate.
+On August 4, a coalition of 25 states sued in the Court of International Trade seeking to halt the new duties. The administration maintains that Section 301 remains a lawful and durable tool. The outcome is pending.
+What is established is straightforward: the United States is once again using trade policy to insist that goods entering the American market should not be the product of forced labor, and that domestic producers should not be forced to compete against systems that externalize human costs. Whether one agrees with every rate or every partner determination, the underlying logic belongs to a recognizable American tradition—protecting the conditions under which free labor can compete and the country can rebuild productive capacity on its own terms.

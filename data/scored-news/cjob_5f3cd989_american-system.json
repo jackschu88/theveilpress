@@ -1,0 +1,16 @@
+{
+  "id": "obs_cjob_5f3cd989_american-system",
+  "entityId": "american-system",
+  "source": "cjob_5f3cd989",
+  "sourceType": "article",
+  "timestamp": "2026-08-05T15:30:51.224Z",
+  "scores": {
+    "veil": 2,
+    "cathedral": 0,
+    "archive": 0,
+    "squareMile": 0,
+    "nciTechnique": 8
+  },
+  "signalStrength": 1,
+  "context": "Section 301 Tariffs on 60 Economies: Forced-Labor Floor After the Court (diag: dense)"
+}
