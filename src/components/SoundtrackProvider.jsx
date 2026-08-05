@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { soundtrack } from "../data/soundtrack";
+import { trackMusicPlay, trackMusicPause } from "../lib/analytics";
 
 const SoundtrackContext = createContext(null);
 
@@ -41,6 +42,7 @@ export default function SoundtrackProvider({ children, tracks = soundtrack }) {
   const currentRef = useRef(null);
   const tracksRef = useRef(tracks);
   const wantPlayRef = useRef(false);
+  const lastTrackedPlayId = useRef(null);
 
   useEffect(() => {
     tracksRef.current = tracks;
@@ -70,7 +72,14 @@ export default function SoundtrackProvider({ children, tracks = soundtrack }) {
     if (playPromise && typeof playPromise.then === "function") {
       playPromise
         .then(() => {
-          if (wantPlayRef.current) setPlaying(true);
+          if (wantPlayRef.current) {
+            setPlaying(true);
+            // Fire once per track selection / successful play start
+            if (lastTrackedPlayId.current !== track.id) {
+              lastTrackedPlayId.current = track.id;
+              trackMusicPlay(track, { source: "soundtrack" });
+            }
+          }
         })
         .catch((err) => {
           setPlaying(false);
@@ -79,6 +88,10 @@ export default function SoundtrackProvider({ children, tracks = soundtrack }) {
         });
     } else {
       setPlaying(true);
+      if (lastTrackedPlayId.current !== track.id) {
+        lastTrackedPlayId.current = track.id;
+        trackMusicPlay(track, { source: "soundtrack" });
+      }
     }
   }, []);
 
@@ -86,6 +99,10 @@ export default function SoundtrackProvider({ children, tracks = soundtrack }) {
     (track) => {
       setCurrent(track);
       currentRef.current = track;
+      // Allow re-tracking when switching tracks
+      if (lastTrackedPlayId.current !== track.id) {
+        lastTrackedPlayId.current = null;
+      }
       playFromElement(track);
     },
     [playFromElement],
@@ -95,11 +112,16 @@ export default function SoundtrackProvider({ children, tracks = soundtrack }) {
     wantPlayRef.current = false;
     audioRef.current?.pause();
     setPlaying(false);
+    if (currentRef.current) {
+      trackMusicPause(currentRef.current, { source: "soundtrack" });
+    }
   }, []);
 
   const resume = useCallback(() => {
     const track = currentRef.current;
     if (!track) return;
+    // Resume of same track: count as play again only if we cleared the id on pause
+    lastTrackedPlayId.current = null;
     playFromElement(track);
   }, [playFromElement]);
 
