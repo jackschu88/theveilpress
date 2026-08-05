@@ -13,6 +13,7 @@ import {
   COMING_LABEL,
 } from "../commerce";
 import { easeOut } from "../motion";
+import { trackVideoPlay } from "../lib/analytics";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
 
@@ -176,6 +177,7 @@ export default function SquareMile() {
               playsInline
               preload="metadata"
               poster="/cover.jpg"
+              onPlay={() => trackVideoPlay("square-mile-trailer", { source: "book_page" })}
             >
               <source src="/videos/square-mile-trailer.mp4" type="video/mp4" />
               <source src="/trailer.mp4" type="video/mp4" />
@@ -232,6 +234,7 @@ export default function SquareMile() {
                   href={p.url}
                   label={p.label}
                   className="btn btn-primary btn-shimmer"
+                  product={p}
                 />
               ) : (
                 <ProductBuyButton
