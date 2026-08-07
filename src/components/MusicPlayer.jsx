@@ -1,4 +1,5 @@
 import { useSoundtrack } from "./SoundtrackProvider";
+import { trackMusicDownload } from "../lib/analytics";
 
 /** Full tracklist UI — uses the global soundtrack so leaving this page does not stop audio. */
 export default function MusicPlayer() {
@@ -74,7 +75,10 @@ export default function MusicPlayer() {
                 href={track.src}
                 download
                 className="music-dl-link"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  trackMusicDownload(track, { source: "music_player" });
+                }}
               >
                 Add to playlist
               </a>

@@ -5,7 +5,6 @@ const films = [
   {
     id: 'brain-on-propaganda',
     title: 'This is your brain on propaganda',
-    dek: 'Hidden Throne teaser — short cut from the Complete set.',
     src: '/videos/teaser-brain-on-propaganda.mp4',
     poster: '/videos/teaser-brain-on-propaganda-poster.jpg',
     aspect: 'landscape',
@@ -13,7 +12,6 @@ const films = [
   {
     id: 'timeline-1',
     title: 'Timeline 1',
-    dek: 'Vertical teaser from the Complete set — built for short-form feeds.',
     src: '/videos/teaser-timeline-1.mp4',
     poster: '/videos/teaser-timeline-1-poster.jpg',
     aspect: 'portrait',
@@ -21,7 +19,6 @@ const films = [
   {
     id: 'trailer',
     title: 'The Veil — trailer',
-    dek: 'Opening cut for The Veil of the Square Mile.',
     src: '/videos/square-mile-trailer.mp4',
     poster: '/cover.jpg',
     aspect: 'landscape',
@@ -29,7 +26,6 @@ const films = [
   {
     id: 'companion',
     title: 'Companion — trailer',
-    dek: 'Map and companion walkthrough.',
     src: '/videos/companion_trailer.mp4',
     poster: '/companion-cover.jpg',
     aspect: 'landscape',
@@ -37,7 +33,6 @@ const films = [
   {
     id: 'journey',
     title: 'Journey — main',
-    dek: 'Cinematic journey cut.',
     src: '/videos/journey-main.mp4',
     poster: '/videos/journey-fogboy-poster.jpg',
     aspect: 'landscape',
@@ -76,7 +71,6 @@ const films = [
           </div>
           <div class="watch-card-body">
             <h2 class="watch-card-title">{film.title}</h2>
-            <p class="watch-card-dek">{film.dek}</p>
           </div>
         </article>
       ))}
@@ -159,13 +153,6 @@ const films = [
     font-family: 'Cinzel', serif;
     font-size: 1.15rem;
     color: var(--vp-text-primary);
-    margin: 0 0 var(--vp-space-2);
-  }
-
-  .watch-card-dek {
-    font-size: 0.92rem;
-    line-height: 1.55;
-    color: var(--vp-text-secondary);
     margin: 0;
   }
 

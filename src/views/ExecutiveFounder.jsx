@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
+import { trackVideoPlay, trackVideoUnmute, trackCta } from "../lib/analytics";
 import { MagneticLink } from "../components/MagneticButton";
 import {
   PRESALE,
@@ -127,6 +128,12 @@ export default function ExecutiveFounder() {
         el.muted = true;
         await el.play();
         setNeedsPlay(false);
+        const vid = journeyVideos.find((v) => v.id === activeVideo);
+        trackVideoPlay(activeVideo, {
+          title: vid?.title || activeVideo,
+          source: "founders_journey",
+          muted: "true",
+        });
       } catch {
         setNeedsPlay(true);
       }
@@ -142,6 +149,7 @@ export default function ExecutiveFounder() {
     if (!el) return;
     el.muted = false;
     el.volume = 1;
+    trackVideoUnmute(activeVideo, { source: "founders_journey" });
     el.play()
       .then(() => setNeedsPlay(false))
       .catch(() => setNeedsPlay(true));
@@ -240,7 +248,10 @@ export default function ExecutiveFounder() {
               <button
                 type="button"
                 className="btn btn-primary btn-shimmer btn-exec"
-                onClick={scrollToMedia}
+                onClick={() => {
+                  trackCta("why_limited_founders", { source: "founders_hero" });
+                  scrollToMedia();
+                }}
               >
                 Why Limited Founders Edition
               </button>
@@ -261,7 +272,7 @@ export default function ExecutiveFounder() {
         {/* Journey films */}
         <section className="journey-section">
           <Reveal>
-            <h2 className="journey-headline">This isn&apos;t just a book. It&apos;s a journey.</h2>
+            <h2 className="journey-headline">This isn't just a book. It's a journey.</h2>
             <p className="journey-sub">Watch this before you decide.</p>
           </Reveal>
 
@@ -334,7 +345,10 @@ export default function ExecutiveFounder() {
                 <button
                   type="button"
                   className="exec-media-card"
-                  onClick={() => setModalVideo(m)}
+                  onClick={() => {
+                    setModalVideo(m);
+                    trackVideoPlay(m.title, { source: "founders_media_library" });
+                  }}
                 >
                   <div
                     className={`exec-media-thumb${
@@ -466,6 +480,7 @@ export default function ExecutiveFounder() {
                 label={`Pre-order Limited Founders · ${formatPrice(EXECUTIVE_PRICE)}`}
                 comingSoonLabel="Pre-order link pending"
                 className="btn btn-primary btn-shimmer btn-exec btn-exec-lg"
+                product={PRESALE.executiveFounderPack}
               />
               <MagneticLink className="btn" to="/library/founders">
                 All presale options

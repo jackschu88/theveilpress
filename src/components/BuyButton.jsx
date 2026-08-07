@@ -6,6 +6,7 @@ import {
   productCtaLabel,
 } from "../commerce";
 import { toAstroPath } from "../lib/astroPaths";
+import { trackProductClick, trackCta } from "../lib/analytics";
 
 /**
  * External checkout button — only renders primary action if URL is set.
@@ -19,6 +20,10 @@ export function BuyButton({
   magnetic = true,
   /** When true, never open checkout (digital/companion wait). */
   disabled = false,
+  /** Optional product name/object for analytics */
+  product,
+  /** Extra analytics props */
+  analyticsProps = {},
 }) {
   const ready =
     !disabled && typeof href === "string" && href.trim().length > 0;
@@ -31,11 +36,19 @@ export function BuyButton({
     );
   }
 
+  const handleClick = () => {
+    trackProductClick(product || label || "checkout", {
+      destination: "gumroad",
+      ...analyticsProps,
+    });
+  };
+
   const props = {
     href,
     className,
     target: "_blank",
     rel: "noopener noreferrer",
+    onClick: handleClick,
   };
 
   if (magnetic) {
@@ -74,7 +87,16 @@ export function ProductBuyButton({
 
   if (isHybridProduct(product)) {
     return (
-      <MagneticLink to={toAstroPath(product.path) || product.path} className={className}>
+      <MagneticLink
+        to={toAstroPath(product.path) || product.path}
+        className={className}
+        onClick={() =>
+          trackCta("hybrid_checkout", {
+            product: product.name,
+            path: product.path || "",
+          })
+        }
+      >
         {hybridLabel || productCtaLabel(product) || `Continue · ${product.name}`}
       </MagneticLink>
     );
@@ -86,13 +108,18 @@ export function ProductBuyButton({
       label={productCtaLabel(product)}
       className={className}
       comingSoonLabel={comingSoonLabel}
+      product={product}
     />
   );
 }
 
 export function BuyLink({ to, label, className = "btn" }) {
   return (
-    <MagneticLink to={to} className={className}>
+    <MagneticLink
+      to={to}
+      className={className}
+      onClick={() => trackCta(label || to, { href: to })}
+    >
       {label}
     </MagneticLink>
   );
