@@ -1,8 +1,7 @@
 ---
 /**
- * Press home — charter shape:
- * one lead desk story · book CTA · film · brief capture
- * Not a product wall. Not "coming soon."
+ * Press home — book-first layout:
+ * hero trailer + companion trailer · pre-order cards · desk (secondary) · brief
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -51,34 +50,137 @@ const secondary = published.slice(1, 3);
   image={lead?.image || '/cover.jpg'}
 >
   <div class="home">
-    <!-- Brand hero -->
+    <!-- ── HERO: Book + trailer front and centre ── -->
     <section class="home-hero">
       <div class="home-hero-stage" aria-hidden="true"></div>
-      <div class="vp-glass vp-glass--hero home-hero-panel">
-        <p class="vp-eyebrow">Independent press · durable power</p>
-        <h1 class="home-hero-title">The Veil Press</h1>
+      <div class="home-hero-panel">
+        <p class="vp-eyebrow">Volume I · Pre-order Now</p>
+        <h1 class="home-hero-title">The Veil of the Square Mile</h1>
+
+        <!-- MAIN TRAILER — front and centre -->
+        <div class="hero-trailer-frame">
+          <video
+            class="hero-trailer-video"
+            controls
+            playsinline
+            preload="metadata"
+            poster="/cover.jpg"
+            aria-label="The Veil of the Square Mile — official trailer"
+          >
+            <source src="/videos/square-mile-trailer.mp4" type="video/mp4" />
+          </video>
+        </div>
+
         <p class="home-hero-dek">
-          Architecture, money, narrative, access — documented with sources.
-          Books as the deep layer. The desk as the continuous signal.
+          The invisible British financial empire — documented, not dramatized.
+          Fifteen parts. Architecture on the record.
         </p>
+        <p class="home-hero-author">Jack Schumacher</p>
+
         <div class="home-hero-actions">
-          <a href={lead ? `/desk/${lead.slug}` : '/desk'} class="vp-btn vp-btn--primary">
-            {lead ? 'Latest from the Desk' : 'Open the Desk'}
-          </a>
-          <a href="/library/veil" class="vp-btn vp-btn--primary">Pre-order print &amp; Founders</a>
+          <a href="/library/veil" class="vp-btn vp-btn--primary vp-btn--gold">Pre-order the book</a>
+          <a href="/library/founders" class="vp-btn vp-btn--primary">Founders editions</a>
         </div>
       </div>
     </section>
 
-    <!-- Lead desk story -->
+    <!-- ── COMPANION TRAILER ── -->
+    <section class="home-section home-companion">
+      <div class="home-section-inner">
+        <div class="vp-glass vp-glass--card companion-card">
+          <div class="companion-copy">
+            <p class="vp-eyebrow">Companion Guide · Coming August 26th</p>
+            <h2 class="depth-title">The Map</h2>
+            <p class="depth-dek">
+              Sources, timelines, dynastic trees, glossary, bibliography, and the
+              steelman of objections. The main book is the journey; the Companion
+              is the map. Included signed in Limited Founders Edition.
+            </p>
+            <div class="depth-actions">
+              <a href="/library/map" class="vp-btn vp-btn--primary">Explore the Map</a>
+              <a href="/library/founders" class="vp-btn vp-btn--secondary">Get it in Founders</a>
+            </div>
+          </div>
+          <div class="companion-trailer-frame">
+            <video
+              class="companion-trailer-video"
+              controls
+              playsinline
+              preload="metadata"
+              poster="/companion-cover.jpg"
+              aria-label="Companion Guide — walkthrough video"
+            >
+              <source src="/videos/companion_trailer.mp4" type="video/mp4" />
+            </video>
+            <p class="vp-text-muted" style="text-align:center;margin-top:0.5rem;">
+              Companion Guide walkthrough
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PRE-ORDER CARDS ── -->
+    <section class="home-section home-buy">
+      <div class="home-section-inner">
+        <h2 class="vp-section-label">Pre-order formats</h2>
+        <p class="vp-text-secondary" style="margin-bottom:var(--vp-space-5);max-width:36rem;">
+          Softcover, hardcover, and both Founders editions on presale through
+          August 26, 2026. Digital formats and Companion Guide: Coming August 26th.
+        </p>
+        <div class="buy-grid">
+          <a href="/library/veil#buy" class="vp-glass vp-glass--card buy-card">
+            <div class="buy-card-inner">
+              <p class="vp-eyebrow">Presale</p>
+              <h3 class="buy-card-title">Softcover</h3>
+              <p class="buy-card-price">$22.99</p>
+              <p class="buy-card-desc">Print-on-demand softcover. + shipping.</p>
+              <span class="buy-card-cta">Pre-order →</span>
+            </div>
+          </a>
+          <a href="/library/veil#buy" class="vp-glass vp-glass--card buy-card">
+            <div class="buy-card-inner">
+              <p class="vp-eyebrow">Presale</p>
+              <h3 class="buy-card-title">Hardcover</h3>
+              <p class="buy-card-price">$29.99</p>
+              <p class="buy-card-desc">Print-on-demand hardcover. + shipping.</p>
+              <span class="buy-card-cta">Pre-order →</span>
+            </div>
+          </a>
+          <a href="/library/founders" class="vp-glass vp-glass--card buy-card buy-card-featured">
+            <div class="buy-card-inner">
+              <p class="vp-eyebrow">Founders Edition</p>
+              <h3 class="buy-card-title">Signed Hardcover</h3>
+              <p class="buy-card-price">$49.99</p>
+              <p class="buy-card-desc">Signed hardcover — scarce run. + shipping.</p>
+              <span class="buy-card-cta">Pre-order →</span>
+            </div>
+          </a>
+          <a href="/library/founders" class="vp-glass vp-glass--card buy-card buy-card-featured buy-card-limited">
+            <div class="buy-card-inner">
+              <p class="vp-eyebrow">Limited Founders</p>
+              <h3 class="buy-card-title">Limited Founders Edition</h3>
+              <p class="buy-card-price">$129.99</p>
+              <p class="buy-card-desc">Signed book + signed Companion + all digital. Free shipping.</p>
+              <span class="buy-card-cta">Pre-order →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DESK (secondary) ── -->
     <section class="home-section home-lead">
       <div class="home-section-inner">
         <h2 class="vp-section-label">From the Desk</h2>
+        <p class="vp-text-secondary" style="margin-bottom:var(--vp-space-4);">
+          Continuous signal. Articles and analysis on durable power — sourced, on the record.
+        </p>
         {lead ? (
           <a href={`/desk/${lead.slug}`} class="lead-card vp-glass vp-glass--card">
             {lead.image && (
               <div class="lead-card-media">
-                <img src={lead.image} alt="" loading="eager" />
+                <img src={lead.image} alt="" loading="lazy" />
               </div>
             )}
             <div class="lead-card-body">
@@ -134,51 +236,7 @@ const secondary = published.slice(1, 3);
       </div>
     </section>
 
-    <!-- Book + film row -->
-    <section class="home-section home-depth">
-      <div class="home-section-inner home-depth-grid">
-        <div class="vp-glass vp-glass--card depth-card">
-          <p class="vp-eyebrow">Library · Print &amp; Founders on presale</p>
-          <h2 class="depth-title">The Veil of the Square Mile</h2>
-          <p class="depth-dek">
-            The invisible British financial empire — architecture of money and access,
-            documented for the long record. Softcover, hardcover, and both Founders
-            editions on presale through August 26, 2026. Digital formats and Companion:
-            Coming August 26th.
-          </p>
-          <div class="depth-actions">
-            <a href="/library/veil" class="vp-btn vp-btn--primary">Pre-order print &amp; Founders</a>
-            <a href="/library/map" class="vp-btn vp-btn--secondary">The Map</a>
-          </div>
-          <img
-            class="depth-cover"
-            src="/cover.jpg"
-            alt="The Veil of the Square Mile cover"
-            loading="lazy"
-          />
-        </div>
-
-        <div class="vp-glass vp-glass--card depth-card depth-film">
-          <p class="vp-eyebrow">Watch</p>
-          <h2 class="depth-title">Cinema</h2>
-          <p class="depth-dek">Teasers and visual essays. Full watch room expands as cuts land.</p>
-          <div class="film-frame">
-            <video
-              class="film-video"
-              controls
-              playsinline
-              preload="metadata"
-              poster="/videos/teaser-brain-on-propaganda-poster.jpg"
-            >
-              <source src="/videos/teaser-brain-on-propaganda.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <a href="/watch" class="vp-btn vp-btn--ghost">Watch room →</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Brief -->
+    <!-- ── BRIEF ── -->
     <section class="home-section home-brief">
       <div class="home-section-inner">
         <div class="vp-glass vp-glass--card brief-strip">
@@ -186,7 +244,7 @@ const secondary = published.slice(1, 3);
             <p class="vp-eyebrow">Owned signal</p>
             <h2 class="depth-title">The Brief</h2>
             <p class="depth-dek">
-              Weekly signal through the noise. No spam, no resale — when the list is ready.
+              Weekly signal through the noise. No spam, no resale.
             </p>
           </div>
           <a href="/brief" class="vp-btn vp-btn--primary">Join the Brief</a>
@@ -201,14 +259,14 @@ const secondary = published.slice(1, 3);
     padding-bottom: var(--vp-space-8);
   }
 
+  /* ── Hero ── */
   .home-hero {
     position: relative;
     isolation: isolate;
-    min-height: min(78vh, 640px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--vp-space-8) var(--vp-space-5);
+    padding: var(--vp-space-8) var(--vp-space-5) var(--vp-space-10);
   }
 
   .home-hero-stage {
@@ -237,65 +295,34 @@ const secondary = published.slice(1, 3);
   .home-hero-panel {
     position: relative;
     z-index: 2;
-    max-width: 40rem;
+    max-width: 48rem;
     width: 100%;
-    padding: var(--vp-space-7) var(--vp-space-6);
+    padding: var(--vp-space-6) var(--vp-space-5);
     text-align: center;
-  }
-
-  /* Gentle enter motion */
-  .home-hero-panel,
-  .home-lead,
-  .home-depth,
-  .home-brief {
-    animation: home-rise 0.85s var(--vp-ease) both;
-  }
-  .home-lead { animation-delay: 0.08s; }
-  .home-depth { animation-delay: 0.16s; }
-  .home-brief { animation-delay: 0.24s; }
-
-  @keyframes home-rise {
-    from {
-      opacity: 0;
-      transform: translateY(14px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .home-hero-panel,
-    .home-lead,
-    .home-depth,
-    .home-brief {
-      animation: none;
-    }
-  }
-
-  .lead-card,
-  .secondary-row,
-  .vp-btn {
-    cursor: pointer;
   }
 
   .home-hero-title {
     font-family: 'Cinzel', serif;
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
     font-weight: 600;
     color: var(--vp-text-primary);
-    margin: 0 0 var(--vp-space-4);
+    margin: 0 0 var(--vp-space-5);
     letter-spacing: 0.04em;
     line-height: 1.15;
   }
 
   .home-hero-dek {
-    font-size: 1.08rem;
+    font-size: 1.05rem;
     line-height: 1.7;
     color: var(--vp-text-secondary);
-    margin: 0 auto var(--vp-space-6);
-    max-width: 32rem;
+    margin: var(--vp-space-4) auto var(--vp-space-3);
+    max-width: 34rem;
+  }
+
+  .home-hero-author {
+    font-size: 0.95rem;
+    color: var(--vp-text-muted);
+    margin: 0 0 var(--vp-space-5);
   }
 
   .home-hero-actions {
@@ -305,15 +332,161 @@ const secondary = published.slice(1, 3);
     justify-content: center;
   }
 
-  .home-section.home-lead,
-  .home-section.home-depth,
-  .home-section.home-brief {
+  .vp-btn--gold {
+    background: var(--vp-accent-gold);
+    color: #0c0e14;
+    border-color: var(--vp-accent-gold);
+  }
+
+  .vp-btn--gold:hover {
+    background: var(--vp-accent-gold-hi);
+  }
+
+  /* Hero trailer frame — prominent */
+  .hero-trailer-frame {
+    border-radius: var(--vp-radius-md, 6px);
+    overflow: hidden;
+    border: 1px solid var(--vp-edge);
+    background: #000;
+    margin: 0 auto var(--vp-space-4);
+    max-width: 100%;
+    box-shadow: 0 0 40px rgba(196, 165, 116, 0.08), 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-trailer-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  /* ── Sections ── */
+  .home-section {
     padding: var(--vp-space-6) var(--vp-space-5);
   }
 
   .home-section-inner {
     max-width: 72rem;
     margin: 0 auto;
+  }
+
+  .vp-section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    color: var(--vp-accent-gold);
+    margin: 0 0 var(--vp-space-2);
+    text-transform: uppercase;
+  }
+
+  /* ── Companion ── */
+  .companion-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--vp-space-6);
+    align-items: center;
+    padding: var(--vp-space-6);
+  }
+
+  .companion-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vp-space-3);
+  }
+
+  .companion-trailer-frame {
+    border-radius: var(--vp-radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--vp-edge);
+    background: #000;
+    box-shadow: 0 0 24px rgba(196, 165, 116, 0.06), 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .companion-trailer-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  /* ── Buy cards ── */
+  .buy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: var(--vp-space-4);
+  }
+
+  .buy-card {
+    text-decoration: none;
+    color: inherit;
+    padding: 0;
+    overflow: hidden;
+    transition: border-color var(--vp-duration) var(--vp-ease);
+  }
+
+  .buy-card:hover {
+    border-color: var(--vp-edge-hot);
+  }
+
+  .buy-card:hover .buy-card-cta,
+  .buy-card:hover .buy-card-title {
+    color: var(--vp-accent-gold);
+  }
+
+  .buy-card-inner {
+    padding: var(--vp-space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vp-space-1);
+    height: 100%;
+  }
+
+  .buy-card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--vp-text-primary);
+    margin: 0;
+    transition: color var(--vp-duration-fast) var(--vp-ease);
+  }
+
+  .buy-card-price {
+    font-family: 'Cinzel', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--vp-accent-gold);
+    margin: 0;
+  }
+
+  .buy-card-desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--vp-text-secondary);
+    margin: 0;
+    flex: 1;
+  }
+
+  .buy-card-cta {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--vp-accent-gold);
+    margin-top: var(--vp-space-2);
+    transition: color var(--vp-duration-fast) var(--vp-ease);
+  }
+
+  .buy-card-featured {
+    border-color: rgba(196, 165, 116, 0.25);
+  }
+
+  .buy-card-limited {
+    border-color: rgba(196, 165, 116, 0.35);
+    box-shadow: 0 0 20px rgba(196, 165, 116, 0.06);
+  }
+
+  /* ── Desk ── */
+  .lead-card,
+  .secondary-row,
+  .vp-btn {
+    cursor: pointer;
   }
 
   .lead-card {
@@ -350,6 +523,11 @@ const secondary = published.slice(1, 3);
     color: var(--vp-text-primary);
     margin: 0 0 var(--vp-space-3);
     line-height: 1.3;
+    transition: color var(--vp-duration-fast) var(--vp-ease);
+  }
+
+  .lead-card:hover .lead-card-title {
+    color: var(--vp-accent-gold);
   }
 
   .lead-card-dek {
@@ -411,17 +589,19 @@ const secondary = published.slice(1, 3);
     margin: var(--vp-space-4) 0 0;
   }
 
-  .home-depth-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  /* ── Brief ── */
+  .brief-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     gap: var(--vp-space-5);
+    padding: var(--vp-space-6);
   }
 
-  .depth-card {
-    padding: var(--vp-space-6);
-    display: flex;
-    flex-direction: column;
-    gap: var(--vp-space-3);
+  .brief-strip-copy {
+    flex: 1;
+    min-width: 16rem;
   }
 
   .depth-title {
@@ -437,7 +617,6 @@ const secondary = published.slice(1, 3);
     line-height: 1.65;
     color: var(--vp-text-secondary);
     margin: 0;
-    flex: 1;
   }
 
   .depth-actions {
@@ -447,47 +626,46 @@ const secondary = published.slice(1, 3);
     margin-top: var(--vp-space-2);
   }
 
-  .depth-cover {
-    width: 120px;
-    border-radius: var(--vp-radius-sm);
-    margin-top: var(--vp-space-3);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-  }
-
-  .film-frame {
-    border-radius: var(--vp-radius-sm);
-    overflow: hidden;
-    border: 1px solid var(--vp-edge);
-    background: #000;
-    margin: var(--vp-space-2) 0;
-  }
-
-  .film-video {
-    display: block;
-    width: 100%;
-    max-height: 240px;
-    object-fit: cover;
-  }
-
-  .brief-strip {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--vp-space-5);
-    padding: var(--vp-space-6);
-  }
-
-  .brief-strip-copy {
-    flex: 1;
-    min-width: 16rem;
-  }
-
   .empty-panel {
     padding: var(--vp-space-6);
     text-align: center;
   }
 
+  /* ── Enter animations ── */
+  .home-hero-panel,
+  .home-companion,
+  .home-buy,
+  .home-lead,
+  .home-brief {
+    animation: home-rise 0.85s var(--vp-ease) both;
+  }
+  .home-companion { animation-delay: 0.06s; }
+  .home-buy       { animation-delay: 0.12s; }
+  .home-lead      { animation-delay: 0.18s; }
+  .home-brief     { animation-delay: 0.24s; }
+
+  @keyframes home-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-hero-panel,
+    .home-companion,
+    .home-buy,
+    .home-lead,
+    .home-brief {
+      animation: none;
+    }
+  }
+
+  /* ── Responsive ── */
   @media (max-width: 800px) {
     .lead-card {
       grid-template-columns: 1fr;
@@ -495,7 +673,18 @@ const secondary = published.slice(1, 3);
     .lead-card-media {
       min-height: 180px;
     }
-    .home-depth-grid {
+
+    .companion-card {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-trailer-frame {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .buy-grid {
       grid-template-columns: 1fr;
     }
   }

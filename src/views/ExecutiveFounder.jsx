@@ -58,21 +58,15 @@ const mediaLibrary = [
     aspect: "landscape",
   },
   {
-    title: "The Journey — Main Ad",
-    src: "/videos/journey-main.mp4",
-    poster: "/cover.jpg",
-    aspect: "landscape",
-  },
-  {
     title: "The news from somewhere else",
     src: "/videos/journey-lazboy.mp4",
-    poster: "",
+    poster: "/cover.jpg",
     aspect: "portrait",
   },
   {
     title: "In the crowd",
     src: "/videos/journey-crowd.mp4",
-    poster: "",
+    poster: "/cover.jpg",
     aspect: "portrait",
   },
   {

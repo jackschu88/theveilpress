@@ -2567,18 +2567,14 @@ body:has(.music-global-bar) {
 /* —— Executive: Media Library —— */
 .exec-media-grid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 220px));
+  justify-content: center;
   gap: 1rem;
 }
 
 @media (min-width: 640px) {
   .exec-media-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (min-width: 960px) {
-  .exec-media-grid {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 260px));
   }
 }
 
@@ -2605,6 +2601,11 @@ body:has(.music-global-bar) {
   background: #000;
   border: 1px solid rgba(201, 168, 76, 0.2);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Portrait clips use phone-frame aspect ratio */
+.exec-media-grid > *:not(.exec-media-item-landscape) .exec-media-thumb {
+  aspect-ratio: 9 / 16;
 }
 
 .exec-media-thumb img {
@@ -2651,7 +2652,7 @@ body:has(.music-global-bar) {
   flex-wrap: wrap;
 }
 
-/* Landscape films sit full-width at the bottom of Explore more */
+/* Landscape films span full width */
 .exec-media-item-landscape {
   grid-column: 1 / -1;
   max-width: 48rem;
