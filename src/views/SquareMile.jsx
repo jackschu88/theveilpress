@@ -20,6 +20,7 @@ const HeroScene = lazy(() => import("../components/HeroScene"));
 const PRESALE = [
   products.softcover,
   products.hardcover,
+  products.companion,
   products.foundersEdition,
   products.limitedFounders,
 ];
@@ -27,7 +28,6 @@ const PRESALE = [
 const COMING = [
   products.ebook,
   products.audiobook,
-  products.companion,
   products.bundleEbookAudioCompanion,
 ];
 
@@ -196,8 +196,8 @@ export default function SquareMile() {
               </p>
               <h2>Pre-order</h2>
               <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
-                Softcover, hardcover, and both Founders editions are live now.
-                Digital formats and the Companion Guide: {COMING_LABEL}.
+                Softcover, hardcover, Companion Guide, and both Founders editions
+                are on presale now. Digital formats: {COMING_LABEL}.
               </p>
             </div>
           </div>
@@ -265,13 +265,7 @@ export default function SquareMile() {
               <p className="muted" style={{ margin: "0.5rem 0 1rem" }}>
                 {p.blurb}
               </p>
-              {p === products.companion ? (
-                <MagneticLink className="btn btn-shimmer" to="/library/map">
-                  Watch the Companion trailer
-                </MagneticLink>
-              ) : (
-                <ProductBuyButton product={p} />
-              )}
+              <ProductBuyButton product={p} />
             </StaggerItem>
           ))}
         </Stagger>
@@ -282,20 +276,20 @@ export default function SquareMile() {
         <Stagger className="card-grid two">
           <StaggerItem>
             <div className="card card-glow">
-              <div className="meta">Companion · {COMING_LABEL}</div>
+              <div className="meta">Companion · On presale</div>
               <h3>The Map</h3>
               <p>
                 The book is the journey. The Companion Guide is the map — primary
                 sources, timelines, institutional lineages, and supporting material
-                that make the argument legible. Standalone {COMING_LABEL}; included
-                (signed) in Limited Founders.
+                that make the argument legible. Standalone hardcover on presale now;
+                included (signed) in Limited Founders.
               </p>
               <div className="actions" style={{ marginTop: "1rem" }}>
                 <MagneticLink
                   className="btn btn-primary btn-shimmer"
                   to="/library/map"
                 >
-                  Open Companion
+                  Pre-order Companion
                 </MagneticLink>
               </div>
             </div>

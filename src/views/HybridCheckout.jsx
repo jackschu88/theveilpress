@@ -18,9 +18,9 @@ const CHANNEL_META = {
     note: "Physical book — ships after the presale window (through August 26, 2026).",
   },
   gumroad: {
-    eyebrow: "Step · Digital",
+    eyebrow: "Step · Gumroad",
     platform: "Gumroad",
-    note: "Digital steps: Coming August 26th unless part of Limited Founders.",
+    note: "Print and Companion hardcover on presale; digital SKUs Coming August 26th unless part of Limited Founders.",
   },
 };
 
@@ -52,8 +52,9 @@ export default function HybridCheckout({ planId: planIdProp } = {}) {
         <p className="eyebrow">Two platforms · one complete set</p>
         <h1>{plan.name}</h1>
         <p className="lede">
-          Softcover is on presale now. Digital and Companion steps are{" "}
-          {COMING_LABEL}. Prefer everything in one cart? Pre-order Limited Founders.
+          Softcover and Companion hardcover are on presale now via Gumroad.
+          Digital-only steps remain {COMING_LABEL}. Prefer everything in one cart?
+          Pre-order Limited Founders.
         </p>
         <p className="muted prose">
           {plan.blurb} Combined storefront total{" "}
@@ -80,9 +81,10 @@ export default function HybridCheckout({ planId: planIdProp } = {}) {
           >
             Why two checkouts?
           </strong>
-          Softcover print is on Gumroad presale now. Standalone digital formats
-          and Companion Guide are {COMING_LABEL}. Limited Founders is the one-cart
-          path that includes signed hardcovers plus digital today.
+          Softcover and Companion hardcover are on Gumroad presale now (separate
+          checkouts). Standalone digital formats are {COMING_LABEL}. Limited
+          Founders is the one-cart path that includes signed hardcovers plus
+          digital today.
         </div>
       </Reveal>
 

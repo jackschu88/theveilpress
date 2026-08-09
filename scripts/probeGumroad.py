@@ -7,8 +7,9 @@ import urllib.request
 
 URL = "https://theveilpress.gumroad.com"
 
-# Site display prices (product only). Soft/hard/companion show without shipping;
-# Gumroad checkout totals include $5 ship for those three.
+# Site display prices (product only). Soft/hard show without shipping;
+# companion has $10 shipping baked into the Gumroad total.
+# Gumroad checkout totals: $5 ship on soft/hard, $10 on companion.
 EXPECTED = {
     "jiytnb": ("Softcover", 44.99, "presale"),  # 39.99 + 5
     "pntwl": ("Hardcover", 51.99, "presale"),  # 46.99 + 5
@@ -16,7 +17,7 @@ EXPECTED = {
     "uehrv": ("Limited Founders", 129.99, "presale"),
     "riwlqv": ("Digital Edition", 15.99, "coming"),
     "rphkx": ("Audiobook", 17.99, "coming"),
-    "jawnaq": ("Companion HC", 59.99, "coming"),  # 54.99 + 5
+    "jawnaq": ("Companion HC", 69.99, "presale"),  # 59.99 + 10
     "tkfupm": ("Digital + Companion", 34.99, "coming"),
     "ggmum": ("Digital + Audiobook", 34.99, "coming"),
     "mghiaq": ("Audio + Companion", 36.99, "coming"),

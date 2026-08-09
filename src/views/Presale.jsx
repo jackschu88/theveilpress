@@ -13,10 +13,11 @@ import { easeOut } from "../motion";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
 
-/** Only print + both Founders are buyable now. */
+/** Print, Companion hardcover, and both Founders are buyable now. */
 const presaleItems = [
   { ...PRESALE.softcover, badge: "Presale" },
   { ...PRESALE.hardcover, badge: "Presale" },
+  { ...PRESALE.companionHardcover, badge: "Companion · Presale" },
   { ...PRESALE.foundersPack, badge: "Founders Edition", featured: true },
   { ...PRESALE.executiveFounderPack, badge: "Limited Founders", featured: true, dedicated: true },
 ];
@@ -96,8 +97,9 @@ export default function Presale() {
           <div className="section-head">
             <h2>Pre-order now</h2>
             <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
-              Softcover, hardcover, and both Founders editions — on presale through{" "}
-              {PRESALE_ENDS_LABEL}. Digital formats and Companion Guide: {COMING_LABEL}.
+              Softcover, hardcover, Companion Guide, and both Founders editions —
+              on presale through {PRESALE_ENDS_LABEL}. Digital formats:{" "}
+              {COMING_LABEL}.
             </p>
           </div>
         </Reveal>
@@ -176,11 +178,11 @@ export default function Presale() {
         >
           <h3 style={{ marginBottom: "0.5rem" }}>About the presale</h3>
           <p style={{ margin: "0 auto", maxWidth: "28rem" }}>
-            Softcover, hardcover, Founders Edition, and Limited Founders are on
-            presale through {PRESALE_ENDS_LABEL}. Print is manufactured on demand;
-            you will be notified when your order ships. Digital formats and the
-            standalone Companion Guide are {COMING_LABEL} — Limited Founders
-            includes signed Companion plus the full digital set now.
+            Softcover, hardcover, Companion Guide hardcover, Founders Edition, and
+            Limited Founders are on presale through {PRESALE_ENDS_LABEL}. Print is
+            manufactured on demand; you will be notified when your order ships.
+            Digital formats are {COMING_LABEL} — Limited Founders includes signed
+            Companion plus the full digital set now.
           </p>
         </div>
       </Reveal>

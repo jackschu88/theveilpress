@@ -5,18 +5,19 @@
  * Do not invent SKUs. Granny on the Go is intentionally excluded.
  *
  * PRESALE (order now through 26 August 2026):
- *   Softcover, Hardcover, Founders Edition, Limited Founders Edition only.
+ *   Softcover, Hardcover, Companion Guide hardcover,
+ *   Founders Edition, Limited Founders Edition.
  *
  * COMING August 26, 2026 (not for sale yet):
- *   All digital SKUs (ebook, audiobook, digital bundles) and Companion Guide.
+ *   All digital SKUs (ebook, audiobook, digital-only bundles).
  *   Limited Founders still includes digital as part of that package.
  *
- * Live catalog (Gumroad checkout totals; soft/hard/companion bake in $5 ship):
+ * Live catalog (Gumroad checkout totals; soft/hard bake in $5 ship, companion $10):
  *   Softcover .............. $39.99 + $5 ship = $44.99  l/jiytnb  ← PRESALE
  *   Hardcover .............. $46.99 + $5 ship = $51.99  l/pntwl   ← PRESALE
  *   Digital Edition ........ $15.99  l/riwlqv  ← COMING Aug 26
  *   Audiobook .............. $17.99  l/rphkx   ← COMING Aug 26
- *   Companion hardcover .... $54.99 + $5 ship = $59.99  l/jawnaq  ← COMING Aug 26
+ *   Companion hardcover .... $59.99 + $10 ship = $69.99  l/jawnaq  ← PRESALE
  *   Founders Edition ....... $64.99  l/jnnnft  ← PRESALE
  *   Limited Founders ....... $129.99 l/uehrv   ← PRESALE (free ship)
  *   Digital + Companion .... $34.99  l/tkfupm  ← COMING Aug 26
@@ -24,8 +25,8 @@
  *   Audio + Companion ...... $36.99  l/mghiaq  ← COMING Aug 26
  *   Digital + Audio + Comp . $49.99  l/obsuvc  ← COMING Aug 26
  *
- * Site displays product price without shipping for soft/hard/companion,
- * then “Plus $5 shipping.” Gumroad still charges the full baked-in total.
+ * Site displays product price without shipping,
+ * then shipping note. Gumroad charges the full baked-in total.
  */
 
 /** Inclusive end of the Volume I print/founders presale window (UTC date). */
@@ -43,12 +44,12 @@ export function isPresaleActive(now = new Date()) {
 }
 
 export const PRESALE_BANNER =
-  "Softcover, hardcover, and Founders editions on presale through August 26, 2026. Digital formats and Companion Guide: Coming August 26th.";
+  "Softcover, hardcover, Companion Guide, and Founders editions on presale through August 26, 2026. Digital formats: Coming August 26th.";
 
 /**
  * saleStatus:
- *   "presale" — buyable now (print + both Founders)
- *   "coming"  — Coming August 26th (digital + companion + digital bundles)
+ *   "presale" — buyable now (print + Companion hardcover + both Founders)
+ *   "coming"  — Coming August 26th (digital SKUs + digital bundles)
  *
  * @typedef {{ url: string, price: number, label: string, name: string, blurb: string, path?: string, checkout?: "external" | "hybrid", shippingNote?: string, saleStatus?: "presale" | "coming" }} Product
  * @typedef {{ id: string, channel: "ingram" | "gumroad", title: string, detail: string, price: number, url: string, label: string, saleStatus?: "presale" | "coming" }} CheckoutStep
@@ -82,9 +83,11 @@ export function formatPrice(n) {
   return `$${n.toFixed(2)}`;
 }
 
-/** Flat shipping added at Gumroad for softcover, hardcover, and Companion. */
+/** Flat shipping added at Gumroad for softcover, hardcover. Companion uses $10. */
 export const SHIPPING_FEE = 5;
+export const COMPANION_SHIPPING_FEE = 10;
 export const SHIPPING_NOTE = "Plus $5 shipping";
+export const COMPANION_SHIPPING_NOTE = "Plus $10 shipping";
 export const FREE_SHIPPING_NOTE = "Free shipping";
 
 /**
@@ -98,9 +101,9 @@ export const STANDALONE = {
   print: 39.99,
   ebook: 15.99,
   audiobook: 17.99,
-  /** Companion Guide hardcover (live SKU) */
-  companion: 54.99,
-  companionHardcover: 54.99,
+  /** Companion Guide hardcover (live SKU — $59.99 product + $10 shipping = $69.99 Gumroad) */
+  companion: 59.99,
+  companionHardcover: 59.99,
   foundersSignedHardcover: 64.99,
   limitedFounders: 129.99,
 };
@@ -109,8 +112,8 @@ export const STANDALONE = {
 export const GUMROAD_CHECKOUT_TOTAL = {
   softcover: money(STANDALONE.softcover + SHIPPING_FEE), // 44.99
   hardcover: money(STANDALONE.hardcover + SHIPPING_FEE), // 51.99
-  companion: money(STANDALONE.companion + SHIPPING_FEE), // 59.99
-  companionHardcover: money(STANDALONE.companionHardcover + SHIPPING_FEE), // 59.99
+  companion: money(STANDALONE.companion + COMPANION_SHIPPING_FEE), // 69.99
+  companionHardcover: money(STANDALONE.companionHardcover + COMPANION_SHIPPING_FEE), // 69.99
   foundersSignedHardcover: STANDALONE.foundersSignedHardcover,
   limitedFounders: STANDALONE.limitedFounders,
   ebook: STANDALONE.ebook,
@@ -200,7 +203,7 @@ export const hybridPlans = {
     name: "Print + Companion",
     price: prices.bundlePrintCompanion,
     blurb:
-      "Softcover is on presale now. Companion Guide is Coming August 26th — pre-order softcover alone, or get both via Limited Founders.",
+      "Both on presale now via Gumroad. Softcover + Companion Guide hardcover (two checkouts), or one-cart Limited Founders for signed set + digital.",
     steps: [
       {
         id: "print",
@@ -216,11 +219,11 @@ export const hybridPlans = {
         id: "companion",
         channel: "gumroad",
         title: "Companion hardcover",
-        detail: `Hardcover companion guide. ${formatPrice(prices.companionHardcover)} + $${SHIPPING_FEE} shipping. Coming August 26th.`,
+        detail: `Hardcover companion guide. ${formatPrice(prices.companionHardcover)} + $${COMPANION_SHIPPING_FEE} shipping. On presale now.`,
         price: prices.companionHardcover,
         url: GUMROAD.companionHardcover,
-        label: COMING_LABEL,
-        saleStatus: "coming",
+        label: `Pre-order Companion · ${formatPrice(prices.companionHardcover)}`,
+        saleStatus: "presale",
       },
     ],
   },
@@ -280,12 +283,12 @@ export const products = {
   companion: {
     name: "Companion Guide (Hardcover)",
     price: prices.companion,
-    label: COMING_LABEL,
+    label: `Pre-order Companion · ${formatPrice(prices.companion)}`,
     url: GUMROAD.companionHardcover,
-    blurb: `${COMING_LABEL}. Hardcover apparatus: glossary, timelines, trees, bibliography, steelman. Plus $${SHIPPING_FEE} shipping. Not on standalone presale — included (signed) in Limited Founders.`,
-    shippingNote: SHIPPING_NOTE,
+    blurb: `Presale through ${PRESALE_ENDS_LABEL}. Hardcover apparatus: glossary, timelines, trees, bibliography, steelman. ${COMPANION_SHIPPING_NOTE} shipping. Also included (signed) in Limited Founders.`,
+    shippingNote: COMPANION_SHIPPING_NOTE,
     checkout: "external",
-    saleStatus: "coming",
+    saleStatus: "presale",
   },
   foundersEdition: {
     name: "Founders Edition",
@@ -310,13 +313,13 @@ export const products = {
   bundlePrintCompanion: {
     name: "Softcover + Companion",
     price: prices.bundlePrintCompanion,
-    label: COMING_LABEL,
+    label: `Pre-order Print + Companion · ${formatPrice(prices.bundlePrintCompanion)}`,
     url: "",
     path: hybridPlans["print-companion"].path,
     checkout: "hybrid",
-    blurb: `Softcover is on presale alone. Companion Guide is ${COMING_LABEL}. Or pre-order Limited Founders for both (signed) plus digital.`,
+    blurb: `Both on presale now (two Gumroad steps). Or pre-order Limited Founders for both signed hardcovers plus digital.`,
     shippingNote: SHIPPING_NOTE,
-    saleStatus: "coming",
+    saleStatus: "presale",
   },
   bundleEbookCompanion: {
     name: "Digital Edition + Companion Guide",
@@ -404,13 +407,13 @@ export const PRESALE_LIST = {
  * Limited Founders — cost if each piece is bought separately.
  *
  *   Founders Edition (signed HC book) ........ $64.99  (Gumroad total)
- *   Companion Guide hardcover ................ $54.99 + $5 shipping = $59.99
+ *   Companion Guide hardcover ................ $59.99 + $10 shipping = $69.99
  *   Digital Edition (ebook) .................. $15.99
  *   Audiobook ................................ $17.99
  *   ─────────────────────────────────────────────────
- *   Total separately ......................... $158.96
+ *   Total separately ......................... $168.96
  *   Limited Founders Edition ................. $129.99  (free shipping)
- *   You save ................................. $28.97
+ *   You save ................................. $38.97
  *
  * Bonuses with no solo SKU (personal message, companion extension, numbered)
  * are listed as included only.
@@ -426,9 +429,9 @@ export const EXECUTIVE_VALUE_STACK = [
   },
   {
     item: "Companion Guide (hardcover)",
-    // Site list $54.99 + $5 shipping = full Gumroad checkout
-    solo: money(STANDALONE.companionHardcover + SHIPPING_FEE),
-    detail: `${formatPrice(STANDALONE.companionHardcover)} + $${SHIPPING_FEE} shipping`,
+    // Site list $59.99 + $10 shipping = full Gumroad checkout
+    solo: money(STANDALONE.companionHardcover + COMPANION_SHIPPING_FEE),
+    detail: `${formatPrice(STANDALONE.companionHardcover)} + $${COMPANION_SHIPPING_FEE} shipping`,
   },
   {
     item: "Digital Edition (ebook)",
@@ -474,9 +477,9 @@ export const PRESALE = {
     name: "Companion Guide (Hardcover)",
     price: PRESALE_LIST.companionHardcover,
     url: GUMROAD.companionHardcover,
-    blurb: `${COMING_LABEL}. Plus $${SHIPPING_FEE} shipping. Not on standalone presale — included (signed) in Limited Founders.`,
-    shippingNote: SHIPPING_NOTE,
-    saleStatus: "coming",
+    blurb: `Presale through ${PRESALE_ENDS_LABEL}. ${COMPANION_SHIPPING_NOTE} shipping. Also included (signed) in Limited Founders.`,
+    shippingNote: COMPANION_SHIPPING_NOTE,
+    saleStatus: "presale",
   },
   foundersPack: {
     name: "Founders Edition",
