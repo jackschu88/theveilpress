@@ -8,6 +8,12 @@ export default defineConfig({
   output: 'static',
   adapter: vercel(),
   site: 'https://theveilpress.com',
+  security: {
+    allowedDomains: [
+      { hostname: 'theveilpress.com', protocol: 'https' },
+      { hostname: 'www.theveilpress.com', protocol: 'https' },
+    ],
+  },
   server: {
     port: 5180,
   },
