@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const affiliates = [
+  {
+    id: 'ree-medical',
+    name: 'REE Medical',
+    tag: 'Veterans / VA claims',
+    description:
+      "Independent medical opinions and nexus letters for veterans building or appealing a VA disability claim. This is the service I personally used to move my own rating from 90% to 100%.",
+    href: 'https://referrals.reemedical.com/l/JACKSCHUMA10/',
+    cta: 'Get your free consultation',
+  },
+];
+---
+
+<BaseLayout
+  title="Affiliates"
+  description="Products and services I actually use and vouch for."
+  noindex={true}
+>
+  <div class="vp-page affiliates-page">
+    <header class="affiliates-header">
+      <p class="vp-eyebrow">Recommended</p>
+      <h1 class="vp-page-title">Affiliates</h1>
+      <p class="vp-page-dek">
+        A short list of products and services I've actually used and am glad to put my name
+        behind. Some of these links pay me a referral if you sign up — that never changes
+        whether something ends up on this page.
+      </p>
+    </header>
+
+    <div class="affiliates-grid">
+      {affiliates.map((a) => (
+        <article class="affiliate-card vp-glass vp-glass--card" id={a.id}>
+          <p class="vp-tag">{a.tag}</p>
+          <h2 class="affiliate-name">{a.name}</h2>
+          <p class="affiliate-desc">{a.description}</p>
+          <a
+            class="vp-btn vp-btn--primary"
+            href={a.href}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+          >
+            {a.cta}
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .affiliates-header {
+    margin-bottom: var(--vp-space-6);
+  }
+
+  .affiliates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: var(--vp-space-5);
+  }
+
+  .affiliate-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--vp-space-3);
+  }
+
+  .affiliate-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--vp-text-primary);
+    margin: 0;
+  }
+
+  .affiliate-desc {
+    color: var(--vp-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>
