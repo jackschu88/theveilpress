@@ -63,16 +63,16 @@ export default function Companion() {
     <AnimatedPage>
       <Reveal>
         <p className="eyebrow">The Veil of the Square Mile</p>
-        <h1>Companion Guide</h1>
+        <h1>Companion Guide — Hardcover</h1>
         <p className="lede">You have read the argument. Here is the apparatus.</p>
         <p className="muted prose">
           Sources, timelines, dynastic trees, glossary, bibliography, appendices,
           and the steelman of objections. The main book is the journey; the
-          Companion is the map.
+          Companion is the map. This is the physical hardcover edition.
         </p>
         {fromBookPath && (
           <p className="note-box" style={{ marginTop: "1.25rem" }}>
-            From the book page. Companion Guide is on presale now (
+            From the book page. Companion Guide hardcover is on presale now (
             {formatPrice(companion.price)} + $10 shipping). Softcover, hardcover,
             and both Founders editions are also on presale through{" "}
             {PRESALE_ENDS_LABEL}. Digital formats are {COMING_LABEL}. Limited
@@ -91,12 +91,12 @@ export default function Companion() {
               controls
               playsInline
               preload="metadata"
-              aria-label="Cinematic trailer for the Companion Guide"
+              aria-label="Cinematic trailer for the Companion Guide hardcover"
               onPlay={() => trackVideoPlay("companion-trailer", { source: "companion_page" })}
             />
           </div>
           <p className="muted companion-trailer-caption">
-            Companion Guide · {formatPrice(companion.price)} + $10 shipping
+            Companion Guide — Hardcover · {formatPrice(companion.price)} + $10 shipping
           </p>
         </div>
       </Reveal>
@@ -128,15 +128,15 @@ export default function Companion() {
           <div className="section-head">
             <h2>Get the Companion</h2>
             <p className="muted" style={{ margin: "0.5rem 0 0" }}>
-              Standalone Companion hardcover is on presale now via Gumroad.
+              Standalone Companion Guide hardcover is on presale now via Gumroad.
               Digital-only bundles are {COMING_LABEL}. Limited Founders includes
-              signed Companion + all digital + signed book.
+              signed Companion hardcover + all digital + signed book.
             </p>
           </div>
         </Reveal>
         <Stagger className="price-row">
           <StaggerItem className="price-card price-glow price-card-featured">
-            <div className="meta">On presale · Gumroad</div>
+            <div className="meta">On presale · Hardcover</div>
             <strong>{formatPrice(companion.price)}</strong>
             <p
               style={{
