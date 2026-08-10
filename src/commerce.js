@@ -122,20 +122,20 @@ export const GUMROAD_CHECKOUT_TOTAL = {
 
 /** Gumroad URLs — live product links only. */
 export const GUMROAD = {
-  softcover: "https://theveilpress.gumroad.com/l/jiytnb",
-  hardcover: "https://theveilpress.gumroad.com/l/pntwl",
-  ebook: "https://theveilpress.gumroad.com/l/riwlqv",
-  audiobook: "https://theveilpress.gumroad.com/l/rphkx",
-  companionHardcover: "https://theveilpress.gumroad.com/l/jawnaq",
+  softcover: "https://shop.theveilpress.com/l/jiytnb",
+  hardcover: "https://shop.theveilpress.com/l/pntwl",
+  ebook: "https://shop.theveilpress.com/l/riwlqv",
+  audiobook: "https://shop.theveilpress.com/l/rphkx",
+  companionHardcover: "https://shop.theveilpress.com/l/jawnaq",
   /** Alias used by products.companion */
-  companion: "https://theveilpress.gumroad.com/l/jawnaq",
-  foundersEdition: "https://theveilpress.gumroad.com/l/jnnnft",
-  limitedFounders: "https://theveilpress.gumroad.com/l/uehrv",
-  bundleEbookCompanion: "https://theveilpress.gumroad.com/l/tkfupm",
-  bundleEbookAudio: "https://theveilpress.gumroad.com/l/ggmum",
-  bundleAudioCompanion: "https://theveilpress.gumroad.com/l/mghiaq",
-  bundleEbookAudioCompanion: "https://theveilpress.gumroad.com/l/obsuvc",
-  fullDigitalUnlock: "https://theveilpress.gumroad.com/l/obsuvc",
+  companion: "https://shop.theveilpress.com/l/jawnaq",
+  foundersEdition: "https://shop.theveilpress.com/l/jnnnft",
+  limitedFounders: "https://shop.theveilpress.com/l/uehrv",
+  bundleEbookCompanion: "https://shop.theveilpress.com/l/tkfupm",
+  bundleEbookAudio: "https://shop.theveilpress.com/l/ggmum",
+  bundleAudioCompanion: "https://shop.theveilpress.com/l/mghiaq",
+  bundleEbookAudioCompanion: "https://shop.theveilpress.com/l/obsuvc",
+  fullDigitalUnlock: "https://shop.theveilpress.com/l/obsuvc",
 };
 
 /** @deprecated empty Ingram — print is on Gumroad now */
