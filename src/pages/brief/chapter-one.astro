@@ -1,0 +1,118 @@
+---
+/**
+ * The free lead-magnet excerpt — Volume Zero (Introduction) + Part I (The Hidden Throne),
+ * real manuscript text, not a placeholder. This is what /brief promises.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { marked } from 'marked';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BriefCTA from '../../components/BriefCTA.astro';
+
+const EXCERPT_DIR = path.join(process.cwd(), 'content', 'excerpt');
+const intro = fs.readFileSync(path.join(EXCERPT_DIR, '00-intro.md'), 'utf-8');
+const partOne = fs.readFileSync(path.join(EXCERPT_DIR, '01-part-one.md'), 'utf-8');
+
+const introHtml = await marked.parse(intro);
+const partOneHtml = await marked.parse(partOne);
+---
+
+<BaseLayout
+  title="The First Chapter, Free"
+  description="Volume Zero and Part I of The Veil of the Square Mile — the free excerpt."
+>
+  <article class="excerpt-page">
+    <header class="excerpt-header">
+      <p class="vp-eyebrow">Free excerpt</p>
+      <h1 class="vp-page-title">The Veil of the Square Mile</h1>
+      <p class="vp-page-dek">Volume Zero: Introduction, and Part I: The Hidden Throne — in full.</p>
+    </header>
+
+    <div class="excerpt-content" set:html={introHtml} />
+    <hr class="excerpt-divider" />
+    <div class="excerpt-content" set:html={partOneHtml} />
+
+    <div class="excerpt-foot">
+      <BriefCTA
+        source="chapter-one-end"
+        heading="Want the rest?"
+        text="Fourteen more parts and the final synthesis. Softcover and hardcover are on presale now."
+      />
+      <p class="excerpt-buy-link">
+        <a href="/library/veil" class="vp-btn vp-btn--primary vp-btn--gold">Pre-order the book</a>
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .excerpt-page {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: var(--vp-space-7) var(--vp-space-5);
+  }
+
+  .excerpt-header {
+    text-align: center;
+    margin-bottom: var(--vp-space-7);
+  }
+
+  .excerpt-content {
+    color: var(--vp-text-primary);
+    line-height: 1.75;
+    font-size: 1.08rem;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+  }
+
+  .excerpt-content :global(h1) {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    margin: 0 0 var(--vp-space-2);
+    color: var(--vp-text-primary);
+  }
+
+  .excerpt-content :global(h2) {
+    font-family: 'Cinzel', serif;
+    font-size: 1.35rem;
+    margin: var(--vp-space-7) 0 var(--vp-space-3);
+    color: var(--vp-text-primary);
+  }
+
+  .excerpt-content :global(h3) {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    margin: var(--vp-space-5) 0 var(--vp-space-2);
+  }
+
+  .excerpt-content :global(p) {
+    margin: 0 0 var(--vp-space-4);
+  }
+
+  .excerpt-content :global(em) {
+    color: var(--vp-text-secondary);
+  }
+
+  .excerpt-content :global(strong) {
+    color: var(--vp-text-primary);
+    font-weight: 600;
+  }
+
+  .excerpt-divider {
+    border: none;
+    border-top: 1px solid var(--vp-rule);
+    margin: var(--vp-space-8) 0;
+  }
+
+  .excerpt-foot {
+    margin-top: var(--vp-space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vp-space-5);
+    align-items: center;
+    text-align: center;
+  }
+
+  .excerpt-buy-link {
+    margin: 0;
+  }
+</style>

@@ -5,6 +5,9 @@
  */
 import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import SquareMilePage from '../../islands/SquareMilePage';
+import { products, PRESALE_ENDS_LABEL } from '../../commerce.js';
+
+const { softcover, hardcover } = products;
 ---
 
 <LibraryLayout
@@ -17,11 +20,28 @@ import SquareMilePage from '../../islands/SquareMilePage';
       <div slot="fallback" class="veil-fallback">
         <p class="vp-eyebrow">Volume I · The Veil Press</p>
         <h1 class="vp-page-title">The Veil of the Square Mile</h1>
-        <p class="vp-page-dek">Loading the book page…</p>
+        <p class="vp-page-dek">
+          The invisible British financial empire — documented, not dramatized.
+          Presale through {PRESALE_ENDS_LABEL}.
+        </p>
+        <div class="veil-fallback-actions">
+          <a href={softcover.url} class="vp-btn vp-btn--primary">
+            {softcover.label}
+          </a>
+          <a href={hardcover.url} class="vp-btn vp-btn--secondary">
+            {hardcover.label}
+          </a>
+        </div>
       </div>
     </SquareMilePage>
   </div>
 </LibraryLayout>
+
+<script is:inline>
+  if (typeof window.fbq === 'function') {
+    window.fbq('track', 'ViewContent', { content_name: 'The Veil of the Square Mile' });
+  }
+</script>
 
 <style>
   .veil-island {
@@ -35,5 +55,12 @@ import SquareMilePage from '../../islands/SquareMilePage';
     min-height: 40vh;
     max-width: 72rem;
     margin: 0 auto;
+  }
+
+  .veil-fallback-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vp-space-3);
+    margin-top: var(--vp-space-5);
   }
 </style>

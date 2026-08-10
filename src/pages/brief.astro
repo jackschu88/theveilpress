@@ -3,21 +3,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const formAction = import.meta.env.PUBLIC_BRIEF_FORM_ACTION;
 const hasFormAction = typeof formAction === 'string' && formAction.trim().length > 0;
+// This is a static build — Astro.url has no per-visitor query string at
+// build time. The real ?src= value is filled in client-side below.
+const source = 'brief-direct';
 ---
 
 <BaseLayout
-  title="The Brief"
-  description="A weekly signal through the noise from The Veil Press. No spam, no resale."
+  title="Get the First Chapter Free"
+  description="Volume Zero and Part I of The Veil of the Square Mile, free. No card, no catch."
 >
   <section class="brief-page">
     <div class="vp-glass vp-glass--card brief-card">
-      <h1 class="brief-heading">The Brief</h1>
+      <p class="vp-eyebrow">Free excerpt</p>
+      <h1 class="brief-heading">Get the first chapter free</h1>
       <p class="brief-desc">
-        A weekly signal through the noise. No spam, no resale.
+        Volume Zero and Part I of <em>The Veil of the Square Mile</em> — the Introduction and
+        "The Hidden Throne," in full. Enter your email and we'll send it straight over, plus the
+        occasional signal through the noise. No spam, no resale, unsubscribe anytime.
       </p>
       {
         hasFormAction ? (
-          <form class="brief-form" method="post" action={formAction}>
+          <form class="brief-form" method="post" action="/api/brief-signup">
             <input
               class="brief-input"
               type="email"
@@ -25,10 +31,9 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
               placeholder="Your email address"
               required
             />
-            <input type="hidden" name="_subject" value="The Veil Press Brief" />
-            <input type="hidden" name="_next" value="https://theveilpress.com/brief/thank-you" />
+            <input type="hidden" name="source" id="brief-source" value={source} />
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-            <button class="brief-submit" type="submit">Subscribe</button>
+            <button class="brief-submit" type="submit">Send me the chapter</button>
           </form>
         ) : (
           <div class="brief-form brief-form--disabled">
@@ -38,18 +43,27 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
               placeholder="Your email address"
               disabled
             />
-            <button class="brief-submit" type="button" disabled>Subscribe</button>
+            <button class="brief-submit" type="button" disabled>Send me the chapter</button>
           </div>
         )
       }
       <p class="vp-text-muted brief-disclaimer">
         {hasFormAction
-          ? 'We\'ll send the Brief only. No resale. Interim form until listmonk.'
+          ? 'No spam, no resale, unsubscribe anytime.'
           : 'Subscriptions not configured yet. Check back soon.'}
       </p>
     </div>
   </section>
 </BaseLayout>
+
+<script is:inline>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var src = params.get('src');
+    var field = document.getElementById('brief-source');
+    if (src && field) field.value = src;
+  })();
+</script>
 
 <style>
   .brief-page {

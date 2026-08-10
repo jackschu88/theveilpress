@@ -46,8 +46,6 @@ export function BuyButton({
   const props = {
     href,
     className,
-    target: "_blank",
-    rel: "noopener noreferrer",
     onClick: handleClick,
   };
 

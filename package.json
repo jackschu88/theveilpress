@@ -12,7 +12,7 @@
     "scan": "node scripts/scanIndex.js",
     "validate-articles": "node scripts/validateArticles.js",
     "ci": "npm run scan && npm run validate-articles && npm run check && npm run build",
-    "postbuild": "npx pagefind --site dist",
+    "postbuild": "npx pagefind --site dist/client && node -e \"require('fs').cpSync('dist/client/pagefind','.vercel/output/static/pagefind',{recursive:true})\"",
     "test": "vitest run"
   },
   "dependencies": {
@@ -20,6 +20,7 @@
     "@astrojs/react": "^5.0.0",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
+    "@astrojs/vercel": "^9.0.5",
     "@gsap/react": "^2.1.2",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
@@ -35,6 +36,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
+    "resend": "^6.18.1",
     "three": "^0.185.1",
     "typescript": "^5.9.3"
   },

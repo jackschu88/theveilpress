@@ -1,0 +1,216 @@
+---
+/**
+ * Single-purpose capture landing page for paid ad traffic.
+ * No nav, no storefront, no desk — one message, one CTA: the free chapter.
+ * Point Facebook/paid campaigns here instead of "/".
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const formAction = import.meta.env.PUBLIC_BRIEF_FORM_ACTION;
+const hasFormAction = typeof formAction === 'string' && formAction.trim().length > 0;
+---
+
+<BaseLayout
+  title="Get the First Chapter Free"
+  description="The Veil of the Square Mile — the invisible British financial empire, documented. Read the first chapter free."
+  minimal
+>
+  <section class="read-page">
+    <div class="read-stage" aria-hidden="true"></div>
+
+    <div class="read-panel">
+      <p class="vp-eyebrow">The Veil of the Square Mile</p>
+      <h1 class="read-title">The invisible British financial empire — documented, not dramatized.</h1>
+      <p class="read-dek">
+        Fifteen parts. Architecture on the record. Read Volume Zero and Part I free —
+        no card, no catch.
+      </p>
+
+      <div class="read-trailer-frame">
+        <video
+          class="read-trailer-video"
+          controls
+          playsinline
+          preload="metadata"
+          poster="/cover.jpg"
+          aria-label="The Veil of the Square Mile — official trailer"
+        >
+          <source src="/videos/square-mile-trailer.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div class="vp-glass vp-glass--card read-form-card">
+        {
+          hasFormAction ? (
+            <form class="read-form" method="post" action="/api/brief-signup">
+              <input
+                class="read-input"
+                type="email"
+                name="email"
+                placeholder="Your email address"
+                required
+              />
+              <input type="hidden" name="source" value="read-landing" />
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+              <button class="read-submit" type="submit">Send me the free chapter</button>
+            </form>
+          ) : (
+            <p class="vp-text-muted">Signup is temporarily unavailable — check back soon.</p>
+          )
+        }
+        <p class="read-disclaimer vp-text-muted">No spam, no resale, unsubscribe anytime.</p>
+      </div>
+
+      <p class="read-alt">
+        Already sold? <a href="/library/veil">Pre-order the book directly →</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .read-page {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--vp-space-7) var(--vp-space-5);
+  }
+
+  .read-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 40%, rgba(16, 19, 28, 0.2), transparent 70%),
+      url('/limited-founders-hero-wide.jpg') center / cover no-repeat;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .read-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(7, 8, 12, 0.6) 0%,
+      rgba(7, 8, 12, 0.8) 60%,
+      var(--vp-bg-deep) 100%
+    );
+  }
+
+  .read-panel {
+    position: relative;
+    z-index: 1;
+    max-width: 40rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .read-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.5rem, 4.5vw, 2.25rem);
+    font-weight: 600;
+    color: var(--vp-text-primary);
+    margin: var(--vp-space-3) 0 var(--vp-space-4);
+    line-height: 1.2;
+  }
+
+  .read-dek {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: var(--vp-text-secondary);
+    margin: 0 0 var(--vp-space-5);
+  }
+
+  .read-trailer-frame {
+    border-radius: var(--vp-radius-md, 6px);
+    overflow: hidden;
+    border: 1px solid var(--vp-edge);
+    background: #000;
+    margin: 0 auto var(--vp-space-6);
+    box-shadow: 0 0 40px rgba(196, 165, 116, 0.08), 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .read-trailer-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .read-form-card {
+    padding: var(--vp-space-6);
+  }
+
+  .read-form {
+    display: flex;
+    gap: var(--vp-space-2);
+    max-width: 26rem;
+    margin: 0 auto var(--vp-space-3);
+  }
+
+  .read-input {
+    flex: 1;
+    padding: var(--vp-space-3) var(--vp-space-4);
+    border: 1px solid var(--vp-edge);
+    border-radius: var(--vp-radius-sm);
+    background: var(--vp-bg-deep);
+    color: var(--vp-text-primary);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  .read-input:focus {
+    outline: none;
+    border-color: var(--vp-edge-hot);
+  }
+
+  .read-submit {
+    padding: var(--vp-space-3) var(--vp-space-5);
+    border: none;
+    border-radius: var(--vp-radius-sm);
+    background: var(--vp-accent-gold);
+    color: #0c0e14;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background var(--vp-duration) var(--vp-ease);
+  }
+
+  .read-submit:hover {
+    background: var(--vp-accent-gold-hi);
+  }
+
+  .read-disclaimer {
+    font-size: 0.8rem;
+    margin: 0;
+  }
+
+  .read-alt {
+    margin: var(--vp-space-5) 0 0;
+    font-size: 0.85rem;
+    color: var(--vp-text-muted);
+  }
+
+  .read-alt a {
+    color: var(--vp-accent-gold);
+    text-decoration: none;
+  }
+
+  .read-alt a:hover {
+    color: var(--vp-accent-gold-hi);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 520px) {
+    .read-form {
+      flex-direction: column;
+    }
+  }
+</style>

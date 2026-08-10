@@ -4,6 +4,19 @@ import { easeOut } from "../../motion";
 
 const KEY = "veilpress-intro-seen";
 
+/** Paid ad traffic should hit content immediately — skip the cinematic beat. */
+function isPaidTraffic(): boolean {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("fbclid") || params.has("gclid")) return true;
+    const source = params.get("utm_source");
+    if (source && /facebook|fb|meta|instagram|ig/i.test(source)) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 export default function VeilIntro() {
   const reduce = useReducedMotion();
   const [show, setShow] = useState(false);
@@ -14,6 +27,14 @@ export default function VeilIntro() {
       if (sessionStorage.getItem(KEY)) return undefined;
     } catch {
       /* ignore */
+    }
+    if (isPaidTraffic()) {
+      try {
+        sessionStorage.setItem(KEY, "1");
+      } catch {
+        /* ignore */
+      }
+      return undefined;
     }
     setShow(true);
     const t = setTimeout(() => {

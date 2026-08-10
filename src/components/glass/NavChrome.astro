@@ -23,16 +23,12 @@ const path = url.pathname;
         </a>
       </li>
       <li>
-        <a href="/brief" class={`nav-link${path.startsWith('/brief') ? ' active' : ''}`}>
-          Brief
-        </a>
-      </li>
-      <li>
         <a href="/about" class={`nav-link${path.startsWith('/about') ? ' active' : ''}`}>
           About
         </a>
       </li>
     </ul>
+    <a href="/brief?src=nav" class="nav-brief-cta">Free chapter</a>
   </div>
 </nav>
 
@@ -116,6 +112,24 @@ const path = url.pathname;
     color: var(--vp-accent-gold);
   }
 
+  .nav-brief-cta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #0c0e14;
+    background: var(--vp-accent-gold);
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--vp-radius-sm);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--vp-duration-fast) var(--vp-ease);
+  }
+
+  .nav-brief-cta:hover {
+    background: var(--vp-accent-gold-hi);
+  }
+
   @media (max-width: 768px) {
     .nav-inner {
       flex-direction: column;
@@ -135,6 +149,10 @@ const path = url.pathname;
 
     .nav-link {
       font-size: 0.8rem;
+    }
+
+    .nav-brief-cta {
+      margin-top: 0.15rem;
     }
   }
 

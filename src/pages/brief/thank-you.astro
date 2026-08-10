@@ -2,13 +2,17 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="You're on the list" description="Thanks for joining The Brief." noindex={true}>
+<BaseLayout title="Here's your chapter" description="Thanks for joining The Brief — here's the free chapter." noindex={true}>
   <section class="brief-page">
     <div class="vp-glass vp-glass--card brief-card">
       <h1 class="brief-heading">You're on the list</h1>
       <p class="brief-desc">
         Thanks for joining The Brief. We'll send signal only — no spam, no resale.
+        Your free chapter is ready now, no need to wait for the email.
       </p>
+      <a href="/brief/chapter-one" class="vp-btn vp-btn--primary vp-btn--gold brief-chapter-cta">
+        Read the first chapter now →
+      </a>
       <p class="brief-links">
         <a href="/desk">Read the Desk</a>
         <span aria-hidden="true"> · </span>
@@ -19,6 +23,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </div>
   </section>
 </BaseLayout>
+
+<script is:inline>
+  if (typeof window.fbq === 'function') {
+    window.fbq('track', 'Lead');
+  }
+</script>
 
 <style>
   .brief-page {
@@ -49,6 +59,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     margin: 0 auto var(--vp-space-5);
     max-width: 24rem;
     line-height: 1.6;
+  }
+
+  .brief-chapter-cta {
+    display: inline-block;
+    margin: 0 0 var(--vp-space-5);
   }
 
   .brief-links {

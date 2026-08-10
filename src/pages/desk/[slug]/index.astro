@@ -7,6 +7,7 @@ import path from 'node:path';
 import { marked } from 'marked';
 import DeskLayout from '../../../layouts/DeskLayout.astro';
 import AdSlot from '../../../components/ads/AdSlot.astro';
+import BriefCTA from '../../../components/BriefCTA.astro';
 import { loadArticleBySlug, uniqueArticleSlugs } from '../../../lib/loadArticles';
 
 const SITE_ROOT = process.cwd();
@@ -126,11 +127,7 @@ const pageImage = typeof data.image === 'string' ? data.image : undefined;
 
         <AdSlot slot="article-rail" />
 
-        <div class="vp-glass vp-glass--rail rail-section">
-          <h4 class="rail-heading">The Brief</h4>
-          <p class="rail-cta-text">Weekly signal through the noise.</p>
-          <a href="/brief" class="rail-cta-link">Subscribe →</a>
-        </div>
+        <BriefCTA source="desk-article" variant="rail" />
       </aside>
     </div>
   </article>
@@ -223,7 +220,4 @@ const pageImage = typeof data.image === 'string' ? data.image : undefined;
   .rail-claim-item { font-size: 0.85rem; }
   .rail-claim-label { display: inline-block; padding: 1px 6px; background: var(--vp-glass-fill-strong); border: 1px solid var(--vp-edge); border-radius: var(--vp-radius-sm); font-size: 0.7rem; text-transform: uppercase; color: var(--vp-text-muted); margin-bottom: var(--vp-space-1); }
   .rail-claim-statement { color: var(--vp-text-secondary); margin: 0; line-height: 1.4; }
-  .rail-cta-text { font-size: 0.85rem; color: var(--vp-text-secondary); margin: 0 0 var(--vp-space-2); }
-  .rail-cta-link { color: var(--vp-accent-gold); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
-  .rail-cta-link:hover { color: var(--vp-accent-gold-hi); }
 </style>

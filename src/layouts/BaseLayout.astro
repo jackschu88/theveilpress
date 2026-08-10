@@ -1,6 +1,8 @@
 ---
 import NavChrome from '../components/glass/NavChrome.astro';
 import LibraryIntro from '../islands/LibraryIntro';
+import MetaPixel from '../components/MetaPixel.astro';
+import CaptureNudge from '../components/CaptureNudge.astro';
 import '../styles/tokens.css';
 import '../styles/glass.css';
 import '../styles/press.css';
@@ -13,6 +15,8 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  /** Hide nav + footer for single-purpose landing pages (e.g. paid ad traffic). */
+  minimal?: boolean;
 }
 
 const {
@@ -20,6 +24,7 @@ const {
   description: descriptionProp,
   image: imageProp,
   noindex = false,
+  minimal = false,
 } = Astro.props;
 
 const siteName = 'The Veil Press';
@@ -61,6 +66,7 @@ const ogImage = ogImagePath.startsWith('http')
     <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <MetaPixel />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -80,45 +86,48 @@ const ogImage = ogImagePath.startsWith('http')
     </div>
 
     <div class="vp-shell">
-      <NavChrome />
+      {!minimal && <NavChrome />}
 
       <main class="vp-main">
         <slot />
       </main>
 
-      <footer class="site-footer">
-        <div class="shell footer-inner">
-          <div>
-            <p class="brand" style="margin-bottom:0.5rem">The Veil Press</p>
-            <p>
-              Institutional histories. The fog removed.<br />
-              &copy; {new Date().getFullYear()} Jack Schumacher<br />
-              <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
+      {!minimal && (
+        <footer class="site-footer">
+          <div class="shell footer-inner">
+            <div>
+              <p class="brand" style="margin-bottom:0.5rem">The Veil Press</p>
+              <p>
+                Institutional histories. The fog removed.<br />
+                &copy; {new Date().getFullYear()} Jack Schumacher<br />
+                <a href="mailto:deepdivefile@gmail.com">deepdivefile@gmail.com</a>
+              </p>
+            </div>
+            <div class="footer-links">
+              <a href="/">Home</a>
+              <a href="/desk">Desk</a>
+              <a href="/library">Library</a>
+              <a href="/watch">Watch</a>
+              <a href="/brief">Brief</a>
+              <a href="/about">About</a>
+            </div>
+          </div>
+          <div class="shell footer-social-row">
+            <nav class="footer-social" aria-label="Social media">
+              {SOCIALS.map((s) => (
+                <a href={s.href} target="_blank" rel="noopener noreferrer">
+                  {s.label}
+                </a>
+              ))}
+            </nav>
+            <p class="muted footer-tagline">
+              Desk builds the signal. Library holds the deep layer. Brief is the owned list.
             </p>
           </div>
-          <div class="footer-links">
-            <a href="/">Home</a>
-            <a href="/desk">Desk</a>
-            <a href="/library">Library</a>
-            <a href="/watch">Watch</a>
-            <a href="/brief">Brief</a>
-            <a href="/about">About</a>
-          </div>
-        </div>
-        <div class="shell footer-social-row">
-          <nav class="footer-social" aria-label="Social media">
-            {SOCIALS.map((s) => (
-              <a href={s.href} target="_blank" rel="noopener noreferrer">
-                {s.label}
-              </a>
-            ))}
-          </nav>
-          <p class="muted footer-tagline">
-            Desk builds the signal. Library holds the deep layer. Brief is the owned list.
-          </p>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
+    {!minimal && <CaptureNudge />}
     <Analytics />
   </body>
 </html>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BriefCTA from '../../components/BriefCTA.astro';
 
 const films = [
   {
@@ -74,6 +75,10 @@ const films = [
           </div>
         </article>
       ))}
+    </div>
+
+    <div class="watch-capture">
+      <BriefCTA source="watch" />
     </div>
 
     <p class="watch-foot vp-text-muted">
@@ -159,5 +164,9 @@ const films = [
   .watch-foot {
     margin: var(--vp-space-6) 0 0;
     font-size: 0.85rem;
+  }
+
+  .watch-capture {
+    margin-top: var(--vp-space-7);
   }
 </style>
