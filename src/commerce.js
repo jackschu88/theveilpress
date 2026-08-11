@@ -6,18 +6,21 @@
  *
  * PRESALE (order now through 26 August 2026):
  *   Softcover, Hardcover, Companion Guide hardcover,
+ *   Hardcover + Companion Guide bundle,
  *   Founders Edition, Limited Founders Edition.
  *
  * COMING August 26, 2026 (not for sale yet):
  *   All digital SKUs (ebook, audiobook, digital-only bundles).
  *   Limited Founders still includes digital as part of that package.
  *
- * Live catalog (Gumroad checkout totals; soft/hard bake in $5 ship, companion $10):
+ * Live catalog (Gumroad checkout totals; soft/hard bake in $5 ship, companion $10,
+ * hardcover+companion bundle bakes in $15 ship):
  *   Softcover .............. $39.99 + $5 ship = $44.99  l/jiytnb  ← PRESALE
  *   Hardcover .............. $46.99 + $5 ship = $51.99  l/pntwl   ← PRESALE
  *   Digital Edition ........ $15.99  l/riwlqv  ← COMING Aug 26
  *   Audiobook .............. $17.99  l/rphkx   ← COMING Aug 26
  *   Companion hardcover .... $59.99 + $10 ship = $69.99  l/jawnaq  ← PRESALE
+ *   Hardcover + Companion .. $104.99 + $15 ship = $119.99  l/qhzsbx  ← PRESALE
  *   Founders Edition ....... $64.99  l/jnnnft  ← PRESALE
  *   Limited Founders ....... $129.99 l/uehrv   ← PRESALE (free ship)
  *   Digital + Companion .... $34.99  l/tkfupm  ← COMING Aug 26
@@ -44,7 +47,7 @@ export function isPresaleActive(now = new Date()) {
 }
 
 export const PRESALE_BANNER =
-  "Softcover, hardcover, Companion Guide, and Founders editions on presale through August 26, 2026. Digital formats: Coming August 26th.";
+  "Softcover, hardcover, Companion Guide, Hardcover + Companion bundle, and Founders editions on presale through August 26, 2026. Digital formats: Coming August 26th.";
 
 /**
  * saleStatus:
@@ -83,16 +86,20 @@ export function formatPrice(n) {
   return `$${n.toFixed(2)}`;
 }
 
-/** Flat shipping added at Gumroad for softcover, hardcover. Companion uses $10. */
+/** Flat shipping added at Gumroad for softcover, hardcover. Companion uses $10. Bundle uses $15. */
 export const SHIPPING_FEE = 5;
 export const COMPANION_SHIPPING_FEE = 10;
+/** Hardcover + Companion Guide physical bundle shipping (baked into Gumroad $119.99). */
+export const HARDCOVER_BUNDLE_SHIPPING_FEE = 15;
 export const SHIPPING_NOTE = "Plus $5 shipping";
 export const COMPANION_SHIPPING_NOTE = "Plus $10 shipping";
+export const HARDCOVER_BUNDLE_SHIPPING_NOTE = "Plus $15 shipping";
 export const FREE_SHIPPING_NOTE = "Free shipping";
 
 /**
  * Site display prices (product only).
  * Softcover / hardcover / Companion: Gumroad checkout = price + SHIPPING_FEE.
+ * Hardcover + Companion bundle: Gumroad = $104.99 + $15 ship = $119.99.
  */
 export const STANDALONE = {
   softcover: 39.99,
@@ -104,6 +111,11 @@ export const STANDALONE = {
   /** Companion Guide hardcover (live SKU — $59.99 product + $10 shipping = $69.99 Gumroad) */
   companion: 59.99,
   companionHardcover: 59.99,
+  /**
+   * Hardcover book + Companion hardcover (physical set only).
+   * Site: $104.99 + $15 shipping. Gumroad checkout total: $119.99.
+   */
+  hardcoverCompanionBundle: 104.99,
   foundersSignedHardcover: 64.99,
   limitedFounders: 129.99,
 };
@@ -114,6 +126,9 @@ export const GUMROAD_CHECKOUT_TOTAL = {
   hardcover: money(STANDALONE.hardcover + SHIPPING_FEE), // 51.99
   companion: money(STANDALONE.companion + COMPANION_SHIPPING_FEE), // 69.99
   companionHardcover: money(STANDALONE.companionHardcover + COMPANION_SHIPPING_FEE), // 69.99
+  hardcoverCompanionBundle: money(
+    STANDALONE.hardcoverCompanionBundle + HARDCOVER_BUNDLE_SHIPPING_FEE
+  ), // 119.99
   foundersSignedHardcover: STANDALONE.foundersSignedHardcover,
   limitedFounders: STANDALONE.limitedFounders,
   ebook: STANDALONE.ebook,
@@ -129,6 +144,8 @@ export const GUMROAD = {
   companionHardcover: "https://shop.theveilpress.com/l/jawnaq",
   /** Alias used by products.companion */
   companion: "https://shop.theveilpress.com/l/jawnaq",
+  /** Hardcover + Companion Guide physical bundle ($119.99 total on Gumroad). */
+  hardcoverCompanionBundle: "https://shop.theveilpress.com/l/qhzsbx",
   foundersEdition: "https://shop.theveilpress.com/l/jnnnft",
   limitedFounders: "https://shop.theveilpress.com/l/uehrv",
   bundleEbookCompanion: "https://shop.theveilpress.com/l/tkfupm",
@@ -150,6 +167,7 @@ const prices = {
   audiobook: STANDALONE.audiobook,
   companion: STANDALONE.companion,
   companionHardcover: STANDALONE.companionHardcover,
+  hardcoverCompanionBundle: STANDALONE.hardcoverCompanionBundle,
   foundersEdition: STANDALONE.foundersSignedHardcover,
   limitedFounders: STANDALONE.limitedFounders,
   bundleEbookCompanion: 34.99,
@@ -290,6 +308,20 @@ export const products = {
     checkout: "external",
     saleStatus: "presale",
   },
+  /**
+   * Complete physical set: main book hardcover + Companion hardcover.
+   * Site shows $104.99 + $15 shipping; Gumroad charges $119.99.
+   */
+  hardcoverCompanionBundle: {
+    name: "Hardcover + Companion Guide",
+    price: prices.hardcoverCompanionBundle,
+    label: `Pre-order Hardcover Bundle · ${formatPrice(prices.hardcoverCompanionBundle)}`,
+    url: GUMROAD.hardcoverCompanionBundle,
+    blurb: `Presale through ${PRESALE_ENDS_LABEL}. The complete physical set — premium hardcover of The Veil of the Square Mile plus matching Companion Guide hardcover (The Map). ${HARDCOVER_BUNDLE_SHIPPING_NOTE}. Gumroad total ${formatPrice(GUMROAD_CHECKOUT_TOTAL.hardcoverCompanionBundle)}.`,
+    shippingNote: HARDCOVER_BUNDLE_SHIPPING_NOTE,
+    checkout: "external",
+    saleStatus: "presale",
+  },
   foundersEdition: {
     name: "Founders Edition",
     price: prices.foundersEdition,
@@ -397,6 +429,7 @@ export const PRESALE_LIST = {
   softcover: STANDALONE.softcover,
   hardcover: STANDALONE.hardcover,
   companionHardcover: STANDALONE.companionHardcover,
+  hardcoverCompanionBundle: STANDALONE.hardcoverCompanionBundle,
   foundersSignedHardcover: STANDALONE.foundersSignedHardcover,
   ebook: STANDALONE.ebook,
   audiobook: STANDALONE.audiobook,
@@ -479,6 +512,14 @@ export const PRESALE = {
     url: GUMROAD.companionHardcover,
     blurb: `Presale through ${PRESALE_ENDS_LABEL}. ${COMPANION_SHIPPING_NOTE}. Also included (signed) in Limited Founders.`,
     shippingNote: COMPANION_SHIPPING_NOTE,
+    saleStatus: "presale",
+  },
+  hardcoverCompanionBundle: {
+    name: "Hardcover + Companion Guide",
+    price: PRESALE_LIST.hardcoverCompanionBundle,
+    url: GUMROAD.hardcoverCompanionBundle,
+    blurb: `Presale through ${PRESALE_ENDS_LABEL}. Complete physical set — main book hardcover + Companion Guide hardcover. ${HARDCOVER_BUNDLE_SHIPPING_NOTE} (Gumroad total ${formatPrice(GUMROAD_CHECKOUT_TOTAL.hardcoverCompanionBundle)}).`,
+    shippingNote: HARDCOVER_BUNDLE_SHIPPING_NOTE,
     saleStatus: "presale",
   },
   foundersPack: {
@@ -571,6 +612,7 @@ const commerce = {
   get bundles() {
     return {
       printCompanion: products.bundlePrintCompanion,
+      hardcoverCompanion: products.hardcoverCompanionBundle,
       ebookCompanion: products.bundleEbookCompanion,
       audioCompanion: products.bundleAudioCompanion,
       ebookAudio: products.bundleEbookAudio,

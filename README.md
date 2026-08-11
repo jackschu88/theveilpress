@@ -50,9 +50,10 @@ src/commerce.js
 |--------|-----|
 | `squareMile.printUrl` | Amazon (or other) print listing |
 | `squareMile.ebookUrl` | Gumroad/Lemon PDF checkout |
-| `companion.fullUrl` | Companion standalone ~$19.99 |
-| `companion.printBuyerUrl` | Companion $5.99 (print QR path) |
-| `companion.ebookBuyerUrl` | Companion $5.99 (ebook thank-you path) |
+| `companion.fullUrl` | Companion standalone |
+| `products.hardcoverCompanionBundle` | Hardcover + Companion physical set — site $104.99 + $15 ship (Gumroad $119.99) |
+| `companion.printBuyerUrl` | Companion print-buyer path |
+| `companion.ebookBuyerUrl` | Companion ebook thank-you path |
 
 Leave a field as `""` → button shows **Coming soon / Link pending**.  
 Paste a real `https://...` URL → button goes live (opens in new tab).

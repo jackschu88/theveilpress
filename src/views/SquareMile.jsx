@@ -21,6 +21,7 @@ const PRESALE = [
   products.softcover,
   products.hardcover,
   products.companion,
+  products.hardcoverCompanionBundle,
   products.foundersEdition,
   products.limitedFounders,
 ];
@@ -196,8 +197,9 @@ export default function SquareMile() {
               </p>
               <h2>Pre-order</h2>
               <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
-                Softcover, hardcover, Companion Guide, and both Founders editions
-                are on presale now. Digital formats: {COMING_LABEL}.
+                Softcover, hardcover, Companion Guide, Hardcover + Companion
+                bundle, and both Founders editions are on presale now. Digital
+                formats: {COMING_LABEL}.
               </p>
             </div>
           </div>

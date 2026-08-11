@@ -839,6 +839,12 @@
           "price": 24.99,
           "url": "",
           "channel": "gumroad"
+        },
+        {
+          "name": "hardcover-companion-bundle",
+          "price": 104.99,
+          "url": "https://theveilpress.gumroad.com/l/qhzsbx",
+          "channel": "gumroad"
         }
       ],
       "companionIds": []
