@@ -1,7 +1,6 @@
 ---
 /**
- * Press home — book-first layout:
- * clear free-chapter CTA above the fold · trailer · pre-order cards · desk · brief
+ * Press home — two trailers explain the book, then buy or free chapter.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,6 +8,16 @@ import matter from 'gray-matter';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/ads/AdSlot.astro';
 import BriefCTA from '../components/BriefCTA.astro';
+import { products, formatPrice, PRESALE_ENDS_LABEL } from '../commerce.js';
+
+const formats = [
+  products.softcover,
+  products.hardcover,
+  products.companion,
+  products.hardcoverCompanionBundle,
+  products.foundersEdition,
+  products.limitedFounders,
+];
 
 const ARTICLES_DIR = path.join(process.cwd(), 'content', 'articles');
 type ArticleCard = {
@@ -51,27 +60,17 @@ const secondary = published.slice(1, 3);
   image={lead?.image || '/cover.jpg'}
 >
   <div class="home">
-    <!-- ── HERO: Clarity first, free chapter primary, trailer kept ── -->
+    <!-- ── HERO: Book + trailer front and centre ── -->
     <section class="home-hero">
       <div class="home-hero-stage" aria-hidden="true"></div>
       <div class="home-hero-panel">
         <p class="vp-eyebrow">Volume I · Pre-order Now</p>
         <h1 class="home-hero-title">The Veil of the Square Mile</h1>
-
         <p class="home-hero-dek">
-          A historical investigation into the quiet architecture of power — the institutions that never needed your vote.
+          The invisible British financial empire — documented, not dramatized.
         </p>
         <p class="home-hero-author">Jack Schumacher</p>
 
-        <div class="home-hero-actions">
-          <a href="/brief?src=home-hero" class="vp-btn vp-btn--primary vp-btn--gold">Get the first chapter free</a>
-          <a href="/library/veil" class="vp-btn vp-btn--primary">See formats / Pre-order</a>
-        </div>
-        <p class="home-hero-secondary">
-          No card required. Volume Zero and Part I, delivered instantly.
-        </p>
-
-        <!-- MAIN TRAILER — kept, below the primary CTA -->
         <div class="hero-trailer-frame">
           <video
             class="hero-trailer-video"
@@ -84,25 +83,31 @@ const secondary = published.slice(1, 3);
             <source src="/videos/square-mile-trailer.mp4" type="video/mp4" />
           </video>
         </div>
+        <p class="home-trailer-caption">The book</p>
+
+        <div class="home-hero-actions">
+          <a href="#buy" class="vp-btn vp-btn--primary vp-btn--gold">Pre-order</a>
+          <a href="#companion" class="vp-btn vp-btn--primary">Companion trailer</a>
+          <a href="/brief?src=home-hero" class="vp-btn vp-btn--secondary">Get the first chapter free</a>
+        </div>
       </div>
     </section>
 
     <!-- ── COMPANION TRAILER ── -->
-    <section class="home-section home-companion">
+    <section class="home-section home-companion" id="companion">
       <div class="home-section-inner">
         <div class="vp-glass vp-glass--card companion-card">
           <div class="companion-copy">
             <p class="vp-eyebrow">Companion Guide · On presale</p>
-            <h2 class="depth-title">The Map</h2>
+            <h2 class="depth-title">The Companion Guide</h2>
             <p class="depth-dek">
               Sources, timelines, dynastic trees, glossary, bibliography, and the
-              steelman of objections. The main book is the journey; the Companion
-              is the map. Hardcover on presale now via Gumroad; also included signed
-              in Limited Founders Edition.
+              steelman of objections. The book is the argument; this is the map.
             </p>
             <div class="depth-actions">
-              <a href="/library/map" class="vp-btn vp-btn--primary">Pre-order Companion</a>
-              <a href="/library/founders" class="vp-btn vp-btn--secondary">Get it in Founders</a>
+              <a href={products.companion.url} class="vp-btn vp-btn--primary" target="_blank" rel="noopener noreferrer">
+                {products.companion.label}
+              </a>
             </div>
           </div>
           <div class="companion-trailer-frame">
@@ -112,63 +117,47 @@ const secondary = published.slice(1, 3);
               playsinline
               preload="metadata"
               poster="/companion-cover.jpg"
-              aria-label="Companion Guide — walkthrough video"
+              aria-label="Companion Guide — trailer"
             >
               <source src="/videos/companion_trailer.mp4" type="video/mp4" />
             </video>
-            <p class="vp-text-muted" style="text-align:center;margin-top:0.5rem;">
-              Companion Guide walkthrough
-            </p>
+            <p class="home-trailer-caption">The Companion Guide</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ── PRE-ORDER CARDS ── -->
-    <section class="home-section home-buy">
+    <section class="home-section home-buy" id="buy">
       <div class="home-section-inner">
-        <h2 class="vp-section-label">Pre-order formats</h2>
+        <h2 class="vp-section-label">Pre-order</h2>
         <p class="vp-text-secondary" style="margin-bottom:var(--vp-space-5);max-width:36rem;">
-          Softcover, hardcover, Companion Guide, Hardcover + Companion bundle, and both Founders editions on
-          presale through August 26, 2026. Digital formats: Coming August 26th.
+          Print and Founders editions on presale through {PRESALE_ENDS_LABEL}.
+          Each card opens checkout. Digital formats: Coming August 26th.
         </p>
         <div class="buy-grid">
-          <a href="/library/veil#buy" class="vp-glass vp-glass--card buy-card">
-            <div class="buy-card-inner">
-              <p class="vp-eyebrow">Presale</p>
-              <h3 class="buy-card-title">Softcover</h3>
-              <p class="buy-card-price">$39.99</p>
-              <p class="buy-card-desc">Print-on-demand softcover. + shipping.</p>
-              <span class="buy-card-cta">Pre-order →</span>
-            </div>
-          </a>
-          <a href="/library/veil#buy" class="vp-glass vp-glass--card buy-card">
-            <div class="buy-card-inner">
-              <p class="vp-eyebrow">Presale</p>
-              <h3 class="buy-card-title">Hardcover</h3>
-              <p class="buy-card-price">$46.99</p>
-              <p class="buy-card-desc">Print-on-demand hardcover. + shipping.</p>
-              <span class="buy-card-cta">Pre-order →</span>
-            </div>
-          </a>
-          <a href="/library/founders" class="vp-glass vp-glass--card buy-card buy-card-featured">
-            <div class="buy-card-inner">
-              <p class="vp-eyebrow">Founders Edition</p>
-              <h3 class="buy-card-title">Signed Hardcover</h3>
-              <p class="buy-card-price">$64.99</p>
-              <p class="buy-card-desc">Signed hardcover — scarce run. Includes shipping.</p>
-              <span class="buy-card-cta">Pre-order →</span>
-            </div>
-          </a>
-          <a href="/library/founders" class="vp-glass vp-glass--card buy-card buy-card-featured buy-card-limited">
-            <div class="buy-card-inner">
-              <p class="vp-eyebrow">Limited Founders</p>
-              <h3 class="buy-card-title">Limited Founders Edition</h3>
-              <p class="buy-card-price">$129.99</p>
-              <p class="buy-card-desc">Signed book + signed Companion + all digital. Free shipping.</p>
-              <span class="buy-card-cta">Pre-order →</span>
-            </div>
-          </a>
+          {formats.map((p) => (
+            <a
+              href={p.url}
+              class:list={[
+                'vp-glass',
+                'vp-glass--card',
+                'buy-card',
+                p === products.foundersEdition && 'buy-card-featured',
+                p === products.limitedFounders && 'buy-card-featured buy-card-limited',
+              ]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div class="buy-card-inner">
+                <p class="vp-eyebrow">{p === products.limitedFounders ? 'Complete set' : 'Presale'}</p>
+                <h3 class="buy-card-title">{p.name}</h3>
+                <p class="buy-card-price">{formatPrice(p.price)}</p>
+                <p class="buy-card-desc">{p.shippingNote || p.blurb}</p>
+                <span class="buy-card-cta">Pre-order →</span>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -370,6 +359,13 @@ const secondary = published.slice(1, 3);
     width: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
+  }
+
+  .home-trailer-caption {
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+    color: var(--vp-text-muted);
+    text-align: center;
   }
 
   /* ── Sections ── */

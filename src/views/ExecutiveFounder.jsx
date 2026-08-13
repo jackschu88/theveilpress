@@ -1,9 +1,7 @@
-import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedPage from "../components/AnimatedPage";
 import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
-import { trackVideoPlay, trackVideoUnmute, trackCta } from "../lib/analytics";
 import { MagneticLink } from "../components/MagneticButton";
 import {
   PRESALE,
@@ -15,68 +13,6 @@ import {
   formatPrice,
 } from "../commerce";
 import { easeOut } from "../motion";
-
-/**
- * Journey films: aspect must match the file (portrait 9:16 vs landscape 16:9).
- * main-ad is 1920×1080 landscape; lazboy/crowd are 720×1280 portrait.
- */
-const journeyVideos = [
-  {
-    id: "main-ad",
-    title: "The Veil of the Square Mile",
-    src: "/videos/journey-main.mp4",
-    poster: "/cover.jpg",
-    aspect: "landscape",
-  },
-  {
-    id: "lazy-boy",
-    title: "The news from somewhere else",
-    src: "/videos/journey-lazboy.mp4",
-    poster: "",
-    aspect: "portrait",
-  },
-  {
-    id: "crowd",
-    title: "In the crowd",
-    src: "/videos/journey-crowd.mp4",
-    poster: "",
-    aspect: "portrait",
-  },
-];
-
-/** Explore more — landscape trailers full-width; portrait clips stay phone-frame thumbs. */
-const mediaLibrary = [
-  {
-    title: "The Veil — Main Trailer",
-    src: "/videos/square-mile-trailer.mp4",
-    poster: "/cover.jpg",
-    aspect: "landscape",
-  },
-  {
-    title: "Companion Guide Trailer",
-    src: "/videos/companion_trailer.mp4",
-    poster: "/companion-cover.jpg",
-    aspect: "landscape",
-  },
-  {
-    title: "The news from somewhere else",
-    src: "/videos/journey-lazboy.mp4",
-    poster: "/cover.jpg",
-    aspect: "portrait",
-  },
-  {
-    title: "In the crowd",
-    src: "/videos/journey-crowd.mp4",
-    poster: "/cover.jpg",
-    aspect: "portrait",
-  },
-  {
-    title: "Through the fog",
-    src: "/videos/journey-fogboy.mp4",
-    poster: "/videos/journey-fogboy-poster.jpg",
-    aspect: "landscape",
-  },
-];
 
 const included = [
   {
@@ -109,69 +45,8 @@ export default function ExecutiveFounder() {
   const savings = EXECUTIVE_SAVINGS;
   const savingsPct = EXECUTIVE_SAVINGS_PCT;
 
-  const [activeVideo, setActiveVideo] = useState(journeyVideos[0].id);
-  const [needsPlay, setNeedsPlay] = useState(false);
-  const [modalVideo, setModalVideo] = useState(null);
-  const mediaRef = useRef(null);
-  const videoRef = useRef(null);
-  const modalVideoRef = useRef(null);
-
-  const currentVideo = journeyVideos.find((v) => v.id === activeVideo);
-
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    // Force the browser to pick up the new src when the queue changes.
-    el.load();
-    const tryPlay = async () => {
-      try {
-        el.muted = true;
-        await el.play();
-        setNeedsPlay(false);
-        const vid = journeyVideos.find((v) => v.id === activeVideo);
-        trackVideoPlay(activeVideo, {
-          title: vid?.title || activeVideo,
-          source: "founders_journey",
-          muted: "true",
-        });
-      } catch {
-        setNeedsPlay(true);
-      }
-    };
-    const onError = () => setNeedsPlay(true);
-    el.addEventListener("error", onError);
-    tryPlay();
-    return () => el.removeEventListener("error", onError);
-  }, [activeVideo]);
-
-  function handlePlayOverlay() {
-    const el = videoRef.current;
-    if (!el) return;
-    el.muted = false;
-    el.volume = 1;
-    trackVideoUnmute(activeVideo, { source: "founders_journey" });
-    el.play()
-      .then(() => setNeedsPlay(false))
-      .catch(() => setNeedsPlay(true));
-  }
-
-  // Modal autoplay is outside the original click gesture — mute first so it starts.
-  useEffect(() => {
-    if (!modalVideo) return undefined;
-    const el = modalVideoRef.current;
-    if (!el) return undefined;
-    el.muted = true;
-    el.play().catch(() => {});
-    return undefined;
-  }, [modalVideo]);
-
-  function scrollToMedia() {
-    mediaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
   return (
     <AnimatedPage>
-      {/* ── Hero: introduce + scroll to media (no purchase yet) ── */}
       <section className="exec-hero-composite" aria-label="Limited Founders Edition">
         <div className="exec-hero-stage">
           <img
@@ -218,9 +93,9 @@ export default function ExecutiveFounder() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.55, ease: easeOut }}
             >
-              The definitive founders package. Signed hardcover book, signed hardcover
-              Companion Guide, and every digital format — numbered and extended — at a
-              presale price that rewards the conviction.
+              Signed hardcover book, signed hardcover Companion Guide, and every
+              digital format — numbered. The trailers on the home page explain
+              the book; this page is the complete set.
             </motion.p>
 
             <motion.div
@@ -245,136 +120,21 @@ export default function ExecutiveFounder() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.7, ease: easeOut }}
             >
-              <button
-                type="button"
+              <BuyButton
+                href={PRESALE.executiveFounderPack.url}
+                label={`Pre-order Limited Founders · ${formatPrice(EXECUTIVE_PRICE)}`}
+                comingSoonLabel="Pre-order link pending"
                 className="btn btn-primary btn-shimmer btn-exec"
-                onClick={() => {
-                  trackCta("why_limited_founders", { source: "founders_hero" });
-                  scrollToMedia();
-                }}
-              >
-                Why Limited Founders Edition
-              </button>
-              <MagneticLink className="btn" to="/library/founders">
-                All presale options
+                product={PRESALE.executiveFounderPack}
+              />
+              <MagneticLink className="btn" to="/#buy">
+                All formats
               </MagneticLink>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── ALL MEDIA (before purchase) ── */}
-      <div id="why-limited-founders" ref={mediaRef} className="exec-media-anchor">
-        <Reveal>
-          <hr className="rule rule-pulse" />
-        </Reveal>
-
-        {/* Journey films */}
-        <section className="journey-section">
-          <Reveal>
-            <h2 className="journey-headline">This isn't just a book. It's a journey.</h2>
-            <p className="journey-sub">Watch this before you decide.</p>
-          </Reveal>
-
-          <Reveal>
-            <div className="journey-player">
-              <div
-                className={`journey-frame${
-                  currentVideo?.aspect === "landscape" ? " journey-frame-landscape" : ""
-                }`}
-              >
-                <video
-                  ref={videoRef}
-                  className="journey-video"
-                  src={currentVideo?.src}
-                  poster={currentVideo?.poster || undefined}
-                  loop
-                  playsInline
-                  preload="metadata"
-                  controls
-                  aria-label={currentVideo?.title}
-                />
-                {needsPlay && (
-                  <button
-                    type="button"
-                    className="trailer-play-sound"
-                    onClick={handlePlayOverlay}
-                  >
-                    Watch with sound
-                  </button>
-                )}
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div className="journey-queue">
-              {journeyVideos.map((v) => (
-                <button
-                  key={v.id}
-                  type="button"
-                  className={`journey-queue-item${activeVideo === v.id ? " journey-queue-active" : ""}`}
-                  onClick={() => setActiveVideo(v.id)}
-                >
-                  <span className="journey-queue-num">
-                    {v.id === "main-ad" ? "Featured" : `0${journeyVideos.indexOf(v)}`}
-                  </span>
-                  <span className="journey-queue-title">{v.title}</span>
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <p className="journey-footer">Once you see it, you will understand why this matters.</p>
-          </Reveal>
-        </section>
-
-        {/* Film library */}
-        <section className="section">
-          <Reveal>
-            <h2 className="exec-section-headline">Explore more</h2>
-            <p className="exec-section-sub">All the films in one place.</p>
-          </Reveal>
-          <Stagger className="exec-media-grid">
-            {mediaLibrary.map((m) => (
-              <StaggerItem
-                key={m.title}
-                className={m.aspect === "landscape" ? "exec-media-item-landscape" : undefined}
-              >
-                <button
-                  type="button"
-                  className="exec-media-card"
-                  onClick={() => {
-                    setModalVideo(m);
-                    trackVideoPlay(m.title, { source: "founders_media_library" });
-                  }}
-                >
-                  <div
-                    className={`exec-media-thumb${
-                      m.aspect === "landscape" ? " exec-media-thumb-landscape" : ""
-                    }`}
-                  >
-                    {m.poster ? (
-                      <img src={m.poster} alt={m.title} />
-                    ) : (
-                      <div className="exec-media-placeholder">
-                        <span>▶</span>
-                      </div>
-                    )}
-                    <div className="exec-media-play" aria-hidden>
-                      <span>▶</span>
-                    </div>
-                  </div>
-                  <p className="exec-media-label">{m.title}</p>
-                </button>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </section>
-      </div>
-
-      {/* ── Package details ── */}
       <section className="section">
         <Reveal>
           <h2 className="exec-section-headline">What you receive</h2>
@@ -458,7 +218,6 @@ export default function ExecutiveFounder() {
         </div>
       </section>
 
-      {/* ── Purchase (bottom only) ── */}
       <section className="section exec-purchase" id="purchase">
         <Reveal>
           <div className="exec-purchase-card">
@@ -482,51 +241,13 @@ export default function ExecutiveFounder() {
                 className="btn btn-primary btn-shimmer btn-exec btn-exec-lg"
                 product={PRESALE.executiveFounderPack}
               />
-              <MagneticLink className="btn" to="/library/founders">
-                All presale options
+              <MagneticLink className="btn" to="/#buy">
+                All formats
               </MagneticLink>
             </div>
           </div>
         </Reveal>
       </section>
-
-      {/* Video modal */}
-      {modalVideo && (
-        <div className="exec-modal-overlay" onClick={() => setModalVideo(null)}>
-          <div className="exec-modal" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="exec-modal-close"
-              onClick={() => setModalVideo(null)}
-            >
-              Close
-            </button>
-            <div
-              className={`exec-modal-frame${
-                modalVideo.aspect === "landscape" ? " exec-modal-frame-landscape" : ""
-              }`}
-            >
-              <video
-                ref={modalVideoRef}
-                className="exec-modal-video"
-                src={modalVideo.src}
-                poster={modalVideo.poster || undefined}
-                controls
-                autoPlay
-                playsInline
-                muted
-                preload="auto"
-                style={
-                  modalVideo.aspect === "portrait"
-                    ? { aspectRatio: "9 / 16", maxHeight: "78vh", margin: "0 auto" }
-                    : undefined
-                }
-              />
-            </div>
-            <p className="exec-modal-label">{modalVideo.title}</p>
-          </div>
-        </div>
-      )}
     </AnimatedPage>
   );
 }
