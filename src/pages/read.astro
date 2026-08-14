@@ -20,9 +20,14 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
     <div class="read-panel">
       <p class="vp-eyebrow">Free chapter · No card required</p>
       <h1 class="read-title">The City of London predates the United Kingdom — and still runs on its own rules.</h1>
+
+      <p class="read-what">
+        <em>The Veil of the Square Mile</em> is a 384-page analytical history of how the City of
+        London Corporation — a medieval corporation that still sits at the center of global finance —
+        built and kept power outside the normal state. Sources on the record. Not slogans.
+      </p>
       <p class="read-dek">
-        <em>The Veil of the Square Mile</em> traces that architecture with sources, not slogans.
-        Get Volume Zero and Part I free. Email only.
+        Get Volume Zero and Part I free by email. Instant access on the next page.
       </p>
 
       <div class="vp-glass vp-glass--card read-form-card">
@@ -49,13 +54,13 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
             <p class="vp-text-muted">Signup is temporarily unavailable — check back soon.</p>
           )
         }
-        <p class="read-disclaimer vp-text-muted">Instant access on the next page. No spam. Unsubscribe anytime.</p>
+        <p class="read-disclaimer vp-text-muted">No spam. Unsubscribe anytime.</p>
       </div>
 
       <ul class="read-bullets">
-        <li>384-page analytical history of the Square Mile’s power</li>
         <li>Primary sources and institutional record — not conspiracy theater</li>
-        <li>Written by a combat veteran and Liberty University graduate</li>
+        <li>Fifteen parts mapping finance, empire, and parallel sovereignty</li>
+        <li>Written by a combat veteran (82nd Airborne) with degrees in History and English</li>
       </ul>
 
       <div class="read-trailer-frame">
@@ -132,10 +137,21 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
     line-height: 1.25;
   }
 
-  .read-dek {
-    font-size: 1.05rem;
+  .read-what {
+    font-size: 1.02rem;
     line-height: 1.65;
     color: var(--vp-text-secondary);
+    margin: 0 0 var(--vp-space-3);
+    text-align: left;
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .read-dek {
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--vp-text-muted);
     margin: 0 0 var(--vp-space-5);
   }
 

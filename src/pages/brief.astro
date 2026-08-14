@@ -3,8 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const formAction = import.meta.env.PUBLIC_BRIEF_FORM_ACTION;
 const hasFormAction = typeof formAction === 'string' && formAction.trim().length > 0;
-// This is a static build — Astro.url has no per-visitor query string at
-// build time. The real ?src= value is filled in client-side below.
 const source = 'brief-direct';
 ---
 
@@ -16,11 +14,17 @@ const source = 'brief-direct';
     <div class="vp-glass vp-glass--card brief-card">
       <p class="vp-eyebrow">Free excerpt</p>
       <h1 class="brief-heading">Get the first chapter free</h1>
-      <p class="brief-desc">
-        Volume Zero and Part I of <em>The Veil of the Square Mile</em> — the Introduction and
-        "The Hidden Throne," in full. Enter your email and we'll send it straight over, plus the
-        occasional signal through the noise. No spam, no resale, unsubscribe anytime.
+
+      <p class="brief-what">
+        <em>The Veil of the Square Mile</em> is a documented history of the City of London
+        Corporation — a medieval body that still sits at the center of global finance and operates
+        with powers the rest of the United Kingdom does not share. Architecture on the record.
       </p>
+      <p class="brief-desc">
+        Enter your email for Volume Zero and Part I in full — the Introduction and “The Hidden
+        Throne.” Instant access. No card.
+      </p>
+
       {
         hasFormAction ? (
           <form class="brief-form" method="post" action="/api/brief-signup">
@@ -30,6 +34,7 @@ const source = 'brief-direct';
               name="email"
               placeholder="Your email address"
               required
+              autocomplete="email"
             />
             <input type="hidden" name="source" id="brief-source" value={source} />
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
@@ -37,12 +42,7 @@ const source = 'brief-direct';
           </form>
         ) : (
           <div class="brief-form brief-form--disabled">
-            <input
-              class="brief-input"
-              type="email"
-              placeholder="Your email address"
-              disabled
-            />
+            <input class="brief-input" type="email" placeholder="Your email address" disabled />
             <button class="brief-submit" type="button" disabled>Send me the chapter</button>
           </div>
         )
@@ -75,7 +75,7 @@ const source = 'brief-direct';
   }
 
   .brief-card {
-    max-width: 30rem;
+    max-width: 32rem;
     width: 100%;
     padding: var(--vp-space-6);
     text-align: center;
@@ -89,11 +89,21 @@ const source = 'brief-direct';
     margin: 0 0 var(--vp-space-4);
   }
 
-  .brief-desc {
+  .brief-what {
     color: var(--vp-text-secondary);
-    margin: 0 auto var(--vp-space-5);
-    max-width: 24rem;
+    margin: 0 auto var(--vp-space-3);
+    max-width: 28rem;
     line-height: 1.6;
+    font-size: 0.98rem;
+    text-align: left;
+  }
+
+  .brief-desc {
+    color: var(--vp-text-muted);
+    margin: 0 auto var(--vp-space-5);
+    max-width: 26rem;
+    line-height: 1.55;
+    font-size: 0.95rem;
   }
 
   .brief-form {
@@ -127,7 +137,7 @@ const source = 'brief-direct';
     color: #0c0e14;
     font-family: 'Source Sans 3', sans-serif;
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: background var(--vp-duration) var(--vp-ease);
   }
@@ -148,5 +158,11 @@ const source = 'brief-direct';
   .brief-form--disabled .brief-submit {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  @media (max-width: 520px) {
+    .brief-form {
+      flex-direction: column;
+    }
   }
 </style>
