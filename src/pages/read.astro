@@ -1,8 +1,7 @@
 ---
 /**
  * Single-purpose capture landing page for paid ad traffic.
- * No nav, no storefront, no desk — one message, one CTA: the free chapter.
- * Point Facebook/paid campaigns here instead of "/".
+ * One job: email for free chapter. Softcover is sold on thank-you / chapter end.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -12,19 +11,52 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
 
 <BaseLayout
   title="Get the First Chapter Free"
-  description="The Veil of the Square Mile — the invisible British financial empire, documented. Read the first chapter free."
+  description="The Veil of the Square Mile — the City of London’s parallel power, documented. Read the first chapter free. No card."
   minimal
 >
   <section class="read-page">
     <div class="read-stage" aria-hidden="true"></div>
 
     <div class="read-panel">
-      <p class="vp-eyebrow">The Veil of the Square Mile</p>
-      <h1 class="read-title">The invisible British financial empire — documented, not dramatized.</h1>
+      <p class="vp-eyebrow">Free chapter · No card required</p>
+      <h1 class="read-title">The City of London predates the United Kingdom — and still runs on its own rules.</h1>
       <p class="read-dek">
-        Fifteen parts. Architecture on the record. Read Volume Zero and Part I free —
-        no card, no catch.
+        <em>The Veil of the Square Mile</em> traces that architecture with sources, not slogans.
+        Get Volume Zero and Part I free. Email only.
       </p>
+
+      <div class="vp-glass vp-glass--card read-form-card">
+        {
+          hasFormAction ? (
+            <form class="read-form" method="post" action="/api/brief-signup">
+              <label class="read-label" for="read-email">Email for the free chapter</label>
+              <div class="read-form-row">
+                <input
+                  id="read-email"
+                  class="read-input"
+                  type="email"
+                  name="email"
+                  placeholder="you@email.com"
+                  required
+                  autocomplete="email"
+                />
+                <button class="read-submit" type="submit">Send me the free chapter</button>
+              </div>
+              <input type="hidden" name="source" value="read-landing" />
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+            </form>
+          ) : (
+            <p class="vp-text-muted">Signup is temporarily unavailable — check back soon.</p>
+          )
+        }
+        <p class="read-disclaimer vp-text-muted">Instant access on the next page. No spam. Unsubscribe anytime.</p>
+      </div>
+
+      <ul class="read-bullets">
+        <li>384-page analytical history of the Square Mile’s power</li>
+        <li>Primary sources and institutional record — not conspiracy theater</li>
+        <li>Written by a combat veteran and Liberty University graduate</li>
+      </ul>
 
       <div class="read-trailer-frame">
         <video
@@ -39,30 +71,11 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
         </video>
       </div>
 
-      <div class="vp-glass vp-glass--card read-form-card">
-        {
-          hasFormAction ? (
-            <form class="read-form" method="post" action="/api/brief-signup">
-              <input
-                class="read-input"
-                type="email"
-                name="email"
-                placeholder="Your email address"
-                required
-              />
-              <input type="hidden" name="source" value="read-landing" />
-              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-              <button class="read-submit" type="submit">Send me the free chapter</button>
-            </form>
-          ) : (
-            <p class="vp-text-muted">Signup is temporarily unavailable — check back soon.</p>
-          )
-        }
-        <p class="read-disclaimer vp-text-muted">No spam, no resale, unsubscribe anytime.</p>
-      </div>
-
       <p class="read-alt">
-        Already sold? <a href="/library/veil">Pre-order the book directly →</a>
+        Prefer print now?
+        <a href="https://shop.theveilpress.com/l/jiytnb" rel="noopener noreferrer" target="_blank"
+          >Softcover — $39.99 + shipping →</a
+        >
       </p>
     </div>
   </section>
@@ -112,11 +125,11 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
 
   .read-title {
     font-family: 'Cinzel', serif;
-    font-size: clamp(1.5rem, 4.5vw, 2.25rem);
+    font-size: clamp(1.45rem, 4.2vw, 2.1rem);
     font-weight: 600;
     color: var(--vp-text-primary);
     margin: var(--vp-space-3) 0 var(--vp-space-4);
-    line-height: 1.2;
+    line-height: 1.25;
   }
 
   .read-dek {
@@ -126,31 +139,26 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
     margin: 0 0 var(--vp-space-5);
   }
 
-  .read-trailer-frame {
-    border-radius: var(--vp-radius-md, 6px);
-    overflow: hidden;
-    border: 1px solid var(--vp-edge);
-    background: #000;
-    margin: 0 auto var(--vp-space-6);
-    box-shadow: 0 0 40px rgba(196, 165, 116, 0.08), 0 8px 32px rgba(0, 0, 0, 0.5);
-  }
-
-  .read-trailer-video {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-  }
-
   .read-form-card {
     padding: var(--vp-space-6);
+    margin-bottom: var(--vp-space-5);
   }
 
-  .read-form {
+  .read-label {
+    display: block;
+    text-align: left;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--vp-text-muted);
+    margin: 0 0 var(--vp-space-2);
+  }
+
+  .read-form-row {
     display: flex;
     gap: var(--vp-space-2);
-    max-width: 26rem;
-    margin: 0 auto var(--vp-space-3);
+    max-width: 28rem;
+    margin: 0 auto;
   }
 
   .read-input {
@@ -177,7 +185,7 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
     color: #0c0e14;
     font-family: 'Source Sans 3', sans-serif;
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
     transition: background var(--vp-duration) var(--vp-ease);
@@ -189,11 +197,58 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
 
   .read-disclaimer {
     font-size: 0.8rem;
-    margin: 0;
+    margin: var(--vp-space-3) 0 0;
+  }
+
+  .read-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--vp-space-6);
+    text-align: left;
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .read-bullets li {
+    position: relative;
+    padding-left: 1.15rem;
+    margin: 0 0 var(--vp-space-2);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--vp-text-secondary);
+  }
+
+  .read-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--vp-accent-gold);
+    opacity: 0.85;
+  }
+
+  .read-trailer-frame {
+    border-radius: var(--vp-radius-md, 6px);
+    overflow: hidden;
+    border: 1px solid var(--vp-edge);
+    background: #000;
+    margin: 0 auto var(--vp-space-5);
+    box-shadow: 0 0 40px rgba(196, 165, 116, 0.08), 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .read-trailer-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 
   .read-alt {
-    margin: var(--vp-space-5) 0 0;
+    margin: 0;
     font-size: 0.85rem;
     color: var(--vp-text-muted);
   }
@@ -209,7 +264,7 @@ const hasFormAction = typeof formAction === 'string' && formAction.trim().length
   }
 
   @media (max-width: 520px) {
-    .read-form {
+    .read-form-row {
       flex-direction: column;
     }
   }

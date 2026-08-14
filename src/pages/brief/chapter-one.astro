@@ -1,13 +1,12 @@
 ---
 /**
- * The free lead-magnet excerpt — Volume Zero (Introduction) + Part I (The Hidden Throne),
- * real manuscript text, not a placeholder. This is what /brief promises.
+ * Free lead-magnet excerpt — Volume Zero + Part I.
+ * End CTA pushes softcover as the clear next step.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { marked } from 'marked';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import BriefCTA from '../../components/BriefCTA.astro';
 
 const EXCERPT_DIR = path.join(process.cwd(), 'content', 'excerpt');
 const intro = fs.readFileSync(path.join(EXCERPT_DIR, '00-intro.md'), 'utf-8');
@@ -15,6 +14,8 @@ const partOne = fs.readFileSync(path.join(EXCERPT_DIR, '01-part-one.md'), 'utf-8
 
 const introHtml = await marked.parse(intro);
 const partOneHtml = await marked.parse(partOne);
+
+const softcoverUrl = 'https://shop.theveilpress.com/l/jiytnb';
 ---
 
 <BaseLayout
@@ -33,13 +34,24 @@ const partOneHtml = await marked.parse(partOne);
     <div class="excerpt-content" set:html={partOneHtml} />
 
     <div class="excerpt-foot">
-      <BriefCTA
-        source="chapter-one-end"
-        heading="Want the rest?"
-        text="Fourteen more parts and the final synthesis. Softcover and hardcover are on presale now."
-      />
-      <p class="excerpt-buy-link">
-        <a href="/library/veil" class="vp-btn vp-btn--primary vp-btn--gold">Pre-order the book</a>
+      <div class="vp-glass vp-glass--card excerpt-buy-card">
+        <p class="vp-eyebrow">Fourteen more parts</p>
+        <h2 class="excerpt-buy-heading">Get the full book in print</h2>
+        <p class="excerpt-buy-copy">
+          Softcover, 384 pages. $39.99 + shipping. Presale through August 26.
+          Same sources. The rest of the architecture.
+        </p>
+        <a
+          href={softcoverUrl}
+          class="vp-btn vp-btn--primary vp-btn--gold"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Pre-order softcover — $39.99 →
+        </a>
+      </div>
+      <p class="excerpt-alt-link">
+        <a href="/library/veil">See all editions</a>
       </p>
     </div>
   </article>
@@ -107,12 +119,43 @@ const partOneHtml = await marked.parse(partOne);
     margin-top: var(--vp-space-8);
     display: flex;
     flex-direction: column;
-    gap: var(--vp-space-5);
+    gap: var(--vp-space-4);
     align-items: center;
     text-align: center;
   }
 
-  .excerpt-buy-link {
+  .excerpt-buy-card {
+    width: 100%;
+    padding: var(--vp-space-6);
+  }
+
+  .excerpt-buy-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: var(--vp-text-primary);
+    margin: var(--vp-space-2) 0 var(--vp-space-3);
+  }
+
+  .excerpt-buy-copy {
+    color: var(--vp-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--vp-space-5);
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .excerpt-alt-link {
     margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .excerpt-alt-link a {
+    color: var(--vp-accent-gold);
+    text-decoration: none;
+  }
+
+  .excerpt-alt-link a:hover {
+    text-decoration: underline;
   }
 </style>

@@ -1,22 +1,47 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const softcoverUrl = 'https://shop.theveilpress.com/l/jiytnb';
 ---
 
-<BaseLayout title="Here's your chapter" description="Thanks for joining The Brief — here's the free chapter." noindex={true}>
+<BaseLayout
+  title="Here's your chapter"
+  description="Thanks for joining The Brief — here's the free chapter. Softcover available now."
+  noindex={true}
+>
   <section class="brief-page">
     <div class="vp-glass vp-glass--card brief-card">
-      <h1 class="brief-heading">You're on the list</h1>
+      <p class="vp-eyebrow">You're in</p>
+      <h1 class="brief-heading">Your chapter is ready</h1>
       <p class="brief-desc">
-        Thanks for joining The Brief. We'll send signal only — no spam, no resale.
-        Your free chapter is ready now, no need to wait for the email.
+        Volume Zero and Part I are open now — no waiting on email. Read them, then decide if you
+        want the full print book.
       </p>
       <a href="/brief/chapter-one" class="vp-btn vp-btn--primary vp-btn--gold brief-chapter-cta">
         Read the first chapter now →
       </a>
+
+      <div class="softcover-offer">
+        <p class="softcover-label">When you're ready for the full work</p>
+        <h2 class="softcover-title">Softcover — $39.99</h2>
+        <p class="softcover-copy">
+          384 pages. Trade paperback. Shipping calculated at checkout (~$5 US).
+          Presale through August 26.
+        </p>
+        <a
+          href={softcoverUrl}
+          class="vp-btn softcover-btn"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Pre-order softcover →
+        </a>
+      </div>
+
       <p class="brief-links">
-        <a href="/desk">Read the Desk</a>
+        <a href="/desk">Desk</a>
         <span aria-hidden="true"> · </span>
-        <a href="/library">Visit the Library</a>
+        <a href="/library/veil">Full catalog</a>
         <span aria-hidden="true"> · </span>
         <a href="/">Home</a>
       </p>
@@ -27,6 +52,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <script is:inline>
   if (typeof window.fbq === 'function') {
     window.fbq('track', 'Lead');
+  }
+  if (typeof window.twq === 'function') {
+    window.twq('event', 'tw-reesx-lead', {});
   }
 </script>
 
@@ -40,7 +68,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .brief-card {
-    max-width: 30rem;
+    max-width: 32rem;
     width: 100%;
     padding: var(--vp-space-6);
     text-align: center;
@@ -57,18 +85,63 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .brief-desc {
     color: var(--vp-text-secondary);
     margin: 0 auto var(--vp-space-5);
-    max-width: 24rem;
+    max-width: 26rem;
     line-height: 1.6;
   }
 
   .brief-chapter-cta {
     display: inline-block;
+    margin: 0 0 var(--vp-space-6);
+  }
+
+  .softcover-offer {
+    border-top: 1px solid var(--vp-rule, rgba(255, 255, 255, 0.1));
+    padding-top: var(--vp-space-5);
     margin: 0 0 var(--vp-space-5);
+  }
+
+  .softcover-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vp-text-muted);
+    margin: 0 0 var(--vp-space-2);
+  }
+
+  .softcover-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.35rem;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-2);
+  }
+
+  .softcover-copy {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--vp-text-secondary);
+    margin: 0 auto var(--vp-space-4);
+    max-width: 22rem;
+  }
+
+  .softcover-btn {
+    display: inline-block;
+    padding: 0.7rem 1.25rem;
+    border: 1px solid var(--vp-accent-gold);
+    border-radius: var(--vp-radius-sm, 4px);
+    color: var(--vp-accent-gold);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  .softcover-btn:hover {
+    background: rgba(196, 165, 116, 0.12);
+    color: var(--vp-accent-gold-hi, #d4b896);
   }
 
   .brief-links {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .brief-links a {
