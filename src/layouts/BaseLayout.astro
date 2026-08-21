@@ -4,6 +4,7 @@ import LibraryIntro from '../islands/LibraryIntro';
 import MetaPixel from '../components/MetaPixel.astro';
 import XPixel from '../components/XPixel.astro';
 import CaptureNudge from '../components/CaptureNudge.astro';
+import HomeFaq from '../components/HomeFaq.astro';
 import '../styles/tokens.css';
 import '../styles/glass.css';
 import '../styles/press.css';
@@ -45,6 +46,7 @@ const ogImagePath = imageProp || '/cover.jpg';
 const ogImage = ogImagePath.startsWith('http')
   ? ogImagePath
   : new URL(ogImagePath, Astro.site ?? siteOrigin).href;
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
 
 const defaultJsonLd = [
   {
@@ -141,6 +143,7 @@ const jsonLdBlocks = [...defaultJsonLd, ...extraJsonLd];
 
       <main class="vp-main">
         <slot />
+        {isHome && <HomeFaq />}
       </main>
 
       {!minimal && (
