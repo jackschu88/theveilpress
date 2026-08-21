@@ -1,0 +1,75 @@
+---
+const faqs = [
+  {
+    q: 'What is The Veil of the Square Mile?',
+    a: 'An analytical history of the City of London Corporation and how a medieval municipal charter still sits beside the modern British state. Written by Jack Schumacher. 6x9 print, 384 pages, ISBN 979-8-2561-9387-4.',
+  },
+  {
+    q: 'What is the Companion Guide?',
+    a: 'The map. Sources, timelines, dynastic trees, glossary, bibliography, and a steelman of objections. The book is the argument. The companion is how you follow it.',
+  },
+  {
+    q: 'When do print copies ship?',
+    a: 'Presale runs through 26 August 2026. Hardcover and signed Founders copies are a limited local run. Softcover also goes through IngramSpark. Digital formats follow the same date.',
+  },
+  {
+    q: 'Is this the romance publisher Veil Press Books?',
+    a: 'No. The Veil Press is an independent imprint for institutional history. It is not Veil Press Books and not Beyond the Veil Press.',
+  },
+  {
+    q: 'What is the Limited Founders Edition?',
+    a: 'A signed hardcover of the book plus the hardcover Companion Guide and the digital set. Seed run for the press. Limited quantity.',
+  },
+];
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+---
+
+<section class="home-section home-faq" id="faq">
+  <div class="home-section-inner">
+    <h2 class="vp-section-label">Questions</h2>
+    <dl class="faq-list">
+      {faqs.map((item) => (
+        <div class="faq-item">
+          <dt>{item.q}</dt>
+          <dd>{item.a}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+
+<style>
+  .faq-list {
+    margin: var(--vp-space-4) 0 0;
+    display: grid;
+    gap: var(--vp-space-4);
+  }
+  .faq-item {
+    margin: 0;
+    padding-bottom: var(--vp-space-4);
+    border-bottom: 1px solid var(--vp-rule);
+  }
+  .faq-item dt {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--vp-text-primary);
+    margin: 0 0 var(--vp-space-2);
+  }
+  .faq-item dd {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--vp-text-secondary);
+  }
+</style>
