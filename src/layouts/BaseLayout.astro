@@ -18,6 +18,7 @@ interface Props {
   noindex?: boolean;
   /** Hide nav + footer for single-purpose landing pages (e.g. paid ad traffic). */
   minimal?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -26,22 +27,69 @@ const {
   image: imageProp,
   noindex = false,
   minimal = false,
+  jsonLd,
 } = Astro.props;
 
 const siteName = 'The Veil Press';
+const siteOrigin = 'https://www.theveilpress.com';
 const defaultDescription =
-  'The Veil Press — institutional histories that strip the fog from power. Architecture, money, narrative, access — documented with sources.';
+  'The Veil of the Square Mile — analytical history of the City of London Corporation. Independent press by Jack Schumacher. Presale now.';
 const title = titleProp
   ? titleProp.includes(siteName)
     ? titleProp
     : `${titleProp} · ${siteName}`
-  : siteName;
+  : 'The Veil of the Square Mile · The Veil Press';
 const description = descriptionProp || defaultDescription;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://theveilpress.com');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? siteOrigin);
 const ogImagePath = imageProp || '/cover.jpg';
 const ogImage = ogImagePath.startsWith('http')
   ? ogImagePath
-  : new URL(ogImagePath, Astro.site ?? 'https://theveilpress.com').href;
+  : new URL(ogImagePath, Astro.site ?? siteOrigin).href;
+
+const defaultJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${siteOrigin}/#org`,
+    name: 'The Veil Press',
+    url: siteOrigin,
+    logo: `${siteOrigin}/cover.jpg`,
+    email: 'deepdivefile@gmail.com',
+    founder: { '@id': `${siteOrigin}/#author` },
+    sameAs: SOCIALS.map((s) => s.href),
+    description:
+      'Independent imprint documenting durable financial and institutional power. Publisher of The Veil of the Square Mile. Not affiliated with Veil Press Books.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${siteOrigin}/#author`,
+    name: 'Jack Schumacher',
+    url: `${siteOrigin}/about`,
+    jobTitle: 'Author',
+    worksFor: { '@id': `${siteOrigin}/#org` },
+    sameAs: SOCIALS.map((s) => s.href),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Book',
+    '@id': `${siteOrigin}/#book`,
+    name: 'The Veil of the Square Mile',
+    isbn: '9798256193874',
+    bookFormat: 'https://schema.org/Paperback',
+    numberOfPages: 384,
+    inLanguage: 'en',
+    url: siteOrigin,
+    image: `${siteOrigin}/cover.jpg`,
+    author: { '@id': `${siteOrigin}/#author` },
+    publisher: { '@id': `${siteOrigin}/#org` },
+    description:
+      'Analytical history of the City of London Corporation and the architecture of durable financial power.',
+  },
+];
+
+const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const jsonLdBlocks = [...defaultJsonLd, ...extraJsonLd];
 ---
 
 <!doctype html>
@@ -67,6 +115,9 @@ const ogImage = ogImagePath.startsWith('http')
     <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    {jsonLdBlocks.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
     <MetaPixel />
     <XPixel />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -77,10 +128,8 @@ const ogImage = ogImagePath.startsWith('http')
     />
   </head>
   <body>
-    <!-- Opening curtain / fog — outside shell so fixed overlay is never trapped by isolation -->
     <LibraryIntro client:only="react" />
 
-    <!-- Soft fog atmosphere (not grain/static). pointer-events none so links work. -->
     <div class="vp-atmosphere" aria-hidden="true">
       <div class="vp-fog vp-fog--a"></div>
       <div class="vp-fog vp-fog--b"></div>
@@ -246,7 +295,6 @@ const ogImage = ogImagePath.startsWith('http')
     isolation: isolate;
   }
 
-  /* Ensure interactive content stays above decorative layers */
   .vp-main a,
   .vp-main button {
     position: relative;
