@@ -7,7 +7,7 @@ export default defineConfig({
   integrations: [react(), sitemap()],
   output: 'static',
   adapter: vercel(),
-  site: 'https://theveilpress.com',
+  site: 'https://www.theveilpress.com',
   security: {
     allowedDomains: [
       { hostname: 'theveilpress.com', protocol: 'https' },
