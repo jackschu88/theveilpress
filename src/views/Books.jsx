@@ -85,7 +85,7 @@ export default function Books() {
                   empire.
                 </p>
               </div>
-              <span className="value">Pre-order</span>
+              <span className="value">In stock</span>
             </a>
           </li>
           <li className="soon">

@@ -5,14 +5,14 @@
  */
 import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import SquareMilePage from '../../islands/SquareMilePage';
-import { products, PRESALE_ENDS_LABEL } from '../../commerce.js';
+import { products } from '../../commerce.js';
 
 const { softcover, hardcover } = products;
 ---
 
 <LibraryLayout
   title="The Veil of the Square Mile"
-  description="Volume I from The Veil Press. Softcover, hardcover, and Founders editions on presale through August 26, 2026."
+  description="Volume I from The Veil Press. Softcover and hardcover ship now. Signed hardcover is a short run. Digital editions available immediately."
   image="/cover.jpg"
 >
   <div class="veil-island">
@@ -22,7 +22,7 @@ const { softcover, hardcover } = products;
         <h1 class="vp-page-title">The Veil of the Square Mile</h1>
         <p class="vp-page-dek">
           The invisible British financial empire — documented, not dramatized.
-          Presale through {PRESALE_ENDS_LABEL}.
+          Softcover and hardcover ship now. Digital editions available immediately.
         </p>
         <div class="veil-fallback-actions">
           <a href={softcover.url} class="vp-btn vp-btn--primary">

@@ -12,7 +12,7 @@ interface Product {
   url: string;
   path?: string;
   checkout?: string;
-  saleStatus?: "presale" | "coming";
+  saleStatus?: "live" | "closed" | "presale" | "coming";
 }
 
 export function BuyButton({

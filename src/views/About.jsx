@@ -81,8 +81,8 @@ export default function About() {
 
       <Reveal>
         <div className="actions">
-          <a className="btn btn-primary" href="/library/founders">
-            Pre-order now
+          <a className="btn btn-primary" href="/#buy">
+            Buy the book
           </a>
           <a
             className="btn"

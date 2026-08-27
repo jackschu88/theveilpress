@@ -4,12 +4,7 @@ import { Reveal, Stagger, StaggerItem } from "../components/Reveal";
 import { BuyButton } from "../components/BuyButton";
 import { MagneticLink } from "../components/MagneticButton";
 import {
-  PRESALE,
-  EXECUTIVE_VALUE_STACK,
-  EXECUTIVE_TOTAL_SOLO,
-  EXECUTIVE_PRICE,
-  EXECUTIVE_SAVINGS,
-  EXECUTIVE_SAVINGS_PCT,
+  products,
   formatPrice,
 } from "../commerce";
 import { easeOut } from "../motion";
@@ -25,7 +20,7 @@ const included = [
   },
   {
     title: "All Digital Assets",
-    desc: "Digital Edition (ebook), audiobook, and Companion PDF — Gumroad pre-order; delivery at launch / campaign timeline.",
+    desc: "Digital Edition (ebook), audiobook, and Companion PDF — delivered with the original seed-run set.",
   },
   {
     title: "Personal Message",
@@ -42,8 +37,7 @@ const included = [
 ];
 
 export default function ExecutiveFounder() {
-  const savings = EXECUTIVE_SAVINGS;
-  const savingsPct = EXECUTIVE_SAVINGS_PCT;
+  const signed = products.signedHardcover;
 
   return (
     <AnimatedPage>
@@ -68,7 +62,7 @@ export default function ExecutiveFounder() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: easeOut }}
             >
-              Limited Edition
+              Seed run closed
             </motion.span>
 
             <motion.h1
@@ -77,7 +71,7 @@ export default function ExecutiveFounder() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15, ease: easeOut }}
             >
-              Limited Founders Edition
+              The Founders seed run is closed
             </motion.h1>
 
             <motion.div
@@ -93,9 +87,9 @@ export default function ExecutiveFounder() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.55, ease: easeOut }}
             >
-              Signed hardcover book, signed hardcover Companion Guide, and every
-              digital format — numbered. The trailers on the home page explain
-              the book; this page is the complete set.
+              Signed hardcovers of the book are available while the current short
+              run of 25 lasts. Softcover and hardcover ship now. The Companion
+              Guide hardcover follows in about a week.
             </motion.p>
 
             <motion.div
@@ -104,14 +98,8 @@ export default function ExecutiveFounder() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.7, ease: easeOut }}
             >
-              <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
-              <span className="exec-shipping">Free shipping</span>
-              <span className="exec-compare">
-                <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
-                <span className="exec-save">
-                  Save {formatPrice(savings)} ({savingsPct}% off)
-                </span>
-              </span>
+              <span className="exec-price">{formatPrice(signed.price)}</span>
+              <span className="exec-shipping">Signed hardcover · includes $5 shipping</span>
             </motion.div>
 
             <motion.div
@@ -121,11 +109,10 @@ export default function ExecutiveFounder() {
               transition={{ delay: 0.9, duration: 0.7, ease: easeOut }}
             >
               <BuyButton
-                href={PRESALE.executiveFounderPack.url}
-                label={`Pre-order Limited Founders · ${formatPrice(EXECUTIVE_PRICE)}`}
-                comingSoonLabel="Pre-order link pending"
+                href={signed.url}
+                label={signed.label}
                 className="btn btn-primary btn-shimmer btn-exec"
-                product={PRESALE.executiveFounderPack}
+                product={signed}
               />
               <MagneticLink className="btn" to="/#buy">
                 All formats
@@ -137,7 +124,7 @@ export default function ExecutiveFounder() {
 
       <section className="section">
         <Reveal>
-          <h2 className="exec-section-headline">What you receive</h2>
+          <h2 className="exec-section-headline">What the seed run included</h2>
         </Reveal>
         <Stagger className="exec-included-grid">
           {included.map((item) => (
@@ -149,70 +136,15 @@ export default function ExecutiveFounder() {
         </Stagger>
       </section>
 
-      <section className="section exec-value-section">
-        <Reveal>
-          <h2 className="exec-section-headline">The value</h2>
-          <p className="exec-section-sub">
-            What each piece costs on its own (product + shipping where it applies)
-            vs. the Limited Founders pack price.
-          </p>
-        </Reveal>
-        <Reveal>
-          <div className="exec-value-card">
-            <div className="exec-value-header">
-              <span>Item</span>
-              <span>Solo price</span>
-            </div>
-            {EXECUTIVE_VALUE_STACK.map((v) => (
-              <div key={v.item} className="exec-value-row">
-                <span>
-                  {v.item}
-                  {v.detail ? (
-                    <span
-                      className="muted"
-                      style={{
-                        display: "block",
-                        fontSize: "0.8rem",
-                        fontWeight: 400,
-                        marginTop: "0.15rem",
-                      }}
-                    >
-                      {v.detail}
-                    </span>
-                  ) : null}
-                </span>
-                <span className={v.solo != null ? "" : "exec-included"}>
-                  {v.solo != null ? formatPrice(v.solo) : "Included"}
-                </span>
-              </div>
-            ))}
-            <div className="exec-value-total">
-              <span>Total if purchased separately</span>
-              <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
-            </div>
-            <div className="exec-value-total exec-value-final">
-              <span>Limited Founders Edition · Free shipping</span>
-              <span style={{ color: "var(--gold-bright)" }}>{formatPrice(EXECUTIVE_PRICE)}</span>
-            </div>
-            <div className="exec-value-save">
-              <span>You save</span>
-              <span>
-                {formatPrice(savings)} ({savingsPct}% off)
-              </span>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
       <section className="section">
         <div className="exec-limited-section">
           <Reveal>
-            <div className="exec-limited-badge">Limited numbered edition</div>
-            <h2 className="exec-limited-title">One print run. Numbered. Never reprinted.</h2>
+            <div className="exec-limited-badge">Closed</div>
+            <h2 className="exec-limited-title">The seed run is closed.</h2>
             <p className="exec-limited-desc">
-              The Limited Founders Edition is a single limited run. Each set is
-              individually numbered; both hardcovers are signed. When they are gone,
-              this edition closes permanently.
+              Signed hardcovers of the book are available while the current short
+              run lasts. Softcover and hardcover ship now. Companion Guide hardcover
+              follows in about one week.
             </p>
           </Reveal>
         </div>
@@ -221,25 +153,18 @@ export default function ExecutiveFounder() {
       <section className="section exec-purchase" id="purchase">
         <Reveal>
           <div className="exec-purchase-card">
-            <p className="exec-purchase-eyebrow">Presale through August 26, 2026</p>
-            <h2 className="exec-purchase-title">Pre-order your Limited Founders Edition</h2>
+            <p className="exec-purchase-eyebrow">Short run · 25 on hand</p>
+            <h2 className="exec-purchase-title">Signed hardcover</h2>
             <p className="exec-purchase-price">
-              <span className="exec-price">{formatPrice(EXECUTIVE_PRICE)}</span>
-              <span className="exec-shipping">Free shipping</span>
-              <span className="exec-compare">
-                <span className="exec-strikethrough">{formatPrice(EXECUTIVE_TOTAL_SOLO)}</span>
-                <span className="exec-save">
-                  Save {formatPrice(savings)} ({savingsPct}% off)
-                </span>
-              </span>
+              <span className="exec-price">{formatPrice(signed.price)}</span>
+              <span className="exec-shipping">Includes $5 shipping. Ships now. Signed before ship.</span>
             </p>
             <div className="actions" style={{ justifyContent: "center" }}>
               <BuyButton
-                href={PRESALE.executiveFounderPack.url}
-                label={`Pre-order Limited Founders · ${formatPrice(EXECUTIVE_PRICE)}`}
-                comingSoonLabel="Pre-order link pending"
+                href={signed.url}
+                label={signed.label}
                 className="btn btn-primary btn-shimmer btn-exec btn-exec-lg"
-                product={PRESALE.executiveFounderPack}
+                product={signed}
               />
               <MagneticLink className="btn" to="/#buy">
                 All formats

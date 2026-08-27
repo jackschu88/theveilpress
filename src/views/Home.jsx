@@ -114,12 +114,12 @@ export default function Home() {
         >
           <MagneticLink
             className="btn btn-primary btn-shimmer"
-            to="/library/founders"
+            to="/#buy"
           >
-            Pre-order now
+            Buy now
           </MagneticLink>
-          <MagneticLink className="btn" to="/library/founders">
-            View founders offerings
+          <MagneticLink className="btn" to="/#buy">
+            All formats
           </MagneticLink>
         </motion.div>
       </section>
@@ -137,7 +137,7 @@ export default function Home() {
         <Reveal>
           <a
             ref={featuredRef}
-            href="/library/founders"
+            href="/#buy"
             className="feature-panel feature-wow"
           >
             <div className="feature-visual">
@@ -150,7 +150,7 @@ export default function Home() {
             </div>
             <div className="feature-body">
               <div className="meta" style={{ marginBottom: "0.75rem" }}>
-                Volume I · Pre-order
+                Volume I · Available now
               </div>
               <h3>The Veil of the Square Mile</h3>
               <p>
@@ -161,7 +161,7 @@ export default function Home() {
                 className="btn btn-primary btn-shimmer"
                 style={{ alignSelf: "flex-start" }}
               >
-                Pre-order now
+                Buy now
               </span>
             </div>
           </a>
@@ -179,23 +179,23 @@ export default function Home() {
             <a className="card card-lift card-glow" href="/library/veil">
               <div className="meta">01</div>
               <h3>The book</h3>
-              <p>Continuous argument — the journey. Pre-order now.</p>
+              <p>Continuous argument — the journey. Ships now.</p>
             </a>
           </StaggerItem>
           <StaggerItem>
             <a className="card card-lift card-glow" href="/library/map">
               <div className="meta">02</div>
               <h3>The Companion</h3>
-              <p>Sources, trees, bibliography — the map. Available for pre-order.</p>
+              <p>Sources, trees, bibliography — the map. Hardcover in about a week.</p>
             </a>
           </StaggerItem>
           <StaggerItem>
-            <a className="card card-lift card-glow" href="/library/founders">
+            <a className="card card-lift card-glow" href="/#buy">
               <div className="meta">03</div>
-              <h3>Founders editions</h3>
+              <h3>Signed hardcover</h3>
               <p>
-                Founders Edition (signed hardcover) and Limited Founders Edition
-                (both signed hardcovers + all digital). Pre-order now.
+                The Founders seed run is closed. Signed hardcovers of the book
+                are available while the current short run lasts.
               </p>
             </a>
           </StaggerItem>

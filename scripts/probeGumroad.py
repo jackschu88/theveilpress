@@ -11,18 +11,19 @@ URL = "https://theveilpress.gumroad.com"
 # companion has $10 shipping baked into the Gumroad total.
 # Gumroad checkout totals: $5 ship on soft/hard, $10 on companion.
 EXPECTED = {
-    "jiytnb": ("Softcover", 44.99, "presale"),  # 39.99 + 5
-    "pntwl": ("Hardcover", 51.99, "presale"),  # 46.99 + 5
-    "jnnnft": ("Founders", 64.99, "presale"),
-    "uehrv": ("Limited Founders", 129.99, "presale"),
-    "riwlqv": ("Digital Edition", 15.99, "coming"),
-    "rphkx": ("Audiobook", 17.99, "coming"),
-    "jawnaq": ("Companion HC", 69.99, "presale"),  # 59.99 + 10
-    "tkfupm": ("Digital + Companion", 34.99, "coming"),
-    "ggmum": ("Digital + Audiobook", 34.99, "coming"),
-    "mghiaq": ("Audio + Companion", 36.99, "coming"),
-    "obsuvc": ("Digital + Audio + Comp", 49.99, "coming"),
+    "jiytnb": ("Softcover", 44.99, "live"),  # 39.99 + 5
+    "pntwl": ("Hardcover", 51.99, "live"),  # 46.99 + 5
+    "jnnnft": ("Signed hardcover", 64.99, "live"),
+    "riwlqv": ("Digital Edition", 15.99, "live"),
+    "rphkx": ("Audiobook", 17.99, "live"),
+    "jawnaq": ("Companion HC", 69.99, "live"),  # 59.99 + 10
+    "qhzsbx": ("Hardcover + Companion", 119.99, "live"),  # 104.99 + 15
+    "tkfupm": ("Digital + Companion", 34.99, "live"),
+    "ggmum": ("Digital + Audiobook", 34.99, "live"),
+    "mghiaq": ("Audio + Companion", 36.99, "live"),
+    "obsuvc": ("Digital + Audio + Comp", 49.99, "live"),
 }
+# Closed public SKU kept in Gumroad for existing orders: uehrv Limited Founders $129.99
 
 raw = urllib.request.urlopen(URL, timeout=30).read().decode("utf-8", "replace")
 m = re.search(r'data-page="([^"]+)"', raw)

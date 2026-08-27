@@ -9,28 +9,15 @@ import { BuyButton, ProductBuyButton } from "../components/BuyButton";
 import {
   products,
   formatPrice,
-  PRESALE_ENDS_LABEL,
-  COMING_LABEL,
+  PUBLIC_GRID,
+  LIVE_BANNER,
 } from "../commerce";
 import { easeOut } from "../motion";
 import { trackVideoPlay } from "../lib/analytics";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
 
-const PRESALE = [
-  products.softcover,
-  products.hardcover,
-  products.companion,
-  products.hardcoverCompanionBundle,
-  products.foundersEdition,
-  products.limitedFounders,
-];
-
-const COMING = [
-  products.ebook,
-  products.audiobook,
-  products.bundleEbookAudioCompanion,
-];
+const LIVE = PUBLIC_GRID;
 
 function scrollToBuy() {
   document.getElementById("buy")?.scrollIntoView({ behavior: "smooth" });
@@ -96,7 +83,7 @@ export default function SquareMile() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.05, duration: 0.5 }}
           >
-            Jack Schumacher · Presale through {PRESALE_ENDS_LABEL}
+            Jack Schumacher · Ships now
           </motion.p>
 
           <motion.div
@@ -113,10 +100,10 @@ export default function SquareMile() {
                 scrollToBuy();
               }}
             >
-              Pre-order formats
+              Buy formats
             </MagneticLink>
-            <MagneticLink className="btn btn-shimmer" to="/library/founders">
-              Founders editions
+            <MagneticLink className="btn btn-shimmer" to="/library/veil#buy">
+              Signed hardcover
             </MagneticLink>
             <MagneticLink className="btn btn-shimmer" to="/library/map">
               Companion Guide
@@ -193,34 +180,25 @@ export default function SquareMile() {
           <div className="section-head veil-buy-head">
             <div>
               <p className="meta" style={{ margin: "0 0 0.4rem", color: "var(--gold)" }}>
-                Presale through {PRESALE_ENDS_LABEL}
+                Available now
               </p>
-              <h2>Pre-order</h2>
+              <h2>Buy</h2>
               <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
-                Softcover, hardcover, Companion Guide, Hardcover + Companion
-                bundle, and both Founders editions are on presale now. Digital
-                formats: {COMING_LABEL}.
+                {LIVE_BANNER}
               </p>
             </div>
           </div>
         </Reveal>
 
-        <Reveal>
-          <p className="meta" style={{ margin: "0 0 0.85rem" }}>
-            On sale now
-          </p>
-        </Reveal>
         <Stagger className="price-row">
-          {PRESALE.map((p) => (
+          {LIVE.map((p) => (
             <StaggerItem
               key={p.name}
               className={`price-card price-glow${
-                p === products.limitedFounders ? " price-card-featured" : ""
+                p === products.signedHardcover ? " price-card-featured" : ""
               }`}
             >
-              <div className="meta">
-                {p === products.limitedFounders ? "Complete set" : "Presale"}
-              </div>
+              <div className="meta">{p.badge || "Available now"}</div>
               <strong>{formatPrice(p.price)}</strong>
               <p className="price-card-name">{p.name}</p>
               {p.shippingNote ? (
@@ -228,9 +206,16 @@ export default function SquareMile() {
                   {p.shippingNote}
                 </p>
               ) : null}
-              <p className="muted" style={{ margin: "0.5rem 0 1rem" }}>
+              <p className="muted" style={{ margin: "0.5rem 0 0.35rem" }}>
                 {p.blurb}
               </p>
+              {p.deliveryNote ? (
+                <p className="muted" style={{ margin: "0 0 1rem", fontSize: "0.85rem" }}>
+                  {p.deliveryNote}
+                </p>
+              ) : (
+                <p className="muted" style={{ margin: "0 0 1rem" }} />
+              )}
               {p.url ? (
                 <BuyButton
                   href={p.url}
@@ -247,30 +232,6 @@ export default function SquareMile() {
             </StaggerItem>
           ))}
         </Stagger>
-
-        <Reveal>
-          <p className="meta" style={{ margin: "2rem 0 0.85rem" }}>
-            {COMING_LABEL}
-          </p>
-        </Reveal>
-        <Stagger className="price-row">
-          {COMING.map((p) => (
-            <StaggerItem key={p.name} className="price-card price-glow">
-              <div className="meta">{COMING_LABEL}</div>
-              <strong>{formatPrice(p.price)}</strong>
-              <p className="price-card-name">{p.name}</p>
-              {p.shippingNote ? (
-                <p className="muted" style={{ margin: "0.15rem 0 0", fontSize: "0.85rem" }}>
-                  {p.shippingNote}
-                </p>
-              ) : null}
-              <p className="muted" style={{ margin: "0.5rem 0 1rem" }}>
-                {p.blurb}
-              </p>
-              <ProductBuyButton product={p} />
-            </StaggerItem>
-          ))}
-        </Stagger>
       </section>
 
       {/* ── Next ── */}
@@ -278,40 +239,40 @@ export default function SquareMile() {
         <Stagger className="card-grid two">
           <StaggerItem>
             <div className="card card-glow">
-              <div className="meta">Companion · On presale</div>
+              <div className="meta">Companion · Ships in about a week</div>
               <h3>The Map</h3>
               <p>
                 The book is the journey. The Companion Guide is the map — primary
                 sources, timelines, institutional lineages, and supporting material
-                that make the argument legible. Standalone hardcover on presale now;
-                included (signed) in Limited Founders.
+                that make the argument legible. Hardcover follows in about one week.
+                The PDF is in the digital bundles, instant after purchase.
               </p>
               <div className="actions" style={{ marginTop: "1rem" }}>
                 <MagneticLink
                   className="btn btn-primary btn-shimmer"
                   to="/library/map"
                 >
-                  Pre-order Companion
+                  Companion Guide
                 </MagneticLink>
               </div>
             </div>
           </StaggerItem>
           <StaggerItem>
             <div className="card card-glow">
-              <div className="meta">Founders</div>
-              <h3>Signed & limited</h3>
+              <div className="meta">Short run</div>
+              <h3>Signed hardcover</h3>
               <p>
-                Founders Edition (signed hardcover) and Limited Founders (signed
-                book + signed Companion + all digital, free shipping). For readers
-                who want the complete apparatus from the start.
+                The Founders seed run is closed. Signed hardcovers of the book are
+                available while the current short run of 25 lasts. Signed before
+                ship.
               </p>
               <div className="actions" style={{ marginTop: "1rem" }}>
-                <MagneticLink
+                <BuyButton
+                  href={products.signedHardcover.url}
+                  label={products.signedHardcover.label}
                   className="btn btn-primary btn-shimmer"
-                  to="/library/founders"
-                >
-                  Founders page
-                </MagneticLink>
+                  product={products.signedHardcover}
+                />
               </div>
             </div>
           </StaggerItem>

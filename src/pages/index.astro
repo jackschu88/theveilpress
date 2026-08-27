@@ -8,16 +8,9 @@ import matter from 'gray-matter';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/ads/AdSlot.astro';
 import BriefCTA from '../components/BriefCTA.astro';
-import { products, formatPrice, PRESALE_ENDS_LABEL } from '../commerce.js';
+import { products, formatPrice, PUBLIC_GRID, LIVE_BANNER } from '../commerce.js';
 
-const formats = [
-  products.softcover,
-  products.hardcover,
-  products.companion,
-  products.hardcoverCompanionBundle,
-  products.foundersEdition,
-  products.limitedFounders,
-];
+const formats = PUBLIC_GRID;
 
 const ARTICLES_DIR = path.join(process.cwd(), 'content', 'articles');
 type ArticleCard = {
@@ -73,7 +66,7 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
     <section class="home-hero">
       <div class="home-hero-stage" aria-hidden="true"></div>
       <div class="home-hero-panel">
-        <p class="vp-eyebrow">Volume I · Pre-order Now</p>
+        <p class="vp-eyebrow">Volume I · Available now</p>
         <h1 class="home-hero-title">The Veil of the Square Mile</h1>
         <p class="home-hero-dek">
           The invisible British financial empire — documented, not dramatized.
@@ -95,7 +88,7 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
         <p class="home-trailer-caption">The book</p>
 
         <div class="home-hero-actions">
-          <a href="#buy" class="vp-btn vp-btn--primary vp-btn--gold">Pre-order</a>
+          <a href="#buy" class="vp-btn vp-btn--primary vp-btn--gold">Buy</a>
           <a href="#companion" class="vp-btn vp-btn--primary">Companion trailer</a>
           <a href="/brief?src=home-hero" class="vp-btn vp-btn--secondary">Get the first chapter free</a>
         </div>
@@ -107,11 +100,12 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
       <div class="home-section-inner">
         <div class="vp-glass vp-glass--card companion-card">
           <div class="companion-copy">
-            <p class="vp-eyebrow">Companion Guide · On presale</p>
+            <p class="vp-eyebrow">Companion Guide</p>
             <h2 class="depth-title">The Companion Guide</h2>
             <p class="depth-dek">
               Sources, timelines, dynastic trees, glossary, bibliography, and the
               steelman of objections. The book is the argument; this is the map.
+              Hardcover ships in about one week. The PDF is in the digital bundles.
             </p>
             <div class="depth-actions">
               <a href={products.companion.url} class="vp-btn vp-btn--primary" target="_blank" rel="noopener noreferrer">
@@ -136,17 +130,17 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
       </div>
     </section>
 
-    <!-- ── PRE-ORDER CARDS ── -->
+    <!-- ── BUY CARDS ── -->
     <section class="home-section home-buy" id="buy">
       <div class="home-section-inner">
-        <h2 class="vp-section-label">Pre-order</h2>
-        <p class="vp-text-secondary" style="margin-bottom:var(--vp-space-3);max-width:36rem;">
-          Print and Founders editions on presale through {PRESALE_ENDS_LABEL}.
-          Each card opens checkout. Digital formats: Coming August 26th.
+        <h2 class="vp-section-label">Buy</h2>
+        <p class="vp-text-secondary" style="margin-bottom:var(--vp-space-3);max-width:40rem;">
+          {LIVE_BANNER}
         </p>
         <p class="vp-text-muted buy-orientation">
-          New here? <strong>Softcover</strong> is the book on its own. The <strong>Companion
-          Guide</strong> is the reference apparatus that goes with it, not a second book.
+          New here? <strong>Softcover</strong> is the book. The <strong>Companion Guide</strong>
+          is the map (sources, timelines, dynastic trees, glossary, bibliography, steelman of
+          objections), not a second argument.
           Not ready to spend anything yet — <a href="/brief?src=home-buy">get the first chapter free</a>.
         </p>
         <div class="buy-grid">
@@ -158,24 +152,25 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
                 'vp-glass--card',
                 'buy-card',
                 p === products.softcover && 'buy-card-suggested',
-                p === products.foundersEdition && 'buy-card-featured',
-                p === products.limitedFounders && 'buy-card-featured buy-card-limited',
+                p === products.signedHardcover && 'buy-card-featured',
               ]}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div class="buy-card-inner">
                 <p class="vp-eyebrow">
-                  {p === products.limitedFounders
-                    ? 'Complete set'
-                    : p === products.softcover
+                  {p === products.softcover
                     ? 'Start here'
-                    : 'Presale'}
+                    : p.badge || 'Available now'}
                 </p>
                 <h3 class="buy-card-title">{p.name}</h3>
                 <p class="buy-card-price">{formatPrice(p.price)}</p>
-                <p class="buy-card-desc">{p.shippingNote || p.blurb}</p>
-                <span class="buy-card-cta">Pre-order →</span>
+                <p class="buy-card-desc">{p.blurb}</p>
+                {p.shippingNote ? (
+                  <p class="buy-card-ship">{p.shippingNote}</p>
+                ) : null}
+                <p class="buy-card-ship">{p.deliveryNote}</p>
+                <span class="buy-card-cta">Buy →</span>
               </div>
             </a>
           ))}
@@ -492,6 +487,13 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
     color: var(--vp-text-secondary);
     margin: 0;
     flex: 1;
+  }
+
+  .buy-card-ship {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--vp-text-muted);
+    margin: 0;
   }
 
   .buy-card-cta {

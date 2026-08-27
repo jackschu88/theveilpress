@@ -6,26 +6,16 @@ import SplitTitle from "../components/SplitTitle";
 import TiltCover from "../components/TiltCover";
 import TrailerPlayer from "../components/TrailerPlayer";
 import { BuyButton } from "../components/BuyButton";
-import { MagneticLink } from "../components/MagneticButton";
 import MusicPlayer from "../components/MusicPlayer";
-import { PRESALE, formatPrice, COMING_LABEL, PRESALE_ENDS_LABEL } from "../commerce";
+import { PUBLIC_GRID, formatPrice, LIVE_BANNER } from "../commerce";
 import { easeOut } from "../motion";
 
 const HeroScene = lazy(() => import("../components/HeroScene"));
 
-/** Print, Companion hardcover, physical bundle, and both Founders are buyable now. */
-const presaleItems = [
-  { ...PRESALE.softcover, badge: "Presale" },
-  { ...PRESALE.hardcover, badge: "Presale" },
-  { ...PRESALE.companionHardcover, badge: "Companion · Presale" },
-  {
-    ...PRESALE.hardcoverCompanionBundle,
-    badge: "Physical set · Presale",
-    featured: true,
-  },
-  { ...PRESALE.foundersPack, badge: "Founders Edition", featured: true },
-  { ...PRESALE.executiveFounderPack, badge: "Limited Founders", featured: true, dedicated: true },
-];
+const liveItems = PUBLIC_GRID.map((item) => ({
+  ...item,
+  featured: item.name === "Signed Hardcover",
+}));
 
 export default function Presale() {
   return (
@@ -55,7 +45,7 @@ export default function Presale() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.65, ease: easeOut }}
           >
-            Pre-order · Volume I
+            Volume I · Available now
           </motion.p>
 
           <SplitTitle text="The Veil of the Square Mile" className="h1-book" />
@@ -73,7 +63,7 @@ export default function Presale() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.95, ease: easeOut }}
           >
-            Pre-order the first volume from The Veil Press.
+            Softcover and hardcover of The Veil of the Square Mile ship now.
           </motion.p>
 
           <motion.p
@@ -100,22 +90,20 @@ export default function Presale() {
       <section className="section">
         <Reveal>
           <div className="section-head">
-            <h2>Pre-order now</h2>
+            <h2>Buy</h2>
             <p className="muted" style={{ margin: "0.5rem 0 0", maxWidth: "36rem" }}>
-              Softcover, hardcover, Companion Guide, Hardcover + Companion
-              bundle, and both Founders editions — on presale through{" "}
-              {PRESALE_ENDS_LABEL}. Digital formats: {COMING_LABEL}.
+              {LIVE_BANNER}
             </p>
           </div>
         </Reveal>
 
         <Stagger className="price-row">
-          {presaleItems.map((item) => (
+          {liveItems.map((item) => (
             <StaggerItem
               key={item.name}
               className={`price-card price-glow${item.featured ? " price-card-featured" : ""}`}
             >
-              <div className="meta">{item.badge}</div>
+              <div className="meta">{item.badge || "Available now"}</div>
               <strong>{formatPrice(item.price)}</strong>
               {item.shippingNote ? (
                 <p
@@ -139,24 +127,22 @@ export default function Presale() {
               >
                 {item.name}
               </p>
-              <p className="muted" style={{ margin: "0 0 1rem" }}>
+              <p className="muted" style={{ margin: "0 0 0.35rem" }}>
                 {item.blurb}
               </p>
-              {item.dedicated ? (
-                <MagneticLink
-                  to="/presale/executive"
-                  className="btn btn-primary btn-shimmer"
-                >
-                  View Limited Founders Edition
-                </MagneticLink>
+              {item.deliveryNote ? (
+                <p className="muted" style={{ margin: "0 0 1rem", fontSize: "0.85rem" }}>
+                  {item.deliveryNote}
+                </p>
               ) : (
-                <BuyButton
-                  href={item.url}
-                  label={`Pre-order · ${formatPrice(item.price)}`}
-                  comingSoonLabel="Pre-order link pending"
-                  className="btn btn-primary btn-shimmer"
-                />
+                <p className="muted" style={{ margin: "0 0 1rem" }} />
               )}
+              <BuyButton
+                href={item.url}
+                label={item.label || `Buy · ${formatPrice(item.price)}`}
+                className="btn btn-primary btn-shimmer"
+                product={item}
+              />
             </StaggerItem>
           ))}
         </Stagger>
@@ -181,14 +167,11 @@ export default function Presale() {
           className="card soon card-glow"
           style={{ textAlign: "center", padding: "2.4rem" }}
         >
-          <h3 style={{ marginBottom: "0.5rem" }}>About the presale</h3>
+          <h3 style={{ marginBottom: "0.5rem" }}>How shipping works</h3>
           <p style={{ margin: "0 auto", maxWidth: "28rem" }}>
-            Softcover, hardcover, Companion Guide hardcover, the Hardcover +
-            Companion physical bundle, Founders Edition, and Limited Founders are
-            on presale through {PRESALE_ENDS_LABEL}. Print is manufactured on
-            demand; you will be notified when your order ships. Digital formats
-            are {COMING_LABEL} — Limited Founders includes signed Companion plus
-            the full digital set now.
+            {LIVE_BANNER} Only the physical Companion Guide — and bundles that
+            include it — wait about a week. Softcover, hardcover, and signed
+            hardcover ship now. Digital is instant after purchase.
           </p>
         </div>
       </Reveal>

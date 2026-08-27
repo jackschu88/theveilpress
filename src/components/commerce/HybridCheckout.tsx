@@ -13,12 +13,12 @@ const CHANNEL_META: Record<string, { eyebrow: string; platform: string; note: st
   ingram: {
     eyebrow: "Step · Print",
     platform: "IngramSpark",
-    note: "Physical book — ships after the presale window (through August 26, 2026).",
+    note: "Physical book — softcover and hardcover ship now. Companion hardcover follows in about one week.",
   },
   gumroad: {
     eyebrow: "Step · Gumroad",
     platform: "Gumroad",
-    note: "Print and Companion hardcover on presale; digital SKUs Coming August 26th unless part of Limited Founders.",
+    note: "Softcover and hardcover ship now. Companion hardcover follows in about one week. Digital is instant after purchase.",
   },
 };
 
@@ -38,9 +38,8 @@ export default function HybridCheckout({ planId }: { planId: string }) {
         <p className="eyebrow">Two platforms · one complete set</p>
         <h1>{plan.name}</h1>
         <p className="lede">
-          Softcover and Companion hardcover are on presale now via Gumroad.
-          Digital-only steps remain {COMING_LABEL}. Prefer everything in one cart?
-          Pre-order Limited Founders.
+          Softcover ships now via Gumroad. Companion hardcover follows in about
+          one week. Digital is instant after purchase.
         </p>
         <p className="muted prose">
           {plan.blurb} Combined storefront total{" "}
@@ -67,10 +66,9 @@ export default function HybridCheckout({ planId }: { planId: string }) {
           >
             Why two checkouts?
           </strong>
-          Softcover and Companion hardcover are on Gumroad presale now (separate
-          checkouts). Standalone digital formats are {COMING_LABEL}. Limited
-          Founders is the one-cart path that includes signed hardcovers plus
-          digital today.
+          Softcover and Companion hardcover are separate Gumroad checkouts.
+          Softcover ships now; Companion hardcover follows in about one week.
+          Prefer one cart for the physical set? Use the Hardcover + Companion bundle.
         </div>
       </Reveal>
 
@@ -133,15 +131,14 @@ export default function HybridCheckout({ planId }: { planId: string }) {
                     isComingSoon(step)
                       ? COMING_LABEL
                       : step.channel === "ingram"
-                        ? "Print pre-order link pending"
-                        : "Pre-order link pending"
+                        ? "Print link pending"
+                        : "Checkout link pending"
                   }
                   className="btn btn-primary btn-shimmer"
                 />
                 {isComingSoon(step) && (
                   <p className="muted" style={{ margin: "0.75rem 0 0", fontSize: "0.95rem" }}>
-                    {COMING_LABEL}. Softcover is on presale alone, or pre-order
-                    Limited Founders for the complete set.
+                    Digital is available now at checkout.
                   </p>
                 )}
               </StaggerItem>
@@ -152,8 +149,8 @@ export default function HybridCheckout({ planId }: { planId: string }) {
         {!anyStepReady && (
           <Reveal>
             <p className="muted" style={{ marginTop: "1.5rem" }}>
-              Pre-order links are still being connected. Digital Gumroad SKUs may
-              already be live from the main pre-order section.
+              Checkout links are still being connected. Digital Gumroad SKUs may
+              already be live from the main buy section.
             </p>
           </Reveal>
         )}
@@ -161,10 +158,10 @@ export default function HybridCheckout({ planId }: { planId: string }) {
 
       <Reveal className="section">
         <div className="actions">
-          <a className="btn" href="/books/square-mile#buy">
+          <a className="btn" href="/library/veil#buy">
             All formats &amp; bundles
           </a>
-          <a className="btn btn-shimmer" href="/books/square-mile/companion">
+          <a className="btn btn-shimmer" href="/library/map">
             Companion · watch why
           </a>
         </div>

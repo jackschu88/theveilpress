@@ -14,7 +14,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        {/* Presale is the live storefront homepage */}
+        {/* SPA leftover — Astro `/` is the live storefront */}
         <Route index element={<Presale />} />
         <Route path="presale" element={<Navigate to="/" replace />} />
         <Route path="presale/executive" element={<ExecutiveFounder />} />

@@ -57,9 +57,7 @@ export function BuyButton({
 }
 
 /**
- * Product CTA — respects saleStatus:
- *   presale → Gumroad / hybrid path
- *   coming  → disabled "Coming August 26th"
+ * Product CTA — live checkout. Coming-soon gate is off.
  */
 export function ProductBuyButton({
   product,
