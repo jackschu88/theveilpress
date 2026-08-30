@@ -1,68 +1,20 @@
 ---
 /**
- * Press home — two trailers explain the book, then buy or free chapter.
+ * Press home — the main film, then a clear path: buy the book,
+ * read the first chapter free, watch, or read the desk.
  */
-import fs from 'node:fs';
-import path from 'node:path';
-import matter from 'gray-matter';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import AdSlot from '../components/ads/AdSlot.astro';
 import BriefCTA from '../components/BriefCTA.astro';
-import { products, formatPrice, PUBLIC_GRID, LIVE_BANNER } from '../commerce.js';
-
-const formats = PUBLIC_GRID;
-
-const ARTICLES_DIR = path.join(process.cwd(), 'content', 'articles');
-type ArticleCard = {
-  slug: string;
-  title: string;
-  dek: string;
-  date: string;
-  image?: string;
-  tags: string[];
-  framing: string;
-};
-
-function loadPublished(): ArticleCard[] {
-  if (!fs.existsSync(ARTICLES_DIR)) return [];
-  const out: ArticleCard[] = [];
-  for (const file of fs.readdirSync(ARTICLES_DIR)) {
-    if (!file.endsWith('.md')) continue;
-    const raw = fs.readFileSync(path.join(ARTICLES_DIR, file), 'utf-8');
-    const fm = matter(raw);
-    if (!fm.data || fm.data.status === 'draft' || !fm.data.slug) continue;
-    out.push({
-      slug: fm.data.slug,
-      title: fm.data.title || fm.data.slug,
-      dek: fm.data.dek || fm.data.description || '',
-      date: String(fm.data.date || ''),
-      image: fm.data.image,
-      tags: Array.isArray(fm.data.tags) ? fm.data.tags : [],
-      framing: String(fm.data.framing || 'default'),
-    });
-  }
-  return out.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
-
-const published = loadPublished();
-// Homepage lead is a purchase-funnel page, not the Desk index — a visitor who
-// just clicked a book ad shouldn't land mid-scroll on whatever general news
-// cycle happened to publish most recently. Prefer the most recent article
-// explicitly framed against the book's own thesis (framing: 'veil'); only
-// fall back to pure recency if nothing thesis-relevant has been published
-// yet. The full unfiltered feed still lives at /desk for anyone who wants it.
-const onThesis = published.filter((a) => a.framing === 'veil');
-const lead = onThesis[0] ?? published[0] ?? null;
-const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
+import { products, formatPrice, LIVE_BANNER } from '../commerce.js';
 ---
 
 <BaseLayout
   title="The Veil Press"
   description="Independent press documenting durable power — architecture, money, narrative, access. Books as the deep layer. The desk as the continuous signal."
-  image={lead?.image || '/cover.jpg'}
+  image="/cover.jpg"
 >
   <div class="home">
-    <!-- ── HERO: Book + trailer front and centre ── -->
+    <!-- ── HERO: the main film, then the path ── -->
     <section class="home-hero">
       <div class="home-hero-stage" aria-hidden="true"></div>
       <div class="home-hero-panel">
@@ -86,65 +38,50 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
           </video>
         </div>
         <p class="home-trailer-caption">The book</p>
+      </div>
+    </section>
 
-        <div class="home-hero-actions">
-          <a href="#buy" class="vp-btn vp-btn--primary vp-btn--gold">Buy</a>
-          <a href="#companion" class="vp-btn vp-btn--primary">Companion trailer</a>
-          <a href="/brief?src=home-hero" class="vp-btn vp-btn--secondary">Get the first chapter free</a>
+    <!-- ── THE PATH: buy · free chapter · watch · read ── -->
+    <section class="home-section home-path" id="buy">
+      <div class="home-section-inner">
+        <h2 class="vp-section-label">Start here</h2>
+        <div class="path-grid">
+          <a href="#get" class="vp-glass vp-glass--card path-card path-card--primary">
+            <h3 class="path-title">Get the book</h3>
+            <p class="path-dek">Softcover, hardcover, or the Companion. Ships now.</p>
+            <span class="path-arrow">Buy →</span>
+          </a>
+          <a href="/brief?src=home" class="vp-glass vp-glass--card path-card">
+            <h3 class="path-title">Read the first chapter free</h3>
+            <p class="path-dek">Volume Zero and Part I — no card, no catch.</p>
+            <span class="path-arrow">Free chapter →</span>
+          </a>
+          <a href="/watch" class="vp-glass vp-glass--card path-card">
+            <h3 class="path-title">Watch</h3>
+            <p class="path-dek">The Record — films and the archive.</p>
+            <span class="path-arrow">Watch →</span>
+          </a>
+          <a href="/desk" class="vp-glass vp-glass--card path-card">
+            <h3 class="path-title">Read the Desk</h3>
+            <p class="path-dek">News and analysis on durable power.</p>
+            <span class="path-arrow">Desk →</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- ── COMPANION TRAILER ── -->
-    <section class="home-section home-companion" id="companion">
+    <!-- ── COMPACT BUY LANDING ── -->
+    <section class="home-section home-get" id="get">
       <div class="home-section-inner">
-        <div class="vp-glass vp-glass--card companion-card">
-          <div class="companion-copy">
-            <p class="vp-eyebrow">Companion Guide</p>
-            <h2 class="depth-title">The Companion Guide</h2>
-            <p class="depth-dek">
-              Sources, timelines, dynastic trees, glossary, bibliography, and the
-              steelman of objections. The book is the argument; this is the map.
-              Hardcover ships in about one week. The PDF is in the digital bundles.
-            </p>
-            <div class="depth-actions">
-              <a href={products.companion.url} class="vp-btn vp-btn--primary" target="_blank" rel="noopener noreferrer">
-                {products.companion.label}
-              </a>
-            </div>
-          </div>
-          <div class="companion-trailer-frame">
-            <video
-              class="companion-trailer-video"
-              controls
-              playsinline
-              preload="metadata"
-              poster="/companion-cover.jpg"
-              aria-label="Companion Guide — trailer"
-            >
-              <source src="/videos/companion_trailer.mp4" type="video/mp4" />
-            </video>
-            <p class="home-trailer-caption">The Companion Guide</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── BUY CARDS ── -->
-    <section class="home-section home-buy" id="buy">
-      <div class="home-section-inner">
-        <h2 class="vp-section-label">Buy</h2>
-        <p class="vp-text-secondary" style="margin-bottom:var(--vp-space-3);max-width:40rem;">
+        <p class="vp-text-secondary home-get-dek" style="max-width:40rem;">
           {LIVE_BANNER}
         </p>
-        <p class="vp-text-muted buy-orientation">
-          New here? <strong>Softcover</strong> is the book. The <strong>Companion Guide</strong>
-          is the map (sources, timelines, dynastic trees, glossary, bibliography, steelman of
-          objections), not a second argument.
-          Not ready to spend anything yet — <a href="/brief?src=home-buy">get the first chapter free</a>.
-        </p>
         <div class="buy-grid">
-          {formats.map((p) => (
+          {[
+            products.softcover,
+            products.hardcover,
+            products.hardcoverCompanionBundle,
+          ].map((p) => (
             <a
               href={p.url}
               class:list={[
@@ -152,103 +89,38 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
                 'vp-glass--card',
                 'buy-card',
                 p === products.softcover && 'buy-card-suggested',
-                p === products.signedHardcover && 'buy-card-featured',
+                p === products.hardcoverCompanionBundle && 'buy-card-featured',
               ]}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div class="buy-card-inner">
                 <p class="vp-eyebrow">
-                  {p === products.softcover
-                    ? 'Start here'
-                    : p.badge || 'Available now'}
+                  {p === products.hardcoverCompanionBundle
+                    ? 'The set'
+                    : p === products.softcover
+                      ? 'Start here'
+                      : 'Available now'}
                 </p>
                 <h3 class="buy-card-title">{p.name}</h3>
                 <p class="buy-card-price">{formatPrice(p.price)}</p>
                 <p class="buy-card-desc">{p.blurb}</p>
-                {p.shippingNote ? (
-                  <p class="buy-card-ship">{p.shippingNote}</p>
-                ) : null}
+                {p.shippingNote ? <p class="buy-card-ship">{p.shippingNote}</p> : null}
                 <p class="buy-card-ship">{p.deliveryNote}</p>
                 <span class="buy-card-cta">Buy →</span>
               </div>
             </a>
           ))}
         </div>
-      </div>
-    </section>
-
-    <!-- ── DESK (secondary) ── -->
-    <section class="home-section home-lead">
-      <div class="home-section-inner">
-        <h2 class="vp-section-label">From the Desk</h2>
-        <p class="vp-text-secondary" style="margin-bottom:var(--vp-space-4);">
-          Continuous signal. Articles and analysis on durable power — sourced, on the record.
-        </p>
-        {lead ? (
-          <a href={`/desk/${lead.slug}`} class="lead-card vp-glass vp-glass--card">
-            {lead.image && (
-              <div class="lead-card-media">
-                <img src={lead.image} alt="" loading="lazy" />
-              </div>
-            )}
-            <div class="lead-card-body">
-              <p class="vp-eyebrow">Lead</p>
-              <h3 class="lead-card-title">{lead.title}</h3>
-              {lead.dek && <p class="lead-card-dek">{lead.dek}</p>}
-              <div class="lead-card-meta">
-                {lead.date && (
-                  <time datetime={lead.date}>
-                    {new Date(lead.date).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </time>
-                )}
-                <span class="lead-card-more">Continue reading →</span>
-              </div>
-            </div>
-          </a>
-        ) : (
-          <div class="vp-glass vp-glass--card empty-panel">
-            <p class="vp-text-secondary">The desk opens when the next package lands.</p>
-            <a href="/desk" class="vp-btn vp-btn--ghost">Desk index</a>
-          </div>
-        )}
-
-        {secondary.length > 0 && (
-          <ul class="secondary-list">
-            {secondary.map((a) => (
-              <li>
-                <a href={`/desk/${a.slug}`} class="secondary-row">
-                  <span class="secondary-title">{a.title}</span>
-                  {a.date && (
-                    <time datetime={a.date}>
-                      {new Date(a.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                    </time>
-                  )}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <p class="section-foot">
-          <a href="/desk" class="vp-btn vp-btn--ghost">All desk pieces →</a>
+        <p class="home-get-note vp-text-muted">
+          More formats, the digital edition, and the full library —{' '}
+          <a href="/library">browse the Library</a>. Not ready to spend yet?{' '}
+          <a href="/brief?src=home-buy">Read the first chapter free</a>.
         </p>
 
-        <AdSlot slot="home-mid" />
-      </div>
-    </section>
-
-    <!-- ── BRIEF ── -->
-    <section class="home-section home-brief">
-      <div class="home-section-inner">
-        <BriefCTA source="home-bottom" />
+        <div class="home-get-capture">
+          <BriefCTA source="home-bottom" />
+        </div>
       </div>
     </section>
   </div>
@@ -266,7 +138,7 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--vp-space-8) var(--vp-space-5) var(--vp-space-10);
+    padding: var(--vp-space-8) var(--vp-space-5) var(--vp-space-8);
   }
 
   .home-hero-stage {
@@ -295,7 +167,7 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
   .home-hero-panel {
     position: relative;
     z-index: 2;
-    max-width: 48rem;
+    max-width: 52rem;
     width: 100%;
     padding: var(--vp-space-6) var(--vp-space-5);
     text-align: center;
@@ -306,7 +178,7 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
     font-size: clamp(1.75rem, 4.5vw, 2.75rem);
     font-weight: 600;
     color: var(--vp-text-primary);
-    margin: 0 0 var(--vp-space-4);
+    margin: 0 0 var(--vp-space-3);
     letter-spacing: 0.04em;
     line-height: 1.15;
   }
@@ -322,44 +194,10 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
   .home-hero-author {
     font-size: 0.95rem;
     color: var(--vp-text-muted);
-    margin: 0 0 var(--vp-space-5);
+    margin: 0 0 var(--vp-space-6);
   }
 
-  .home-hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vp-space-3);
-    justify-content: center;
-  }
-
-  .home-hero-secondary {
-    margin: var(--vp-space-4) 0 var(--vp-space-5);
-    font-size: 0.9rem;
-    color: var(--vp-text-muted);
-  }
-
-  .home-hero-secondary a {
-    color: var(--vp-accent-gold);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .home-hero-secondary a:hover {
-    color: var(--vp-accent-gold-hi);
-    text-decoration: underline;
-  }
-
-  .vp-btn--gold {
-    background: var(--vp-accent-gold);
-    color: #0c0e14;
-    border-color: var(--vp-accent-gold);
-  }
-
-  .vp-btn--gold:hover {
-    background: var(--vp-accent-gold-hi);
-  }
-
-  /* Hero trailer frame — kept, below primary CTA */
+  /* Hero trailer frame — the film is the front doors */
   .hero-trailer-frame {
     border-radius: var(--vp-radius-md, 6px);
     overflow: hidden;
@@ -386,7 +224,7 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
 
   /* ── Sections ── */
   .home-section {
-    padding: var(--vp-space-6) var(--vp-space-5);
+    padding: var(--vp-space-7) var(--vp-space-5);
   }
 
   .home-section-inner {
@@ -399,45 +237,74 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
     font-size: 0.85rem;
     letter-spacing: 0.12em;
     color: var(--vp-accent-gold);
-    margin: 0 0 var(--vp-space-2);
+    margin: 0 0 var(--vp-space-3);
     text-transform: uppercase;
   }
 
-  /* ── Companion ── */
-  .companion-card {
+  /* ── Path tiles ── */
+  .path-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--vp-space-6);
-    align-items: center;
-    padding: var(--vp-space-6);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: var(--vp-space-4);
   }
 
-  .companion-copy {
+  .path-card {
     display: flex;
     flex-direction: column;
-    gap: var(--vp-space-3);
+    gap: var(--vp-space-2);
+    text-decoration: none;
+    color: inherit;
+    padding: var(--vp-space-5);
+    transition: border-color var(--vp-duration) var(--vp-ease);
   }
 
-  .companion-trailer-frame {
-    border-radius: var(--vp-radius-sm);
-    overflow: hidden;
-    border: 1px solid var(--vp-edge);
-    background: #000;
-    box-shadow: 0 0 24px rgba(196, 165, 116, 0.06), 0 4px 20px rgba(0, 0, 0, 0.4);
+  .path-card:hover {
+    border-color: var(--vp-edge-hot);
   }
 
-  .companion-trailer-video {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
+  .path-card--primary {
+    border-color: rgba(196, 165, 116, 0.4);
   }
 
-  /* ── Buy cards ── */
+  .path-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--vp-text-primary);
+    margin: 0;
+    transition: color var(--vp-duration-fast) var(--vp-ease);
+  }
+
+  .path-card:hover .path-title,
+  .path-card:hover .path-arrow {
+    color: var(--vp-accent-gold);
+  }
+
+  .path-dek {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--vp-text-secondary);
+    margin: 0;
+    flex: 1;
+  }
+
+  .path-arrow {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--vp-accent-gold);
+    margin-top: var(--vp-space-2);
+    transition: color var(--vp-duration-fast) var(--vp-ease);
+  }
+
+  /* ── Buy ── */
   .buy-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
     gap: var(--vp-space-4);
+    margin-top: var(--vp-space-4);
+  }
+
+  .home-get-dek {
+    margin-bottom: var(--vp-space-2);
   }
 
   .buy-card {
@@ -504,18 +371,6 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
     transition: color var(--vp-duration-fast) var(--vp-ease);
   }
 
-  .buy-orientation {
-    font-size: 0.88rem;
-    line-height: 1.6;
-    max-width: 40rem;
-    margin: 0 0 var(--vp-space-5);
-  }
-
-  .buy-orientation a {
-    color: var(--vp-accent-gold);
-    text-decoration: underline;
-  }
-
   .buy-card-suggested {
     border-color: rgba(196, 165, 116, 0.4);
   }
@@ -524,158 +379,29 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
     border-color: rgba(196, 165, 116, 0.25);
   }
 
-  .buy-card-limited {
-    border-color: rgba(196, 165, 116, 0.35);
-    box-shadow: 0 0 20px rgba(196, 165, 116, 0.06);
-  }
-
-  /* ── Desk ── */
-  .lead-card,
-  .secondary-row,
-  .vp-btn {
-    cursor: pointer;
-  }
-
-  .lead-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
-    gap: 0;
-    text-decoration: none;
-    overflow: hidden;
-    padding: 0;
-  }
-
-  .lead-card-media {
-    min-height: 220px;
-    background: var(--vp-bg-fog);
-  }
-
-  .lead-card-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .lead-card-body {
-    padding: var(--vp-space-6);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .lead-card-title {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(1.25rem, 2.5vw, 1.65rem);
-    color: var(--vp-text-primary);
-    margin: 0 0 var(--vp-space-3);
-    line-height: 1.3;
-    transition: color var(--vp-duration-fast) var(--vp-ease);
-  }
-
-  .lead-card:hover .lead-card-title {
-    color: var(--vp-accent-gold);
-  }
-
-  .lead-card-dek {
-    font-size: 1rem;
+  .home-get-note {
+    font-size: 0.88rem;
     line-height: 1.6;
-    color: var(--vp-text-secondary);
-    margin: 0 0 var(--vp-space-4);
-  }
-
-  .lead-card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--vp-space-4);
-    font-size: 0.85rem;
-    color: var(--vp-text-muted);
-  }
-
-  .lead-card-more {
-    color: var(--vp-accent-gold);
-    font-weight: 500;
-  }
-
-  .secondary-list {
-    list-style: none;
     margin: var(--vp-space-5) 0 0;
-    padding: 0;
-    border-top: 1px solid var(--vp-rule);
   }
 
-  .secondary-row {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--vp-space-4);
-    padding: var(--vp-space-4) 0;
-    border-bottom: 1px solid var(--vp-rule);
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .secondary-row:hover .secondary-title {
+  .home-get-note a {
     color: var(--vp-accent-gold);
+    text-decoration: underline;
   }
 
-  .secondary-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1rem;
-    color: var(--vp-text-primary);
-    transition: color var(--vp-duration-fast) var(--vp-ease);
-  }
-
-  .secondary-row time {
-    flex-shrink: 0;
-    font-size: 0.8rem;
-    color: var(--vp-text-muted);
-  }
-
-  .section-foot {
-    margin: var(--vp-space-4) 0 0;
-  }
-
-  /* ── Brief ── */
-  .depth-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.35rem;
-    color: var(--vp-text-primary);
-    margin: 0;
-    line-height: 1.3;
-  }
-
-  .depth-dek {
-    font-size: 0.95rem;
-    line-height: 1.65;
-    color: var(--vp-text-secondary);
-    margin: 0;
-  }
-
-  .depth-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vp-space-3);
-    margin-top: var(--vp-space-2);
-  }
-
-  .empty-panel {
-    padding: var(--vp-space-6);
-    text-align: center;
+  .home-get-capture {
+    margin-top: var(--vp-space-6);
   }
 
   /* ── Enter animations ── */
   .home-hero-panel,
-  .home-companion,
-  .home-buy,
-  .home-lead,
-  .home-brief {
+  .home-path,
+  .home-get {
     animation: home-rise 0.85s var(--vp-ease) both;
   }
-  .home-companion { animation-delay: 0.06s; }
-  .home-buy       { animation-delay: 0.12s; }
-  .home-lead      { animation-delay: 0.18s; }
-  .home-brief     { animation-delay: 0.24s; }
+  .home-path { animation-delay: 0.08s; }
+  .home-get  { animation-delay: 0.14s; }
 
   @keyframes home-rise {
     from {
@@ -690,27 +416,13 @@ const secondary = published.filter((a) => a.slug !== lead?.slug).slice(0, 2);
 
   @media (prefers-reduced-motion: reduce) {
     .home-hero-panel,
-    .home-companion,
-    .home-buy,
-    .home-lead,
-    .home-brief {
+    .home-path,
+    .home-get {
       animation: none;
     }
   }
 
-  /* ── Responsive ── */
   @media (max-width: 800px) {
-    .lead-card {
-      grid-template-columns: 1fr;
-    }
-    .lead-card-media {
-      min-height: 180px;
-    }
-
-    .companion-card {
-      grid-template-columns: 1fr;
-    }
-
     .hero-trailer-frame {
       max-width: 100%;
     }

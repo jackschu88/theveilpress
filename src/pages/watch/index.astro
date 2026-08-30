@@ -1,60 +1,23 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BriefCTA from '../../components/BriefCTA.astro';
-
-const films = [
-  {
-    id: 'trailer',
-    title: 'The Veil of the Square Mile',
-    src: '/videos/square-mile-trailer.mp4',
-    poster: '/cover.jpg',
-    aspect: 'landscape',
-  },
-  {
-    id: 'companion',
-    title: 'Companion Guide',
-    src: '/videos/companion_trailer.mp4',
-    poster: '/companion-cover.jpg',
-    aspect: 'landscape',
-  },
-];
+import ArchiveStrip from '../../components/ArchiveStrip.astro';
 ---
-
 <BaseLayout
   title="Watch"
-  description="The book trailer and the Companion Guide trailer — the two films that explain The Veil of the Square Mile."
+  description="The Veil Press record — the book trailer and the Companion Guide trailer, plus episodes from the archive. Canonical files stay on this site."
   image="/cover.jpg"
 >
   <div class="vp-page watch-page">
     <header class="watch-header">
       <h1 class="vp-page-title">Watch</h1>
       <p class="vp-page-dek">
-        Two trailers. The book, then the Companion Guide that maps it.
+        The Record — films and episodes assembled into one archive. Two films
+        open: the book, then the Companion Guide that maps it.
       </p>
     </header>
 
-    <div class="watch-grid">
-      {films.map((film) => (
-        <article
-          class={`watch-card vp-glass vp-glass--card${film.aspect === 'portrait' ? ' watch-card--portrait' : ''}`}
-          id={film.id}
-        >
-          <div class={`watch-frame watch-frame--${film.aspect || 'landscape'}`}>
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              poster={film.poster}
-            >
-              <source src={film.src} type="video/mp4" />
-            </video>
-          </div>
-          <div class="watch-card-body">
-            <h2 class="watch-card-title">{film.title}</h2>
-          </div>
-        </article>
-      ))}
-    </div>
+    <ArchiveStrip />
 
     <div class="watch-capture">
       <BriefCTA source="watch" />
@@ -76,48 +39,16 @@ const films = [
 
 <style>
   .watch-header {
-    margin-bottom: var(--vp-space-6);
+    margin-bottom: var(--vp-space-7);
   }
 
-  .watch-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-    gap: var(--vp-space-5);
+  .watch-capture {
+    margin-top: var(--vp-space-7);
   }
 
-  .watch-card {
-    overflow: hidden;
-    padding: 0;
-  }
-
-  .watch-frame {
-    background: #000;
-    border-bottom: 1px solid var(--vp-edge);
-  }
-
-  .watch-frame video {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-  }
-
-  .watch-frame--portrait {
-    display: flex;
-    justify-content: center;
-    background: #05060a;
-  }
-
-  .watch-frame--portrait video {
-    width: auto;
-    max-width: 100%;
-    max-height: 28rem;
-    aspect-ratio: 9 / 16;
-    object-fit: contain;
-  }
-
-  .watch-card--portrait {
-    max-width: 22rem;
+  .watch-foot {
+    margin: var(--vp-space-6) 0 0;
+    font-size: 0.85rem;
   }
 
   .watch-foot a {
@@ -127,25 +58,5 @@ const films = [
 
   .watch-foot a:hover {
     text-decoration: underline;
-  }
-
-  .watch-card-body {
-    padding: var(--vp-space-5);
-  }
-
-  .watch-card-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.15rem;
-    color: var(--vp-text-primary);
-    margin: 0;
-  }
-
-  .watch-foot {
-    margin: var(--vp-space-6) 0 0;
-    font-size: 0.85rem;
-  }
-
-  .watch-capture {
-    margin-top: var(--vp-space-7);
   }
 </style>

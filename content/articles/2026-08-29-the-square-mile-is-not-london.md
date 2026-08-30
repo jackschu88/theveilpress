@@ -7,6 +7,7 @@ status: published
 density: dense
 nci_overall: 3
 framing: veil
+image: /covers/square-mile.png
 dek: "Greater London and the City of London are different jurisdictions. The Square Mile's corporation, its own police force, and its business vote survived inside a modern state — and the record is worth mapping."
 description: "The City of London is not a metaphor for finance; it is a governing body with its own corporation, police, and electoral franchise. The Square Mile persists inside the modern state — municipal fact, not conspiracy."
 tags: ["City of London", "Square Mile", "City of London Corporation", "Lord Mayor", "Court of Common Council", "Court of Aldermen", "City of London Police", "business vote", "Greater London", "municipal governance"]

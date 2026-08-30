@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+const AMAZON_TAG = 'theveilpress-20';
+function amazonSearch(query: string) {
+  return `https://www.amazon.com/s?k=${encodeURIComponent(query)}&tag=${AMAZON_TAG}`;
+}
+
 const affiliates = [
   {
     id: 'ree-medical',
@@ -10,6 +15,61 @@ const affiliates = [
       "Independent medical opinions and nexus letters for veterans building or appealing a VA disability claim. This is the service I personally used to move my own rating from 90% to 100%.",
     href: 'https://referrals.reemedical.com/l/JACKSCHUMA10/',
     cta: 'Get your free consultation',
+  },
+  {
+    id: 'vettix',
+    name: 'VetTix',
+    tag: 'Veterans / free tickets',
+    description:
+      'A nonprofit that gives veterans, active-duty service members, and their families free tickets to sports, concerts, and other events. Sign up with my link and we both get bonus coins toward tickets.',
+    href: 'https://www.vettix.org/ref/2106498',
+    cta: 'Sign up for free tickets',
+  },
+];
+
+const furtherReading = [
+  {
+    id: 'treasure-islands',
+    name: 'Treasure Islands',
+    author: 'Nicholas Shaxson',
+    description:
+      "Tax havens, offshore finance, and how the City of London sits at the center of that system — the closest thing to a direct extension of this book's subject.",
+    href: amazonSearch('Treasure Islands Nicholas Shaxson'),
+  },
+  {
+    id: 'moneyland',
+    name: 'Moneyland',
+    author: 'Oliver Bullough',
+    description:
+      'How the ultra-wealthy move money through secrecy jurisdictions and financial opacity — the same hidden architecture, traced globally.',
+    href: amazonSearch('Moneyland Oliver Bullough'),
+  },
+  {
+    id: 'kleptopia',
+    name: 'Kleptopia',
+    author: 'Tom Burgis',
+    description:
+      'Investigative journalism on dirty money, kleptocracy, and how Western financial systems enable it.',
+    href: amazonSearch('Kleptopia Tom Burgis'),
+  },
+  {
+    id: 'tower-of-basel',
+    name: 'Tower of Basel',
+    author: 'Adam LeBor',
+    description:
+      'The Bank for International Settlements and the hidden power of central banking — a different institution, the same architecture of power.',
+    href: amazonSearch('Tower of Basel Adam LeBor'),
+  },
+];
+
+const framingReading = [
+  {
+    id: 'unseen-realm',
+    name: 'The Unseen Realm',
+    author: 'Michael S. Heiser',
+    description:
+      "For readers interested in the deeper framing beneath this book's conclusion — the biblical divine council worldview, not financial history.",
+    href: amazonSearch('The Unseen Realm Michael Heiser'),
   },
 ];
 ---
@@ -47,12 +107,62 @@ const affiliates = [
         </article>
       ))}
     </div>
+
+    <header class="affiliates-header affiliates-section">
+      <p class="vp-eyebrow">Further Reading</p>
+      <h2 class="vp-section-label">If this book was for you, so are these</h2>
+    </header>
+
+    <div class="affiliates-grid">
+      {furtherReading.map((b) => (
+        <article class="affiliate-card vp-glass vp-glass--card" id={b.id}>
+          <p class="vp-tag">{b.author}</p>
+          <h2 class="affiliate-name">{b.name}</h2>
+          <p class="affiliate-desc">{b.description}</p>
+          <a
+            class="vp-btn vp-btn--secondary"
+            href={b.href}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+          >
+            Find it on Amazon
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <header class="affiliates-header affiliates-section">
+      <p class="vp-eyebrow">On the Deeper Framing</p>
+      <h2 class="vp-section-label">Beneath the argument</h2>
+    </header>
+
+    <div class="affiliates-grid">
+      {framingReading.map((b) => (
+        <article class="affiliate-card vp-glass vp-glass--card" id={b.id}>
+          <p class="vp-tag">{b.author}</p>
+          <h2 class="affiliate-name">{b.name}</h2>
+          <p class="affiliate-desc">{b.description}</p>
+          <a
+            class="vp-btn vp-btn--secondary"
+            href={b.href}
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+          >
+            Find it on Amazon
+          </a>
+        </article>
+      ))}
+    </div>
   </div>
 </BaseLayout>
 
 <style>
   .affiliates-header {
     margin-bottom: var(--vp-space-6);
+  }
+
+  .affiliates-section {
+    margin-top: var(--vp-space-8, 4rem);
   }
 
   .affiliates-grid {

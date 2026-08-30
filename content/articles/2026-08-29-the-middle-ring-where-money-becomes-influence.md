@@ -7,6 +7,7 @@ status: published
 density: dense
 nci_overall: 3
 framing: veil
+image: /covers/middle-ring.png
 dek: "Foundations, nonprofits, think tanks, and media sit between money and power. Treasury is now looking at that layer — and the questions it raises outlive any single administration."
 description: "Foundations, nonprofits, think tanks, and the rest of the institutional layer between donors and the public now sit under Treasury scrutiny. The real question is how transparent the middle ring should be."
 tags: ["Treasury Department", "Scott Bessent", "tax-exempt organizations", "501(c)(3)", "nonprofits", "fiscal sponsorship", "Form 990", "philanthropy", "institutional mapping", "civil society"]

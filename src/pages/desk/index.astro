@@ -19,8 +19,11 @@ const published = articles
   .filter((a) => a.data.status !== 'draft' && a.data.slug)
   .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
-const lead = published[0] ?? null;
-const rest = published.slice(1);
+// Numbered-archive sequencing: newest = lowest number.
+const numbered = published.map((a, i) => ({ ...a, recordNum: String(i + 1).padStart(2, '0') }));
+
+const lead = numbered[0] ?? null;
+const rest = numbered.slice(1);
 ---
 
 <DeskLayout
@@ -28,6 +31,7 @@ const rest = published.slice(1);
   description="News and analysis from The Veil Press desk — durable power, documented with sources."
 >
   <header class="desk-header">
+    <p class="vp-eyebrow">The Desk · Published record</p>
     <h1 class="vp-page-title">Desk</h1>
     <p class="vp-page-dek">
       News and analysis on durable power — architecture, money, narrative, access.
@@ -43,11 +47,14 @@ const rest = published.slice(1);
     <div class="desk-stack">
       {lead && (
         <a href={`/desk/${lead.data.slug}`} class="desk-lead vp-glass vp-glass--card" data-nav="article">
-          {lead.data.image && (
-            <div class="desk-lead-img">
+          <div class="desk-lead-img">
+            <span class="desk-lead-num">REC · {lead.recordNum}</span>
+            {lead.data.image ? (
               <img src={lead.data.image} alt="" loading="eager" />
-            </div>
-          )}
+            ) : (
+              <span class="desk-cover-fallback desk-cover-fallback--lead" aria-hidden="true" />
+            )}
+          </div>
           <div class="desk-lead-body">
             <p class="vp-eyebrow">Latest</p>
             <h2 class="desk-lead-title">{lead.data.title}</h2>
@@ -80,11 +87,14 @@ const rest = published.slice(1);
         <div class="desk-list">
           {rest.map((article) => (
             <a href={`/desk/${article.data.slug}`} class="desk-row vp-glass vp-glass--card" data-nav="article">
-              {article.data.image && (
-                <div class="desk-row-img">
+              <div class="desk-row-img">
+                <span class="desk-row-num">REC · {article.recordNum}</span>
+                {article.data.image ? (
                   <img src={article.data.image} alt="" loading="lazy" />
-                </div>
-              )}
+                ) : (
+                  <span class="desk-cover-fallback" aria-hidden="true" />
+                )}
+              </div>
               <div class="desk-row-body">
                 <h2 class="desk-row-title">{article.data.title}</h2>
                 {(article.data.dek || article.data.description) && (
@@ -139,16 +149,17 @@ const rest = published.slice(1);
   }
 
   .desk-lead {
-    display: grid;
-    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
-    gap: 0;
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
     overflow: hidden;
     padding: 0;
   }
 
   .desk-lead-img {
-    min-height: 200px;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5 / 2;
     background: var(--vp-bg-fog);
   }
 
@@ -159,43 +170,86 @@ const rest = published.slice(1);
     display: block;
   }
 
+  .desk-lead-num,
+  .desk-row-num {
+    position: absolute;
+    z-index: 2;
+    top: 0.6rem;
+    left: 0.6rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #0c0e14;
+    background: var(--vp-accent-gold);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  .desk-cover-fallback {
+    position: absolute;
+    inset: 0;
+    display: block;
+    background:
+      radial-gradient(120% 120% at 85% 10%, rgba(196, 165, 116, 0.18), transparent 55%),
+      linear-gradient(160deg, var(--vp-bg-fog), #0a0c12);
+  }
+
+  .desk-cover-fallback::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(196, 165, 116, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196, 165, 116, 0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .desk-cover-fallback--lead {
+    /* slightly stronger treatment for the lead */
+  }
+
   .desk-lead-body {
-    padding: var(--vp-space-6);
+    padding: var(--vp-space-7);
   }
 
   .desk-lead-title {
     font-family: 'Cinzel', serif;
-    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
     color: var(--vp-text-primary);
     margin: 0 0 var(--vp-space-3);
-    line-height: 1.3;
+    line-height: 1.25;
   }
 
   .desk-lead-dek {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 1.05rem;
+    line-height: 1.65;
     color: var(--vp-text-secondary);
     margin: 0 0 var(--vp-space-4);
+    max-width: 46rem;
   }
 
   .desk-list {
     display: flex;
     flex-direction: column;
-    gap: var(--vp-space-4);
+    gap: var(--vp-space-5);
   }
 
   .desk-row {
     display: flex;
-    gap: var(--vp-space-5);
+    flex-direction: column;
+    gap: 0;
     text-decoration: none;
-    padding: var(--vp-space-5);
+    padding: 0;
+    overflow: hidden;
   }
 
   .desk-row-img {
+    position: relative;
     flex-shrink: 0;
-    width: 148px;
-    height: 96px;
-    border-radius: var(--vp-radius-sm);
+    width: 100%;
+    aspect-ratio: 5 / 2;
     overflow: hidden;
     background: var(--vp-bg-fog);
   }
@@ -204,19 +258,19 @@ const rest = published.slice(1);
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
   }
 
   .desk-row-body {
-    flex: 1;
-    min-width: 0;
+    padding: var(--vp-space-6);
   }
 
   .desk-row-title {
     font-family: 'Cinzel', serif;
-    font-size: 1.1rem;
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
     color: var(--vp-text-primary);
     margin: 0 0 var(--vp-space-2);
-    line-height: 1.35;
+    line-height: 1.3;
   }
 
   .desk-row:hover .desk-row-title,
@@ -225,10 +279,11 @@ const rest = published.slice(1);
   }
 
   .desk-row-dek {
-    font-size: 0.92rem;
-    line-height: 1.5;
+    font-size: 0.98rem;
+    line-height: 1.55;
     color: var(--vp-text-secondary);
     margin: 0 0 var(--vp-space-3);
+    max-width: 46rem;
   }
 
   .desk-meta {
@@ -248,17 +303,13 @@ const rest = published.slice(1);
 
   @media (max-width: 700px) {
     .desk-lead {
-      grid-template-columns: 1fr;
-    }
-    .desk-lead-img {
-      min-height: 160px;
-    }
-    .desk-row {
       flex-direction: column;
     }
+    .desk-lead-img {
+      aspect-ratio: 5 / 2;
+    }
     .desk-row-img {
-      width: 100%;
-      height: 140px;
+      aspect-ratio: 5 / 2;
     }
   }
 </style>
