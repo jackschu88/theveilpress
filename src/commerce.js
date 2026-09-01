@@ -15,7 +15,7 @@
  *
  * Live catalog (Gumroad checkout totals; soft/hard bake in $5 ship, companion $10,
  * hardcover+companion bundle bakes in $15 ship):
- *   Softcover .............. $39.99 + $5 ship = $44.99  l/jiytnb
+ *   Softcover .............. $35.99 + $5 ship = $40.99  l/jiytnb
  *   Hardcover .............. $46.99 + $5 ship = $51.99  l/pntwl
  *   Signed hardcover ....... $64.99 (includes $5 ship)  l/jnnnft
  *   Digital Edition ........ $15.99  l/riwlqv
@@ -114,10 +114,10 @@ export const FREE_SHIPPING_NOTE = "Free shipping";
  * Signed hardcover: Gumroad total $64.99 (existing Founders checkout).
  */
 export const STANDALONE = {
-  softcover: 39.99,
+  softcover: 35.99,
   hardcover: 46.99,
   /** @deprecated use softcover — kept for older imports */
-  print: 39.99,
+  print: 35.99,
   ebook: 15.99,
   audiobook: 17.99,
   /** Companion Guide hardcover (live SKU — $59.99 product + $10 shipping = $69.99 Gumroad) */
@@ -136,7 +136,7 @@ export const STANDALONE = {
 
 /** Full amount charged on Gumroad (includes baked-in shipping where applicable). */
 export const GUMROAD_CHECKOUT_TOTAL = {
-  softcover: money(STANDALONE.softcover + SHIPPING_FEE), // 44.99
+  softcover: money(STANDALONE.softcover + SHIPPING_FEE), // 40.99
   hardcover: money(STANDALONE.hardcover + SHIPPING_FEE), // 51.99
   companion: money(STANDALONE.companion + COMPANION_SHIPPING_FEE), // 69.99
   companionHardcover: money(STANDALONE.companionHardcover + COMPANION_SHIPPING_FEE), // 69.99
